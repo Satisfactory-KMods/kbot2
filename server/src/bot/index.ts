@@ -17,7 +17,6 @@ client.on( "ready", async() => {
 	if ( client.isReady() ) {
 		global.DiscordBot = client;
 		DiscordBot.user.setActivity( {
-			url: "https://kbot.kyrium.space/signin",
 			name: `v${ Package.version }`,
 			type: ActivityType.Streaming
 		} );
