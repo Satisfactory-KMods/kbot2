@@ -9,13 +9,13 @@ module.exports = {
 		"eslint:recommended",
 		"plugin:vue/vue3-essential",
 		'@vue/eslint-config-typescript',
-		"@vue/standard",
 		"@vue/typescript/recommended"
 	],
 	parserOptions: {
 		ecmaVersion: 2020
 	},
 	rules: {
+		"no-trailing-spaces": [ "error" ],
 		"computed-property-spacing": [ "error", "always" ],
 		"space-before-function-paren": 0,
 		"@typescript-eslint/indent": [ "error", "tab" ],

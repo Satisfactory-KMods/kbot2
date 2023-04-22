@@ -10,9 +10,9 @@
 		"build:lint": "yarn lint",
 		"build:web": "vite build",
 		"lint": "concurrently -m 3 \"yarn lint:server\" \"yarn lint:shared\" \"yarn lint:vue\"",
-		"lint:server": "eslint ./server/src/**/*.{ts,tsx,js,jsx,vue} --fix",
-		"lint:shared": "eslint ./shared/**/*.{ts,tsx,js,jsx,vue} --fix",
-		"lint:vue": "eslint ./src/**/*.{ts,tsx,js,jsx} --fix"
+		"lint:server": "eslint ./server/src/**/*.{ts,tsx,js,jsx} --fix",
+		"lint:shared": "eslint ./shared/**/*.{ts,tsx,js,jsx} --fix",
+		"lint:vue": "eslint ./src/**/*.{ts,tsx,js,jsx,vue} --fix"
 	},
 	"dependencies": {
 		"@kyri123/k-javascript-utils": "^0.2.1-build.12",
