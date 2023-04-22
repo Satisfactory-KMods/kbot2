@@ -1,11 +1,16 @@
 .DS_Store
 node_modules
 /dist
-
+/BuildServer
+/mount
 
 # local env files
 .env.local
 .env.*.local
+
+# dev env files
+.env.dev
+.env.*.dev
 
 # Log files
 npm-debug.log*
