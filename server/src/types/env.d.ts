@@ -7,6 +7,7 @@ declare global {
 			MONGODB_USER : string;
 			MONGODB_PASSWD : string;
 			MONGODB_DATABASE : string;
+			TOKEN : string;
 		}
 	}
 }

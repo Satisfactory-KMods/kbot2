@@ -7,6 +7,7 @@ import { Server }           from "socket.io";
 import http                 from "http";
 import { SystemLib_Class }  from "@server/lib/System.Lib";
 import core                 from "express";
+import { Client }           from "discord.js";
 
 export declare global {
 	var SystemLib : SystemLib_Class;
@@ -22,5 +23,6 @@ export declare global {
 	var __RootDir : string;
 	var __MountDir : string;
 	var __LogFile : string;
+	var DiscordBot : Client<true>;
 
 }

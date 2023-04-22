@@ -17,6 +17,9 @@
 	"dependencies": {
 		"@kyri123/k-javascript-utils": "^0.2.1-build.12",
 		"core-js": "^3.8.3",
+		"discord.js": "^14.9.0",
+		"dotenv": "^16.0.3",
+		"express": "^4.18.2",
 		"express-fileupload": "^1.4.0",
 		"graphql-request": "^6.0.0",
 		"jsonwebtoken": "^9.0.0",

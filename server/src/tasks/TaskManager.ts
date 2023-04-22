@@ -22,7 +22,7 @@ export class JobTask {
 		this.TaskFunction = Task;
 		this.Task = setInterval( this.Tick.bind( this ), this.Interval );
 		this.Tick().then( () =>
-			SystemLib.Log( "Init run job:", SystemLib.ToBashColor( "Red" ), this.JobName )
+			SystemLib.Log( "TASKS", "Init run job:", SystemLib.ToBashColor( "Red" ), this.JobName )
 		);
 	}
 
@@ -67,8 +67,8 @@ export class JobTask {
 	}
 
 	protected async RunTask() {
-		SystemLib.Log(
-			"[TASKS] Running Task",
+		SystemLib.Log( "TASKS",
+			"Running Task",
 			SystemLib.ToBashColor( "Red" ),
 			this.JobName
 		);
@@ -81,14 +81,14 @@ export class TaskManagerClass {
 
 	async Init() {
 		for ( const File of fs.readdirSync(
-			path.join( __BaseDir, "/Tasks/Jobs" )
+			path.join( __BaseDir, "/tasks/jobs" )
 		) ) {
 			const Stats = fs.statSync(
-				path.join( __BaseDir, "/Tasks/Jobs", File )
+				path.join( __BaseDir, "/tasks/jobs", File )
 			);
 			if ( Stats.isFile() && File.endsWith( ".Task.ts" ) ) {
 				const JobClass : JobTask = (
-					await import( path.join( __BaseDir, "/Tasks/Jobs", File ) )
+					await import( path.join( __BaseDir, "/tasks/jobs", File ) )
 				).default as JobTask;
 				this.Jobs[ JobClass.JobName ] = JobClass;
 			}

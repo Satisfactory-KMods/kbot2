@@ -8,7 +8,10 @@ import * as mongoose        from "mongoose";
 import "@kyri123/k-javascript-utils/lib/useAddons";
 import fs                   from "fs";
 import fileUpload           from "express-fileupload";
-import { SystemLib_Class }  from "@server/lib/System.Lib";
+import {
+	BC,
+	SystemLib_Class
+}                           from "@server/lib/System.Lib";
 import {
 	IEmitEvents,
 	IListenEvents
@@ -21,7 +24,7 @@ global.__BaseDir = __dirname;
 global.__RootDir = path.join( __BaseDir, "../.." );
 global.__MountDir = path.join( __RootDir, "mount" );
 ( !fs.existsSync( path.join( __MountDir, "Logs" ) ) ) && fs.mkdirSync( path.join( __MountDir, "Logs" ), { recursive: true } );
-global.__LogFile = path.join( __MountDir, "Logs", `${Date.now()}.log` );
+global.__LogFile = path.join( __MountDir, "Logs", `${ Date.now() }.log` );
 
 global.SystemLib = new SystemLib_Class();
 
@@ -55,10 +58,9 @@ Api.use( function( req, res, next ) {
 	res.setHeader( "Access-Control-Allow-Credentials", "true" );
 	next();
 } );
-
 mongoose
 	.connect(
-		`mongodb://${process.env.MONGODB_HOST}:${process.env.MONGODB_PORT}`,
+		`mongodb://${ process.env.MONGODB_HOST }:${ process.env.MONGODB_PORT }/${ process.env.MONGODB_DATABASE }`,
 		{
 			user: process.env.MONGODB_USER,
 			pass: process.env.MONGODB_PASSWD
@@ -77,7 +79,7 @@ mongoose
 			socket.join( roomName as string );
 		} );
 
-		SystemLib.Log( "[DB] Connected... Start API and SOCKETIO" );
+		SystemLib.Log( "DB", "Connected... Start API and SOCKETIO" );
 
 		global.Router = express.Router();
 		await InstallRoutings( path.join( __BaseDir, "routings/router" ) );
@@ -100,10 +102,15 @@ mongoose
 		global.TaskManager = new TaskManagerClass();
 		await TaskManager.Init();
 
+		const BotModul = await import( "@bot/index" );
+		await BotModul.default();
+
 		HttpServer.listen( 80, async() =>
-			SystemLib.Log(
-				"[API/SOCKETIO] API listen on port",
+			SystemLib.Log( "API/SOCKETIO",
+				"API listen on port", BC( "Cyan" ),
 				80
 			)
 		);
+
+
 	} );

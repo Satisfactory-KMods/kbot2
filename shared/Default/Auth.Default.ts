@@ -1,5 +1,5 @@
 import { IAPIResponseBase } from "@shared/types/API_Response";
-import { IMO_UserAccount }  from "@shared/types/mongodb";
+import { IMO_UserAccount }  from "@shared/types/MongoDB";
 import { ERoles }           from "@shared/Enum/ERoles";
 
 export const DefaultUser : IMO_UserAccount = {

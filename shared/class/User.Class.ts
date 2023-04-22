@@ -1,7 +1,7 @@
 import jwt, { JwtPayload } from "jwt-decode";
 import { ERoles }          from "../Enum/ERoles";
 import { DefaultUser }     from "../Default/Auth.Default";
-import { IMO_UserAccount } from "@shared/types/mongodb";
+import { IMO_UserAccount } from "@shared/types/MongoDB";
 
 export class User {
 	private JsonWebToken;
@@ -11,7 +11,8 @@ export class User {
 		this.JsonWebToken = JsonWebToken;
 		try {
 			this.UserData = jwt( JsonWebToken );
-		} catch ( e ) {
+		}
+		catch ( e ) {
 			this.UserData = {
 				...DefaultUser
 			};

@@ -32,6 +32,12 @@
 			"./src/types"
 		],
 		"paths": {
+			"@bot/*": [
+				"server/src/bot/*"
+			],
+			"@/*": [
+				"./*"
+			],
 			"@app/*": [
 				"src/*"
 			],

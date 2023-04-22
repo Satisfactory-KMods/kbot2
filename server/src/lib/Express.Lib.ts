@@ -12,12 +12,12 @@ import * as jwt                  from "jsonwebtoken";
 import { ERoles }                from "@shared/Enum/ERoles";
 import NextFunction = Connect.NextFunction;
 
-export function ApiUrl ( Url : TApiPath | string ) {
-	SystemLib.Log( "[URL] Routing registered:", SystemLib.ToBashColor( "Red" ), Url );
+export function ApiUrl( Url : TApiPath | string ) {
+	SystemLib.Log( "URL", "Routing registered:", SystemLib.ToBashColor( "Red" ), Url );
 	return Url;
 }
 
-export async function MW_Auth ( req : Request, res : Response, next : NextFunction ) {
+export async function MW_Auth( req : Request, res : Response, next : NextFunction ) {
 	const Response : ResponseBase = {
 		...DefaultResponseFailed,
 		MessageCode: "Api.error.Unauthorized"
@@ -27,7 +27,8 @@ export async function MW_Auth ( req : Request, res : Response, next : NextFuncti
 	let Token : string | undefined;
 	try {
 		Token = AuthHeader && AuthHeader.split( " " )[ 1 ].replaceAll( "\"", "" );
-	} catch ( e ) {
+	}
+	catch ( e ) {
 	}
 
 	if ( Token ) {
@@ -42,13 +43,14 @@ export async function MW_Auth ( req : Request, res : Response, next : NextFuncti
 					return;
 				}
 			}
-		} catch ( e ) {
+		}
+		catch ( e ) {
 		}
 	}
 	res.json( Response );
 }
 
-export async function MW_Permission ( req : Request, res : Response, next : NextFunction, Permission : ERoles ) {
+export async function MW_Permission( req : Request, res : Response, next : NextFunction, Permission : ERoles ) {
 	const Response : ResponseBase = {
 		...DefaultResponseFailed,
 		MessageCode: "Api.error.Unauthorized"
