@@ -1,7 +1,7 @@
 import fs   from "fs";
 import path from "path";
 
-export type TTasksRunner = "MakeItClean";
+export type TTasksRunner = "MakeItClean" | "DiscordGuilds";
 
 export class JobTask {
 	public JobName = "";

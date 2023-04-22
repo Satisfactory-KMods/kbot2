@@ -114,13 +114,6 @@ export class SystemLib_Class {
 		}
 		CurrentLog = CurrentLog + OutLog;
 		fs.writeFileSync( __LogFile, this.ClearANSI( CurrentLog ) );
-
-		if ( SocketIO ) {
-			SocketIO.emit(
-				"OnPanelLogUpdated",
-				this.ClearANSI( CurrentLog ).split( "\n" ).reverse()
-			);
-		}
 	}
 
 	public DebugLog( Prefix : string, ...data : any[] ) {

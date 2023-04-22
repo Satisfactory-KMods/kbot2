@@ -7,5 +7,5 @@ const UserAccountSchema = new mongoose.Schema<IMO_UserAccountToken>( {
 	expire: { type: Date, required: true }
 }, { timestamps: true } );
 
-export default mongoose.model<IMO_UserAccountToken>( "SBS_UserAccountToken", UserAccountSchema );
+export default mongoose.model<IMO_UserAccountToken>( "KBot2_UserAccountToken", UserAccountSchema );
 export { UserAccountSchema };

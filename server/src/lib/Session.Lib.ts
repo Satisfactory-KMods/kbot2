@@ -1,8 +1,10 @@
-import { IMO_UserAccount } from "../../../src/Shared/Types/MongoDB";
-import DB_SessionToken     from "../MongoDB/DB_SessionToken";
 import * as jwt            from "jsonwebtoken";
+import { IMO_UserAccount } from "@shared/types/MongoDB";
+import DB_SessionToken     from "@server/mongodb/DB_SessionToken";
 
-export async function CreateSession ( User : Partial<IMO_UserAccount> ) : Promise<string | undefined> {
+// create a new session token and register it in the database
+// if the token is not registered in the database the token will be invalid too. (small protection to modify the token)
+export async function CreateSession( User : Partial<IMO_UserAccount> ) : Promise<string | undefined> {
 	delete User.__v;
 	delete User.salt;
 	delete User.hash;
@@ -20,9 +22,10 @@ export async function CreateSession ( User : Partial<IMO_UserAccount> ) : Promis
 			} );
 			return session.token;
 		}
-	} catch ( e ) {
+	}
+	catch ( e ) {
 		if ( e instanceof Error ) {
-			SystemLib.LogError( e );
+			SystemLib.LogError( e.message );
 		}
 	}
 	return undefined;

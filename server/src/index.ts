@@ -16,8 +16,6 @@ import {
 	IEmitEvents,
 	IListenEvents
 }                           from "@shared/types/SocketIO";
-import DB_UserAccount       from "@server/mongodb/DB_UserAccount";
-import { ERoles }           from "@shared/Enum/ERoles";
 import { TaskManagerClass } from "@server/tasks/TaskManager";
 
 global.__BaseDir = __dirname;
@@ -27,7 +25,9 @@ global.__MountDir = path.join( __RootDir, "mount" );
 global.__LogFile = path.join( __MountDir, "Logs", `${ Date.now() }.log` );
 
 global.SystemLib = new SystemLib_Class();
+SystemLib.Log( "Start", "SystemLib was created" );
 
+SystemLib.Log( "Start", "Create apps" );
 global.Api = express();
 global.HttpServer = http.createServer( global.Api );
 
@@ -40,6 +40,7 @@ global.SocketIO = new Server<IListenEvents, IEmitEvents>( global.HttpServer, {
 	}
 } );
 
+SystemLib.Log( "Start", "Configure express app" );
 Api.use( express.json() );
 Api.use( express.urlencoded( { extended: true } ) );
 Api.use( fileUpload( {
@@ -68,6 +69,7 @@ mongoose
 	)
 	.then( async() => {
 		global.DownloadIPCached = [];
+		SystemLib.Log( "Start", "Create SocketIO" );
 		// Sockets need to connect on a room otherwise we will not be able to send messages
 		SocketIO.on( "connection", function( socket ) {
 			const query = socket.handshake.query;
@@ -79,8 +81,8 @@ mongoose
 			socket.join( roomName as string );
 		} );
 
-		SystemLib.Log( "DB", "Connected... Start API and SOCKETIO" );
-
+		// Register Router and Frontend
+		SystemLib.Log( "Start", "Register routings" );
 		global.Router = express.Router();
 		await InstallRoutings( path.join( __BaseDir, "routings/router" ) );
 
@@ -89,24 +91,19 @@ mongoose
 			res.sendFile( path.join( __RootDir, "dist", "index.html" ) );
 		} );
 
-		if ( !await DB_UserAccount.findOne() ) {
-			const NewUser = new DB_UserAccount();
-			NewUser.email = "admin@kmods.de";
-			NewUser.username = "Kyrium";
-			NewUser.role = ERoles.admin;
-			NewUser.setPassword( "123456" );
-			SystemLib.LogWarning( "[DB] Default user was created. Kyrium | 123456 | admin@kmods.de" );
-			await NewUser.save();
-		}
-
-		global.TaskManager = new TaskManagerClass();
-		await TaskManager.Init();
-
+		// start the Discord Bot.
+		SystemLib.Log( "Start", "Starting the bot" );
 		const BotModul = await import( "@bot/index" );
 		await BotModul.default();
 
+		// Tasks
+		SystemLib.Log( "Start", "Register all Tasks" );
+		global.TaskManager = new TaskManagerClass();
+		await TaskManager.Init();
+
+		// Tasks
 		HttpServer.listen( 80, async() =>
-			SystemLib.Log( "API/SOCKETIO",
+			SystemLib.Log( "start",
 				"API listen on port", BC( "Cyan" ),
 				80
 			)

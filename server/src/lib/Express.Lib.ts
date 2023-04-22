@@ -17,6 +17,7 @@ export function ApiUrl( Url : TApiPath | string ) {
 	return Url;
 }
 
+// middleware to check the JWT token for
 export async function MW_Auth( req : Request, res : Response, next : NextFunction ) {
 	const Response : ResponseBase = {
 		...DefaultResponseFailed,

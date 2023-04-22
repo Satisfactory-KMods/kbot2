@@ -7,12 +7,19 @@ export interface IMongoDB {
 	updatedAt? : Date | string // string on client side
 }
 
+export interface IMO_Guild extends IMongoDB {
+	guildId : string,
+	guildName : string,
+	accountIds : string[]
+}
+
 export interface IMO_UserAccount extends IMongoDB {
 	username : string,
 	hash? : string,
 	salt? : string,
-	email : string,
-	role : ERoles
+	role : ERoles,
+	guilds : string[],
+	discordId : string
 }
 
 export interface IMO_UserAccountToken extends IMongoDB {

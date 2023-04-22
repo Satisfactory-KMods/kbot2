@@ -9,22 +9,23 @@ export interface IUserAccountMethods {
 }
 
 const UserAccountSchema = new mongoose.Schema<IMO_UserAccount>( {
-	username: { type: String, required: true },
-	email: { type: String, required: true },
+	username: { type: String, required: true, unique: true },
+	discordId: { type: String, required: true, unique: true },
 	role: { type: Number, required: true },
 	hash: { type: String, required: true },
-	salt: { type: String, required: true }
+	salt: { type: String, required: true },
+	guilds: { type: [ String ], default: [] }
 }, { timestamps: true } );
 
-UserAccountSchema.methods.setPassword = function ( password ) {
-	this.salt = crypto.randomBytes( 16 ).toString( "hex" );
+UserAccountSchema.methods.setPassword = function( password ) {
+	this.salt = crypto.randomBytes( 16 + Math.ceil( Math.random() * 48 ) ).toString( "hex" );
 	this.hash = crypto.pbkdf2Sync( password, this.salt, 1000, 256, "sha512" ).toString( "hex" );
 };
 
-UserAccountSchema.methods.validPassword = function ( password ) {
+UserAccountSchema.methods.validPassword = function( password ) {
 	const hash = crypto.pbkdf2Sync( password, this.salt, 1000, 256, "sha512" ).toString( "hex" );
 	return this.hash === hash;
 };
 
-export default mongoose.model<IMO_UserAccount, Model<IMO_UserAccount, any, IUserAccountMethods>>( "SBS_UserAccount", UserAccountSchema );
+export default mongoose.model<IMO_UserAccount, Model<IMO_UserAccount, any, IUserAccountMethods>>( "KBot2_UserAccount", UserAccountSchema );
 export { UserAccountSchema };
