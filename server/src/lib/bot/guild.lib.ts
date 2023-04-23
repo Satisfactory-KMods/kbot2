@@ -28,7 +28,6 @@ const UpdateGuild = async( dicordGuild : Guild ) => {
 				guildData: dicordGuild.toJSON()
 			} );
 		}
-		console.log( dicordGuild.toJSON() );
 	}
 	catch ( e ) {
 		if ( e instanceof Error ) {
@@ -205,7 +204,7 @@ class DiscordGuildManagerClass {
 
 	public RemoveGuild( guildId : string ) : void {
 		if ( this.Guilds.has( guildId ) ) {
-			this.Guilds.delete( guildId )!;
+			this.Guilds.delete( guildId );
 		}
 	}
 
