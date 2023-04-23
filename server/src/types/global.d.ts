@@ -1,15 +1,17 @@
-import { TaskManagerClass } from "@server/tasks/TaskManager";
+import { TaskManagerClass }         from "@server/tasks/TaskManager";
 import {
 	IEmitEvents,
 	IListenEvents
-}                           from "@shared/types/SocketIO";
-import { Server }           from "socket.io";
-import http                 from "http";
-import { SystemLib_Class }  from "@server/lib/System.Lib";
-import core                 from "express";
-import { Client }           from "discord.js";
+}                                   from "@shared/types/SocketIO";
+import { Server }                   from "socket.io";
+import http                         from "http";
+import { SystemLib_Class }          from "@server/lib/System.Lib";
+import core                         from "express";
+import { Client }                   from "discord.js";
+import { DiscordGuildManagerClass } from "@server/lib/bot/guild.lib";
 
 export declare global {
+	var Cached_DiscordGuildManager : DiscordGuildManagerClass;
 	var SystemLib : SystemLib_Class;
 	var Api : core.Express;
 	var Router : core.Router;

@@ -20,8 +20,8 @@ const GuildOptionSchema = new mongoose.Schema<IMO_GuildOptions>( {
 
 const GuildSchema = new mongoose.Schema<IMO_Guild>( {
 	guildId: { type: String, required: true, unique: true },
-	guildName: { type: String, required: true },
 	accountIds: { type: [ String ], default: [] },
+	guildData: { type: {}, default: {} },
 	options: {
 		type: GuildOptionSchema, default: {
 			chatCommandPrefix: ".",

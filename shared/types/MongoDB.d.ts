@@ -1,4 +1,5 @@
-import { ERoles } from "@shared/Enum/ERoles";
+import { ERoles }            from "@shared/Enum/ERoles";
+import { IDiscordGuildData } from "@shared/types/discord";
 
 export interface IMongoDB {
 	_id? : string,
@@ -13,9 +14,9 @@ export interface IGuildDB {
 
 export interface IMO_Guild extends IGuildDB {
 	isInGuild : boolean,
-	guildName : string,
 	accountIds : string[]
-	options : IMO_GuildOptions
+	options : IMO_GuildOptions,
+	guildData : IDiscordGuildData
 }
 
 export interface IMO_RolePingRule {
