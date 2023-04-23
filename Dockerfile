@@ -11,8 +11,8 @@ RUN yarn install
 COPY *.ts ./
 COPY *.js ./
 COPY *.cjs ./
+COPY .eslintrc ./
 COPY *.html ./
-COPY .browserslistrc ./
 
 # Copy source folder
 COPY ./src ./src

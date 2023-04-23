@@ -15,16 +15,31 @@
 		"baseUrl": ".",
 		"types": [
 			"webpack-env"
-		],
+		], 
 		"paths": {
 			"@app/*": [
 				"src/*"
+			],
+			"@hooks/*": [
+				"src/hooks/*"
+			],
+			"@comp/*": [
+				"src/components/*"
+			],
+			"@style/*": [
+				"src/components/*"
+			],
+			"@routing/*": [
+				"src/routing/*"
 			],
 			"@shared/*": [
 				"shared/*"
 			],
 			"@/*": [
 				"./*"
+			],
+			"@server/*": [
+				"server/src/*"
 			]
 		},
 		"lib": [
@@ -38,7 +53,6 @@
 		"shared/**/*.ts",
 		"src/**/*.ts",
 		"src/**/*.tsx",
-		"src/**/*.vue",
 		"tests/**/*.ts",
 		"tests/**/*.tsx"
 	],

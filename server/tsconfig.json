@@ -46,6 +46,18 @@
 			],
 			"@server/*": [
 				"server/src/*"
+			],
+			"@hooks/*": [
+				"src/hooks/*"
+			],
+			"@comp/*": [
+				"src/components/*"
+			],
+			"@style/*": [
+				"src/components/*"
+			],
+			"@routing/*": [
+				"src/routing/*"
 			]
 		},
 		"sourceMap": true,
