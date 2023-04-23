@@ -4,17 +4,16 @@ import {
 	Alias,
 	defineConfig,
 	loadEnv
-}                       from "vite";
-import react            from "@vitejs/plugin-react";
-import eslint           from "vite-plugin-eslint";
+}             from "vite";
+import react  from "@vitejs/plugin-react";
+import eslint from "vite-plugin-eslint";
 import {
 	join,
 	resolve
-}                       from "path";
-import fs               from "fs";
-import { dependencies } from "./package.json";
+}             from "path";
+import fs     from "fs";
 
-const vendor = [ "express-files", "compressing", "react", "react-router-dom", "react-dom", "discord.js", "express", "express-files", "@kyri123/k-javascript-utils", "bootstrap" ];
+const vendor = [ "react-bootstrap", "react-icons", "react", "react-markdown", "react-select", "react-router-dom", "react-dom" ];
 
 function renderChunks( deps : Record<string, string> ) {
 	const chunks : any = {};
@@ -67,8 +66,8 @@ export default defineConfig( ( { command, mode, ssrBuild } ) => {
 					chunkFileNames: `chunk/[name].js`,
 					assetFileNames: `asset/[name].[ext]`,
 					manualChunks: {
-						vendor,
-						...renderChunks( dependencies )
+						vendor//,
+						//...renderChunks( dependencies )
 					}
 				}
 			}
