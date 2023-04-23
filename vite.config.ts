@@ -14,10 +14,12 @@ import {
 import fs               from "fs";
 import { dependencies } from "./package.json";
 
+const vendor = [ "compressing", "react", "react-router-dom", "react-dom", "discord.js", "express", "express-files", "@kyri123/k-javascript-utils", "bootstrap" ];
+
 function renderChunks( deps : Record<string, string> ) {
 	const chunks : any = {};
 	Object.keys( deps ).forEach( ( key ) => {
-		if ( [ "react", "react-router-dom", "react-dom" ].includes( key ) ) {
+		if ( vendor.includes( key ) ) {
 			return;
 		}
 		chunks[ key ] = [ key ];
@@ -65,7 +67,7 @@ export default defineConfig( ( { command, mode, ssrBuild } ) => {
 					chunkFileNames: `chunk/[name].js`,
 					assetFileNames: `asset/[name].[ext]`,
 					manualChunks: {
-						vendor: [ "react", "react-router-dom", "react-dom" ],
+						vendor,
 						...renderChunks( dependencies )
 					}
 				}
