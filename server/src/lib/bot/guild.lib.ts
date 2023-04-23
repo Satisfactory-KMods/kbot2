@@ -4,8 +4,10 @@ import { BC }    from "@server/lib/System.Lib";
 // update a guild or add a new one
 export const UpdateGuild = async( [ guildId, guildName ] : [ string, string ] ) => {
 	try {
-		await DB_Guilds.create( { guildId, guildName } );
-		SystemLib.LogWarning( "bot", `New Guild added to Database:${ BC( "Cyan" ) }`, guildName );
+		if ( !await DB_Guilds.exists( { guildId } ) ) {
+			await DB_Guilds.create( { guildId, guildName } );
+			SystemLib.LogWarning( "bot", `New Guild added to Database:${ BC( "Cyan" ) }`, guildName, ` | ID:`, guildId );
+		}
 	}
 	catch ( e ) {
 		try {

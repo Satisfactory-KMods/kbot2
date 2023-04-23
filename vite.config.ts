@@ -4,17 +4,32 @@ import {
 	Alias,
 	defineConfig,
 	loadEnv
-}                  from "vite";
-import react       from "@vitejs/plugin-react";
-import eslint      from "vite-plugin-eslint";
-import { resolve } from "path";
-import fs          from "fs";
+}                       from "vite";
+import react            from "@vitejs/plugin-react";
+import eslint           from "vite-plugin-eslint";
+import {
+	join,
+	resolve
+}                       from "path";
+import fs               from "fs";
+import { dependencies } from "./package.json";
+
+function renderChunks( deps : Record<string, string> ) {
+	const chunks : any = {};
+	Object.keys( deps ).forEach( ( key ) => {
+		if ( [ "react", "react-router-dom", "react-dom" ].includes( key ) ) {
+			return;
+		}
+		chunks[ key ] = [ key ];
+	} );
+	return chunks;
+}
 
 export default defineConfig( ( { command, mode, ssrBuild } ) => {
 	const Paths : Record<string, string[]> = JSON.parse( fs.readFileSync( resolve( __dirname, "tsconfig.json" ), "utf-8" ).toString() ).compilerOptions.paths;
 	const alias = Object.entries( Paths ).map<Alias>( ( [ key, value ] ) => ( {
 		find: key.replace( "/*", "" ),
-		replacement: value[ 0 ].replace( "/*", "" )
+		replacement: join( __dirname, value[ 0 ].replace( "/*", "" ) )
 	} ) );
 	console.log( "Resolve Alias:", alias );
 	const env = loadEnv( mode, process.cwd(), "" );
@@ -48,7 +63,11 @@ export default defineConfig( ( { command, mode, ssrBuild } ) => {
 				output: {
 					entryFileNames: `entry/[name].js`,
 					chunkFileNames: `chunk/[name].js`,
-					assetFileNames: `asset/[name].[ext]`
+					assetFileNames: `asset/[name].[ext]`,
+					manualChunks: {
+						vendor: [ "react", "react-router-dom", "react-dom" ],
+						...renderChunks( dependencies )
+					}
 				}
 			}
 		},

@@ -27,5 +27,14 @@ UserAccountSchema.methods.validPassword = function( password ) {
 	return this.hash === hash;
 };
 
-export default mongoose.model<IMO_UserAccount, Model<IMO_UserAccount, any, IUserAccountMethods>>( "KBot2_UserAccount", UserAccountSchema );
-export { UserAccountSchema };
+const DB_UserAccounts = mongoose.model<IMO_UserAccount, Model<IMO_UserAccount, any, IUserAccountMethods>>( "KBot2_UserAccount", UserAccountSchema );
+
+const Revalidate = async() => {
+
+};
+
+export default DB_UserAccounts;
+export {
+	UserAccountSchema,
+	Revalidate
+};

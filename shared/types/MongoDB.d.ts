@@ -7,10 +7,34 @@ export interface IMongoDB {
 	updatedAt? : Date | string // string on client side
 }
 
-export interface IMO_Guild extends IMongoDB {
-	guildId : string,
+export interface IGuildDB {
+	guildId : string;
+}
+
+export interface IMO_Guild extends IGuildDB {
+	isInGuild : boolean,
 	guildName : string,
 	accountIds : string[]
+	options : IMO_GuildOptions
+}
+
+export interface IMO_RolePingRule {
+	roleId : string;
+	modRefs : string[];
+}
+
+export interface IMO_GuildOptions extends IMongoDB {
+	chatCommandPrefix : string,
+	changelogForumId : string,
+	updateTextChannelId : string,
+	RolePingRules : IMO_RolePingRule[],
+}
+
+export interface IMO_TextReactions extends IGuildDB {
+	command : string,
+	alias : string[],
+	reactionText : string,
+	autoReactionMatches : string[]
 }
 
 export interface IMO_UserAccount extends IMongoDB {
@@ -24,6 +48,12 @@ export interface IMO_UserAccount extends IMongoDB {
 
 export interface IMO_UserAccountToken extends IMongoDB {
 	userid : string,
+	token : string,
+	expire : Date
+}
+
+export interface IMO_RegisterToken extends IGuildDB {
+	userId : string,
 	token : string,
 	expire : Date
 }

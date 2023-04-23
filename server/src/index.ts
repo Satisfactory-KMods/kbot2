@@ -17,6 +17,7 @@ import {
 	IListenEvents
 }                           from "@shared/types/SocketIO";
 import { TaskManagerClass } from "@server/tasks/TaskManager";
+import { Revalidate }       from "@server/mongodb/DB_Guilds";
 
 global.__BaseDir = __dirname;
 global.__RootDir = path.join( __BaseDir, "../.." );
@@ -68,6 +69,20 @@ mongoose
 		}
 	)
 	.then( async() => {
+		SystemLib.Log( "Revalidate", "MongoDB" );
+		for ( const DB of fs.readdirSync( path.join( __BaseDir, "mongodb" ) ) ) {
+			const File = path.join( __BaseDir, "mongodb", DB );
+			const Stats = fs.statSync( File );
+			if ( Stats.isFile() ) {
+				const DBImport = await import( File );
+				if ( DBImport.Revalidate ) {
+					SystemLib.Log( "Revalidate", `Schema for${ BC( "Cyan" ) }`, DB.toString().replace( ".ts", "" ) );
+					await DBImport.Revalidate();
+				}
+			}
+		}
+
+
 		global.DownloadIPCached = [];
 		SystemLib.Log( "Start", "Create SocketIO" );
 		// Sockets need to connect on a room otherwise we will not be able to send messages

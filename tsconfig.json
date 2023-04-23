@@ -21,31 +21,31 @@
 		],
 		"paths": {
 			"@app/*": [
-				"/src/*"
+				"./src/*"
 			],
 			"@hooks/*": [
-				"/src/hooks/*"
+				"./src/hooks/*"
 			],
 			"@comp/*": [
-				"/src/components/*"
+				"./src/components/*"
 			],
 			"@style/*": [
-				"/src/style/*"
+				"./src/style/*"
 			],
 			"@routing/*": [
-				"/src/routing/*"
+				"./src/routing/*"
 			],
 			"@shared/*": [
-				"/shared/*"
+				"./shared/*"
 			],
 			"@guild/*": [
-				"/src/routing/guild/[id]/*"
+				"./src/routing/guild/[id]/*"
 			],
 			"@server/*": [
-				"/server/src/*"
+				"./server/src/*"
 			],
 			"@/*": [
-				"/*"
+				"./*"
 			]
 		},
 		"lib": [
@@ -60,6 +60,7 @@
 		"src/**/*.tsx"
 	],
 	"exclude": [
-		"node_modules"
+		"node_modules",
+		"server/**/*"
 	]
 }

@@ -7,5 +7,14 @@ const UserAccountSchema = new mongoose.Schema<IMO_UserAccountToken>( {
 	expire: { type: Date, required: true }
 }, { timestamps: true } );
 
-export default mongoose.model<IMO_UserAccountToken>( "KBot2_UserAccountToken", UserAccountSchema );
-export { UserAccountSchema };
+const DB_SessionToken = mongoose.model<IMO_UserAccountToken>( "KBot2_UserAccountToken", UserAccountSchema );
+
+const Revalidate = async() => {
+
+};
+
+export default DB_SessionToken;
+export {
+	UserAccountSchema,
+	Revalidate
+};

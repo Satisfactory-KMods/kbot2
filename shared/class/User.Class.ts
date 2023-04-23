@@ -1,6 +1,6 @@
 import jwt, { JwtPayload } from "jwt-decode";
-import { ERoles }          from "../Enum/ERoles";
-import { DefaultUser }     from "../Default/Auth.Default";
+import { ERoles }          from "@shared/Enum/ERoles";
+import { DefaultUser }     from "@shared/Default/Auth.Default";
 import { IMO_UserAccount } from "@shared/types/MongoDB";
 
 export class User {

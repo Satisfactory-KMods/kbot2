@@ -54,7 +54,7 @@
 				"src/components/*"
 			],
 			"@style/*": [
-				"src/components/*"
+				"src/style/*"
 			],
 			"@routing/*": [
 				"src/routing/*"

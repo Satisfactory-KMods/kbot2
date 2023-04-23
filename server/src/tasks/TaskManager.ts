@@ -3,6 +3,12 @@ import path from "path";
 
 export type TTasksRunner = "MakeItClean" | "DiscordGuilds";
 
+export interface IJobOptions {
+	Interval : number,
+	JobName : TTasksRunner,
+	Task : ( CallCount : number ) => Promise<void>
+}
+
 export class JobTask {
 	public JobName = "";
 	protected Interval = 60000;
@@ -12,18 +18,18 @@ export class JobTask {
 	protected IsRun = false;
 	protected RunNextTask = [ false, false ];
 
-	constructor(
-		Interval : number,
-		JobName : TTasksRunner,
-		Task : ( CallCount : number ) => Promise<void>
-	) {
+	private constructor( { Interval, Task, JobName } : IJobOptions ) {
 		this.JobName = JobName;
 		this.Interval = Interval;
 		this.TaskFunction = Task;
 		this.Task = setInterval( this.Tick.bind( this ), this.Interval );
-		this.Tick().then( () =>
-			SystemLib.Log( "TASKS", "Init run job:", SystemLib.ToBashColor( "Red" ), this.JobName )
-		);
+	}
+
+	static async ConstructJob( Options : IJobOptions ) : Promise<JobTask> {
+		const Job = new JobTask( Options );
+		await Job.Tick();
+		SystemLib.Log( "TASKS", "Init run job:", SystemLib.ToBashColor( "Red" ), Options.JobName );
+		return Job;
 	}
 
 	public UpdateTickTime( NewTime : number ) {
@@ -87,9 +93,8 @@ export class TaskManagerClass {
 				path.join( __BaseDir, "/tasks/jobs", File )
 			);
 			if ( Stats.isFile() && File.endsWith( ".Task.ts" ) ) {
-				const JobClass : JobTask = (
-					await import( path.join( __BaseDir, "/tasks/jobs", File ) )
-				).default as JobTask;
+				const JobOptions : IJobOptions = ( await import( path.join( __BaseDir, "/tasks/jobs", File ) ) ).default;
+				const JobClass = await JobTask.ConstructJob( JobOptions );
 				this.Jobs[ JobClass.JobName ] = JobClass;
 			}
 		}

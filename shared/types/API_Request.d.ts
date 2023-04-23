@@ -1,4 +1,4 @@
-import { User } from "../class/User.Class";
+import { User } from "@shared/class/User.Class";
 
 export type RequestWithUser<T = any> = {
 	UserClass? : T;
