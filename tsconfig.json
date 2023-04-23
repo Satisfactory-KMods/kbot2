@@ -1,60 +1,63 @@
 {
 	"compilerOptions": {
-		"target": "esnext",
 		"module": "esnext",
-		"strict": true,
-		"jsx": "preserve",
 		"moduleResolution": "node",
-		"experimentalDecorators": true,
+		"target": "esnext",
+		"removeComments": false,
+		"allowJs": true,
 		"skipLibCheck": true,
 		"esModuleInterop": true,
 		"allowSyntheticDefaultImports": true,
+		"strict": true,
 		"forceConsistentCasingInFileNames": true,
-		"useDefineForClassFields": true,
-		"sourceMap": true,
+		"noFallthroughCasesInSwitch": true,
+		"resolveJsonModule": true,
+		"isolatedModules": true,
+		"noEmit": true,
+		"jsx": "react-jsx",
 		"baseUrl": ".",
 		"types": [
-			"webpack-env"
-		], 
+			"node"
+		],
 		"paths": {
 			"@app/*": [
-				"src/*"
+				"/src/*"
 			],
 			"@hooks/*": [
-				"src/hooks/*"
+				"/src/hooks/*"
 			],
 			"@comp/*": [
-				"src/components/*"
+				"/src/components/*"
 			],
 			"@style/*": [
-				"src/components/*"
+				"/src/style/*"
 			],
 			"@routing/*": [
-				"src/routing/*"
+				"/src/routing/*"
 			],
 			"@shared/*": [
-				"shared/*"
+				"/shared/*"
 			],
-			"@/*": [
-				"./*"
+			"@guild/*": [
+				"/src/routing/guild/[id]/*"
 			],
 			"@server/*": [
-				"server/src/*"
+				"/server/src/*"
+			],
+			"@/*": [
+				"/*"
 			]
 		},
 		"lib": [
-			"esnext",
 			"dom",
 			"dom.iterable",
-			"scripthost"
+			"esnext"
 		]
 	},
 	"include": [
 		"shared/**/*.ts",
 		"src/**/*.ts",
-		"src/**/*.tsx",
-		"tests/**/*.ts",
-		"tests/**/*.tsx"
+		"src/**/*.tsx"
 	],
 	"exclude": [
 		"node_modules"
