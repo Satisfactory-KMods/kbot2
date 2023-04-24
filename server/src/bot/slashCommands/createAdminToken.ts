@@ -27,7 +27,7 @@ const exec = async( interaction : CommandInteraction ) => {
 		registerDoc.token = MakeRandomString( 20, "-" );
 		if ( await registerDoc.save() ) {
 			await interaction.reply( {
-				content: `Token created successfully!\n\nYou can now use this url **https://kbot2.kyrium.space/register/${ registerDoc.token }** to register on the admin panel.\n\nThis toke expires <t:${ Math.trunc( registerDoc.expire.valueOf() / 1000 ) }:R>`,
+				content: `Token created successfully!\n\nYou can now use this url **${ process.env.BASE_URL }register/${ registerDoc.token }** to register on the admin panel.\n\nThis toke expires <t:${ Math.trunc( registerDoc.expire.valueOf() / 1000 ) }:R>`,
 				ephemeral: true
 			} );
 		}

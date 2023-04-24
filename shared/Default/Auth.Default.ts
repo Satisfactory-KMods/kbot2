@@ -11,13 +11,15 @@ export const DefaultUser : IMO_UserAccount = {
 };
 
 export const DefaultResponseFailed : IAPIResponseBase = {
+	Data: undefined,
 	Success: false,
 	Auth: false,
 	Reached: true,
 	MessageCode: "Api.error.Failed"
 };
-
+ 
 export const DefaultResponseSuccess : IAPIResponseBase = {
+	Data: undefined,
 	Success: true,
 	Auth: false,
 	Reached: true

@@ -31,26 +31,23 @@ export class SystemLib_Class {
 	}
 
 	constructor() {
-		this.IsDevMode = process.argv[ 2 ] === "true";
-		this.UseDebug =
-			process.argv[ 2 ] === "true" ||
-			process.argv[ 2 ] === "Debug" ||
-			process.argv[ 2 ] === "development";
+		this.IsDevMode = SystemLib_Class.IsDev();
+		this.UseDebug = SystemLib_Class.IsDev();
 
-		this.DebugLog( "SYSTEM", "Try to load:", ".env" );
-		dotenv.config();
 		if ( SystemLib_Class.IsDev() ) {
-			this.DebugLog( "SYSTEM", "Try to load:", ".env.dev" );
+			this.Log( "SYSTEM", "Try to load:", ".env.dev" );
 			dotenv.config( {
 				path: ".env.dev"
 			} );
 		}
 		else {
-			this.DebugLog( "SYSTEM", "Try to load:", ".env.local" );
+			this.Log( "SYSTEM", "Try to load:", ".env.local" );
 			dotenv.config( {
 				path: ".env.local"
 			} );
 		}
+		this.Log( "SYSTEM", "Try to load:", ".env" );
+		dotenv.config();
 	}
 
 	public DebugMode() : boolean {

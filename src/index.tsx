@@ -1,18 +1,14 @@
-import { StrictMode }    from "react";
-import App               from "@app/App";
-import { createRoot }    from "react-dom/client";
+import { StrictMode } from "react";
+import App            from "@app/App";
+import { createRoot } from "react-dom/client";
 
 import "@style/Ribbon.scss";
 import "@style/index.css";
-import "bootstrap/dist/js/bootstrap.min.js";
-import "bootstrap/dist/css/bootstrap.min.css";
 import "@kyri123/k-javascript-utils/lib/useAddons";
-import { BrowserRouter } from "react-router-dom";
+import "flowbite";
 
 createRoot( document.getElementById( "root" ) as HTMLElement ).render(
 	<StrictMode>
-		<BrowserRouter>
-			<App/>
-		</BrowserRouter>
+		<App/>
 	</StrictMode>
 );

@@ -1,6 +1,7 @@
 import { FC }           from "react";
 import {
 	Link,
+	useLocation,
 	useParams
 }                       from "react-router-dom";
 import { usePageTitle } from "@kyri123/k-reactutils";
@@ -8,6 +9,7 @@ import { usePageTitle } from "@kyri123/k-reactutils";
 
 const ErrorPage : FC = () => {
 	const { ErrorCode } = useParams();
+	const { pathname } = useLocation();
 	usePageTitle( `SBS - Error ${ ErrorCode }` );
 
 	return (
@@ -18,7 +20,8 @@ const ErrorPage : FC = () => {
 					<span className={ "d-block text-xl" }></span>
 					<span className={ "d-block" }></span>
 					<span className={ "d-block" }>
-						<Link to={ "/" } className={ "btn btn-secondary mt-3" }>Home</Link>
+						<Link to={ pathname.replace( `error/${ ErrorCode }`, "" ) }
+							  className={ "btn btn-secondary mt-3" }>Home</Link>
 					</span>
 				</div>
 			</div>

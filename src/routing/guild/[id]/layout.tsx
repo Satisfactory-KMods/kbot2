@@ -1,10 +1,22 @@
 import {
-	FunctionComponent,
+	FC,
 	PropsWithChildren
 }                    from "react";
 import { Container } from "react-bootstrap";
+import {
+	json,
+	LoaderFunction,
+	Outlet
+}                    from "react-router-dom";
 
-const Layout : FunctionComponent<PropsWithChildren> = ( { children } ) => {
+const loader : LoaderFunction = async( { request, params } ) => {
+	const { guildId } = params;
+	console.log( "layout", guildId );
+	const data = {};
+	return json( data );
+};
+
+const Component : FC<PropsWithChildren> = ( { children } ) => {
 
 	return (
 		<>
@@ -17,7 +29,7 @@ const Layout : FunctionComponent<PropsWithChildren> = ( { children } ) => {
 						 backgroundSize: "cover"
 					 } }>
 					<Container className={ "h-100 p-3" }>
-						{ children }
+						<Outlet/>
 					</Container>
 				</div>
 			</div>
@@ -25,4 +37,7 @@ const Layout : FunctionComponent<PropsWithChildren> = ( { children } ) => {
 	);
 };
 
-export default Layout;
+export {
+	Component,
+	loader
+};

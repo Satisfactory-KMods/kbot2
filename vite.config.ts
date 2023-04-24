@@ -13,7 +13,7 @@ import {
 }             from "path";
 import fs     from "fs";
 
-const vendor = [ "react-bootstrap", "react-icons", "react", "react-markdown", "react-select", "react-router-dom", "react-dom" ];
+const vendor = [ "react-icons", "react", "react-markdown", "react-select", "react-router-dom", "react-dom" ];
 
 function renderChunks( deps : Record<string, string> ) {
 	const chunks : any = {};

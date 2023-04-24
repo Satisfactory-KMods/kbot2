@@ -18,6 +18,7 @@ import {
 }                           from "@shared/types/SocketIO";
 import { TaskManagerClass } from "@server/tasks/TaskManager";
 import { Revalidate }       from "@server/mongodb/DB_Guilds";
+import * as console         from "console";
 
 global.__BaseDir = __dirname;
 global.__RootDir = path.join( __BaseDir, "../.." );
@@ -51,6 +52,10 @@ Api.use( fileUpload( {
 Api.use( express.static( path.join( __BaseDir, "../..", "dist" ), { extensions: [ "js" ] } ) );
 
 Api.use( function( req, res, next ) {
+	if ( SystemLib_Class.IsDev() ) {
+		console.log( req.method, req.url );
+	}
+
 	res.setHeader( "Access-Control-Allow-Origin", "*" );
 	res.setHeader( "Access-Control-Allow-Methods", "GET, POST" );
 	res.setHeader(

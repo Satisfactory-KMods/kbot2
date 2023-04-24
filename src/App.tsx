@@ -1,18 +1,15 @@
 import {
-	RouterProvider,
-	useLocation
+	Navigate,
+	RouterProvider
 }                     from "react-router-dom";
 import React          from "react";
-import useAuth        from "@hooks/useAuth";
 import "@kyri123/k-javascript-utils/lib/useAddons";
 import { rootRouter } from "@routing/router";
 
 function App() {
-	const Location = useLocation();
-	const Auth = useAuth();
 
 	return (
-		<RouterProvider router={ rootRouter }/>
+		<RouterProvider router={ rootRouter } fallbackElement={ <Navigate to={ "/error/404" }/> }/>
 	);
 }
 

@@ -3,40 +3,37 @@ import {
 	createRoutesFromElements,
 	Navigate,
 	Route
-}                          from "react-router-dom";
-import LoadingPage         from "@routing/LoadingPage";
-import React, { Suspense } from "react";
-import ErrorPage           from "@routing/error/ErrorPage";
+}                from "react-router-dom";
+import React     from "react";
+import ErrorPage from "@routing/error/ErrorPage";
 
 const rootRouter = createBrowserRouter( createRoutesFromElements(
-	<Suspense fallback={ <LoadingPage/> }>
-		<Route path="/" element={ <LoadingPage/> }>
-			<Route path="/error/:ErrorCode" element={ <ErrorPage/> }/>
-			<Route path="/guild/:id/*" lazy={ () => import("@guild/index") }/>
+	<>
+		<Route path="error/:ErrorCode" element={ <ErrorPage/> }/>
 
-			<Route path="/signin" lazy={ () => import("@routing/signin") }/>
-			<Route path="/signup/:authcode" lazy={ () => import("@routing/signup/[authcode]") }/>
-
-			<Route path="/" element={ <Navigate to={ "/signin" }/> }/>
-			<Route path="*" element={ <Navigate to={ "/error/404" }/> }/>
+		<Route lazy={ () => import("@routing/layout") }>
+			<Route index lazy={ () => import("@routing/index") }/>
+			<Route path="/login" lazy={ () => import("@routing/login") }/>
+			<Route path="/register/:authcode" lazy={ () => import("@routing/register/[authcode]") }/>
 		</Route>
-	</Suspense>
+
+		<Route path="/guild/:guildId" lazy={ () => import("@guild/layout") }>
+			<Route path="home" lazy={ () => import("@guild/index") }/>
+		</Route>
+
+		<Route path="*" element={ <Navigate to={ "error/404" }/> }/>
+	</>
 ) );
 
-const guildRouter = createBrowserRouter( createRoutesFromElements(
-	<Suspense fallback={ <LoadingPage/> }>
-		<Route path="/" element={ <LoadingPage/> }>
-			<Route path="/error/:ErrorCode" element={ <ErrorPage/> }/>
-			<Route path="/guild/:id/*" lazy={ () => import("@guild/index") }/>
+const guildRouter = (
+	<>
+		<Route path="error/:ErrorCode" element={ <ErrorPage/> }/>
 
-			<Route path="/signin" lazy={ () => import("@routing/signin") }/>
-			<Route path="/signup/:authcode" lazy={ () => import("@routing/signup/[authcode]") }/>
-
-			<Route path="/" element={ <Navigate to={ "/signin" }/> }/>
-			<Route path="*" element={ <Navigate to={ "/error/404" }/> }/>
+		<Route path="/" element={ <Navigate to={ "home" }/> }>
+			<Route path="*" element={ <Navigate to={ "error/404" }/> }/>
 		</Route>
-	</Suspense>
-) );
+	</>
+);
 
 
 export {
