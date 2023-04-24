@@ -14,6 +14,7 @@ import {
 import fs     from "fs";
 
 const vendor = [ "react-icons", "react", "react-markdown", "react-select", "react-router-dom", "react-dom" ];
+const flowbite = [ "flowbite-react" ];
 
 function renderChunks( deps : Record<string, string> ) {
 	const chunks : any = {};
@@ -66,8 +67,7 @@ export default defineConfig( ( { command, mode, ssrBuild } ) => {
 					chunkFileNames: `chunk/[name].js`,
 					assetFileNames: `asset/[name].[ext]`,
 					manualChunks: {
-						vendor//,
-						//...renderChunks( dependencies )
+						vendor, flowbite
 					}
 				}
 			}

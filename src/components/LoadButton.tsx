@@ -1,5 +1,7 @@
-import { ButtonProps }   from "flowbite-react/lib/esm/components/Button/Button";
-import { Button }        from "flowbite-react";
+import {
+	Button,
+	ButtonProps
+}                        from "flowbite-react";
 import React, {
 	FC,
 	PropsWithChildren
