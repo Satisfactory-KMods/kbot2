@@ -1,13 +1,12 @@
 import {
 	FC,
 	PropsWithChildren
-}                    from "react";
-import { Container } from "react-bootstrap";
+} from "react";
 import {
 	json,
 	LoaderFunction,
 	Outlet
-}                    from "react-router-dom";
+} from "react-router-dom";
 
 const loader : LoaderFunction = async( { request, params } ) => {
 	const { guildId } = params;
@@ -28,9 +27,9 @@ const Component : FC<PropsWithChildren> = ( { children } ) => {
 						 backgroundRepeat: "no-repeat",
 						 backgroundSize: "cover"
 					 } }>
-					<Container className={ "h-100 p-3" }>
-						<Outlet/>
-					</Container>
+
+					<Outlet/>
+
 				</div>
 			</div>
 		</>
