@@ -5,6 +5,7 @@ import {
 	LoaderFunction,
 	Outlet
 }             from "react-router-dom";
+import Ribbon from "@comp/elements/Ribbon";
 
 
 const loader : LoaderFunction = async() => {
@@ -23,7 +24,8 @@ const Component : FC = () => {
 				</Link>
 				<div
 					className="w-full bg-gray-800 rounded-lg shadow border md:mt-0 sm:max-w-md xl:p-0 border-gray-700">
-					<div className="p-6 space-y-4 md:space-y-6 sm:p-8">
+					<div className="relative p-6 space-y-4 md:space-y-6 sm:p-8">
+						<Ribbon color="red">Alpha</Ribbon>
 						<Outlet/>
 					</div>
 				</div>

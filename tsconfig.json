@@ -29,9 +29,6 @@
 			"@comp/*": [
 				"./src/components/*"
 			],
-			"@tw/*": [
-				"./src/components/tailwind/*"
-			],
 			"@style/*": [
 				"./src/style/*"
 			],
