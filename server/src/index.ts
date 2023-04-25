@@ -25,7 +25,7 @@ global.__RootDir = process.cwd();
 global.__MountDir = path.join( __RootDir, "mount" );
 ( !fs.existsSync( path.join( __MountDir, "Logs" ) ) ) && fs.mkdirSync( path.join( __MountDir, "Logs" ), { recursive: true } );
 global.__LogFile = path.join( __MountDir, "Logs", `${ Date.now() }.log` );
-
+ 
 global.SystemLib = new SystemLib_Class();
 SystemLib.Log( "Start", "SystemLib was created" );
 

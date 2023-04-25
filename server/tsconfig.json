@@ -63,9 +63,6 @@
 		"sourceMap": false,
 		"baseUrl": "../"
 	},
-	"files": [
-		"./src/Types/global.d.ts"
-	],
 	"include": [
 		"./src/**/*.ts",
 		"../shared/**/*.ts"
