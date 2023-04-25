@@ -1,6 +1,6 @@
 {
 	"compilerOptions": {
-		"outDir": "../dist/server",
+		"outDir": "../dist-server",
 		"rootDirs": [
 			"server/src",
 			"shared"
@@ -63,6 +63,9 @@
 		"sourceMap": false,
 		"baseUrl": "../"
 	},
+	"files": [
+		"./src/types/global.d.ts"
+	],
 	"include": [
 		"./src/**/*.ts",
 		"../shared/**/*.ts"

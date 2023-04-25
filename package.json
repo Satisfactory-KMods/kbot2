@@ -3,7 +3,7 @@
 	"version": "2.0.0",
 	"private": true,
 	"scripts": {
-		"production": "NODE_ENV=production node ./dist/server/index.js",
+		"production": "NODE_ENV=production ts-node --project ./server/tsconfig.json -r tsconfig-paths/register ./server/src/index.ts",
 		"devserver": "ts-node --project ./server/tsconfig.json -r tsconfig-paths/register ./server/src/index.ts",
 		"dev": "concurrently -m 2 \"vite --host --port 3000\" \"nodemon\"",
 		"build": "yarn build:lint && yarn build:web && yarn build:server",

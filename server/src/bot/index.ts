@@ -92,7 +92,7 @@ export default async function() {
 			} );
 
 			// start the client login
-			await DiscordBot.login( process.env.Token );
+			await DiscordBot.login( process.env.TOKEN );
 		};
 		Do();
 	} );
