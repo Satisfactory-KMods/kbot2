@@ -24,6 +24,13 @@ const validateLogin = async() : Promise<ILoaderDataBase> => {
 	return { loggedIn: false };
 };
 
+const getToken = () : string => {
+	return window.localStorage.getItem( "session" ) || "";
+};
+const setToken = ( token : string ) : void => {
+	window.localStorage.setItem( "session", token );
+};
+
 const useAuth = () : [ User, () => void ] => {
 	const { Storage, ResetStorage } = useLocalStorage( "session", "" );
 
@@ -34,5 +41,7 @@ const useAuth = () : [ User, () => void ] => {
 
 export default useAuth;
 export {
+	getToken,
+	setToken,
 	validateLogin
 };

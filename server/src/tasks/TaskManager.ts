@@ -7,6 +7,7 @@ export interface IJobOptions {
 	Interval : number,
 	JobName : TTasksRunner,
 	Task : ( CallCount : number ) => Promise<void>
+	DisableInitSync? : boolean
 }
 
 export class JobTask {
@@ -27,7 +28,12 @@ export class JobTask {
 
 	static async ConstructJob( Options : IJobOptions ) : Promise<JobTask> {
 		const Job = new JobTask( Options );
-		await Job.Tick();
+		if ( Options.DisableInitSync ) {
+			Job.Tick();
+		}
+		else {
+			await Job.Tick();
+		}
 		SystemLib.Log( "TASKS", "Init run job:", SystemLib.ToBashColor( "Red" ), Options.JobName );
 		return Job;
 	}

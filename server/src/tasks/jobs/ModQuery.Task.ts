@@ -45,6 +45,7 @@ const GraphQuery = ( Offset : number ) => {
 };
 
 const JobOptions : IJobOptions = {
+	DisableInitSync: true,
 	Interval: 60000 * 60, // 60 minutes
 	JobName: "FicsitQuery",
 	Task: async() => {

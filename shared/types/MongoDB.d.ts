@@ -8,7 +8,7 @@ export interface IMongoDB {
 	updatedAt? : Date | string // string on client side
 }
 
-export interface IGuildDB {
+export interface IGuildDB extends IMongoDB {
 	guildId : string;
 }
 
