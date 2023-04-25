@@ -60,12 +60,12 @@ const Component : FC = () => {
 	}
 	console.log( guilds );
 	return ( <>
-		<div className="mb-4 flex items-center justify-between">
-			<h5 className="text-xl font-bold leading-none text-gray-900 dark:text-white">
+		<div className="mb-4 flex items-center justify-between text-center">
+			<h5 className="text-3xl font-bold leading-none text-gray-900 dark:text-white text-center">
 				Select a Server
 			</h5>
 		</div>
-		<div className="flow-root">
+		<div className="flow-root -mx-8 border-y border-gray-700">
 			<ul className="divide-y divide-gray-200 dark:divide-gray-700">
 				{ guilds.map( ( guild ) => ( <GuildSelectRow guild={ guild } key={ guild._id }/> ) ) }
 			</ul>
