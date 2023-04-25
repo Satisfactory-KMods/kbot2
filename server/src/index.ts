@@ -21,7 +21,7 @@ import { Revalidate }       from "@server/mongodb/DB_Guilds";
 import * as console         from "console";
 
 global.__BaseDir = __dirname;
-global.__RootDir = path.join( __BaseDir, "../.." );
+global.__RootDir = process.cwd();
 global.__MountDir = path.join( __RootDir, "mount" );
 ( !fs.existsSync( path.join( __MountDir, "Logs" ) ) ) && fs.mkdirSync( path.join( __MountDir, "Logs" ), { recursive: true } );
 global.__LogFile = path.join( __MountDir, "Logs", `${ Date.now() }.log` );

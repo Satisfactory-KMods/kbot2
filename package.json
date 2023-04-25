@@ -3,12 +3,13 @@
 	"version": "2.0.0",
 	"private": true,
 	"scripts": {
-		"production": "NODE_ENV=production ts-node --project ./server/tsconfig.json -r tsconfig-paths/register ./server/src/index.ts",
+		"production": "NODE_ENV=production node ./dist/server/index.js",
 		"devserver": "ts-node --project ./server/tsconfig.json -r tsconfig-paths/register ./server/src/index.ts",
 		"dev": "concurrently -m 2 \"vite --host --port 3000\" \"nodemon\"",
-		"build": "yarn build:lint && yarn build:web",
+		"build": "yarn build:lint && yarn build:web && yarn build:server",
 		"build:lint": "yarn lint",
 		"build:web": "vite build",
+		"build:server": "tsc --project ./server/tsconfig.json && tsc-alias -p ./server/tsconfig.json",
 		"lint": "concurrently -m 3 \"yarn lint:server\" \"yarn lint:shared\" \"yarn lint:react\"",
 		"lint:server": "eslint ./server/src/**/*.{ts,tsx,js,jsx} --fix",
 		"lint:shared": "eslint ./shared/**/*.{ts,tsx,js,jsx} --fix",
@@ -66,6 +67,7 @@
 		"react-error-overlay": "6.0.9",
 		"tailwindcss": "^3.3.1",
 		"ts-node": "^10.9.1",
+		"tsc-alias": "^1.8.5",
 		"typescript": "^4.9.5",
 		"vite": "^4.2.0",
 		"vite-plugin-eslint": "^1.8.1"

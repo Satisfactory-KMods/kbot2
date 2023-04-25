@@ -1,6 +1,6 @@
 {
 	"compilerOptions": {
-		"outDir": "../ServerBuild",
+		"outDir": "../dist/server",
 		"rootDirs": [
 			"server/src",
 			"shared"
@@ -60,7 +60,7 @@
 				"src/routing/*"
 			]
 		},
-		"sourceMap": true,
+		"sourceMap": false,
 		"baseUrl": "../"
 	},
 	"files": [
