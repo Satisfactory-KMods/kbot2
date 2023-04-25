@@ -18,14 +18,16 @@ const UpdateGuild = async( dicordGuild : Guild ) => {
 			await DB_Guilds.create( {
 				guildId: dicordGuild.id,
 				accountIds: dicordGuild.members.cache.filter( R => R.permissions.has( PermissionFlagsBits.Administrator ) ).map( R => R.id.toString() ),
-				guildData: dicordGuild.toJSON()
+				guildData: dicordGuild.toJSON(),
+				isInGuild: true
 			} );
 			SystemLib.LogWarning( "bot", `New Guild added to Database:${ BC( "Cyan" ) }`, dicordGuild.name, ` | ID:`, dicordGuild.id );
 		}
 		else {
 			await DB_Guilds.findOneAndUpdate( { guildId: dicordGuild.id }, {
 				accountIds: dicordGuild.members.cache.filter( R => R.permissions.has( PermissionFlagsBits.Administrator ) ).map( R => R.id.toString() ),
-				guildData: dicordGuild.toJSON()
+				guildData: dicordGuild.toJSON(),
+				isInGuild: true
 			} );
 		}
 	}

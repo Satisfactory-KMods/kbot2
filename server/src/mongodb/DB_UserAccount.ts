@@ -13,8 +13,7 @@ const UserAccountSchema = new mongoose.Schema<IMO_UserAccount>( {
 	discordId: { type: String, required: true, unique: true },
 	role: { type: Number, required: true },
 	hash: { type: String, required: true },
-	salt: { type: String, required: true },
-	guilds: { type: [ String ], default: [] }
+	salt: { type: String, required: true }
 }, { timestamps: true } );
 
 UserAccountSchema.methods.setPassword = function( password ) {
@@ -27,13 +26,13 @@ UserAccountSchema.methods.validPassword = function( password ) {
 	return this.hash === hash;
 };
 
-const DB_UserAccounts = mongoose.model<IMO_UserAccount, Model<IMO_UserAccount, any, IUserAccountMethods>>( "KBot2_UserAccount", UserAccountSchema );
+const DB_UserAccount = mongoose.model<IMO_UserAccount, Model<IMO_UserAccount, any, IUserAccountMethods>>( "KBot2_UserAccount", UserAccountSchema );
 
 const Revalidate = async() => {
 
 };
 
-export default DB_UserAccounts;
+export default DB_UserAccount;
 export {
 	UserAccountSchema,
 	Revalidate

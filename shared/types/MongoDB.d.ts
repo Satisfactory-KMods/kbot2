@@ -43,7 +43,6 @@ export interface IMO_UserAccount extends IMongoDB {
 	hash? : string,
 	salt? : string,
 	role : ERoles,
-	guilds : string[],
 	discordId : string
 }
 
@@ -56,5 +55,6 @@ export interface IMO_UserAccountToken extends IMongoDB {
 export interface IMO_RegisterToken extends IGuildDB {
 	userId : string,
 	token : string,
-	expire : Date
+	expire : Date,
+	isPasswordResetToken : boolean
 }

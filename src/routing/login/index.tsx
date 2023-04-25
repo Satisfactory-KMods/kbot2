@@ -1,5 +1,6 @@
 import {
 	FC,
+	FormEvent,
 	useRef,
 	useState
 }                                     from "react";
@@ -17,6 +18,8 @@ import { TR_Auth_Account_Checkout }   from "@shared/types/API_Response";
 import { EApiAuth }                   from "@shared/Enum/EApiPath";
 import {
 	Button,
+	Checkbox,
+	Label,
 	TextInput
 }                                     from "flowbite-react";
 import LoadButton                     from "@comp/LoadButton";
@@ -26,6 +29,7 @@ import {
 	SiPatreon,
 	SlLogin
 }                                     from "react-icons/all";
+import { fireToastFromApi }           from "@lib/sweetAlert";
 
 const loader : LoaderFunction = async() => {
 	const result = await validateLogin();
@@ -38,30 +42,44 @@ const loader : LoaderFunction = async() => {
 const Component : FC = () => {
 	const navigate = useNavigate();
 	const [ isLoading, setIsLoading ] = useState( false );
+	const [ inputError, setInputError ] = useState( [ false, false ] );
 	const { loggedIn } = useLoaderData() as ILoaderDataBase;
 
 	const loginRef = useRef<HTMLInputElement>( null );
 	const passwordRef = useRef<HTMLInputElement>( null );
+	const stayLoggedInRef = useRef<HTMLInputElement>( null );
 
 	if ( loggedIn ) {
 		return ( <></> );
 	}
 
-	const OnSubmit = async() => {
-		setIsLoading( true );
+	const OnSubmit = async( event : FormEvent<HTMLFormElement> ) => {
+		event.preventDefault();
 
-		if ( loginRef.current && passwordRef.current ) {
+		const username = loginRef.current?.value;
+		const password = passwordRef.current?.value;
+		const stayLoggedIn = !!stayLoggedInRef.current?.checked;
+
+		if ( username !== undefined && password !== undefined ) {
+			setInputError( [ username.length < 6, password.length < 8 ] );
+			if ( username.length < 6 || password.length < 8 ) {
+				return;
+			}
+
+			setIsLoading( true );
 			const Response = await fetchCheckoutJson<TReq_Auth_Account_Checkout, TR_Auth_Account_Checkout>( {
 				path: EApiAuth.account,
-				data: {
-					username: loginRef.current.value,
-					password: passwordRef.current.value
-				}
+				data: { username, password, stayLoggedIn }
 			} ).catch( console.warn );
 
 			if ( Response ) {
-				window.localStorage.setItem( "session", Response.Data.token );
-				navigate( "/" );
+				if ( Response.Success ) {
+					window.localStorage.setItem( "session", Response.Data.token );
+					navigate( "/" );
+				}
+				else {
+					fireToastFromApi( Response );
+				}
 			}
 		}
 
@@ -73,11 +91,25 @@ const Component : FC = () => {
 			<h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl text-white text-center">
 				Sign in to your account
 			</h1>
-			<form className="space-y-4 md:space-y-6" action="#">
-				<TextInput className="w-full" placeholder="Discord id or login name" ref={ loginRef }/>
-				<TextInput className="w-full" placeholder="Password" ref={ passwordRef }/>
+			<form className="space-y-4" action="#" onSubmit={ OnSubmit }>
+				<TextInput color={ inputError[ 0 ] ? "failure" : "gray" } className="w-full mt-6"
+						   placeholder="Discord id or login name" ref={ loginRef }
+						   helperText={ inputError[ 1 ] ? <><span className="font-medium">Oops!</span> Username is too
+							   short... must be 6 character long.</> : undefined }/>
+				<TextInput color={ inputError[ 1 ] ? "failure" : "gray" } className="w-full mt-6" placeholder="Password"
+						   type="password"
+						   ref={ passwordRef }
+						   helperText={ inputError[ 1 ] ? <><span className="font-medium">Oops!</span> Password is too
+							   short... must be 8 character long.</> : undefined }/>
 
-				<LoadButton className="w-full" isLoading={ isLoading }
+				<div className="flex items-center gap-2 mt-6">
+					<Checkbox id="remember" defaultChecked={ true } ref={ stayLoggedInRef }/>
+					<Label htmlFor="remember">
+						Remember me
+					</Label>
+				</div>
+
+				<LoadButton className="w-full" isLoading={ isLoading } type={ "submit" }
 							icon={ <SlLogin className="mr-3 h-4 w-4"/> }>
 					Sign In
 				</LoadButton>

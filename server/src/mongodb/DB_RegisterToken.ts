@@ -5,7 +5,8 @@ const RegisterTokenSchema = new mongoose.Schema<IMO_RegisterToken>( {
 	userId: { type: String, required: true },
 	guildId: { type: String, required: true },
 	token: { type: String, required: true },
-	expire: { type: Date, required: true }
+	expire: { type: Date, required: true },
+	isPasswordResetToken: { type: Boolean, required: true }
 } );
 
 const DB_RegisterToken = mongoose.model<IMO_RegisterToken>( "KBot2_RegisterToken", RegisterTokenSchema );

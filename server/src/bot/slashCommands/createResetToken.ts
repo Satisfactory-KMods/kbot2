@@ -7,8 +7,8 @@ import { MakeRandomString } from "@kyri123/k-javascript-utils";
 import DB_UserAccount       from "@server/mongodb/DB_UserAccount";
 
 const command = new SlashCommandBuilder()
-	.setName( "create-token" )
-	.setDescription( "Create a token url for register on the admin Panel" );
+	.setName( "reset-password" )
+	.setDescription( "Create a token url for reset the password on the admin Panel" );
 
 const exec = async( interaction : CommandInteraction ) => {
 	try {
@@ -21,23 +21,23 @@ const exec = async( interaction : CommandInteraction ) => {
 	}
 
 	try {
-		if ( !await DB_UserAccount.exists( { discordId: interaction.user.id } ) ) {
+		if ( await DB_UserAccount.exists( { discordId: interaction.user.id } ) ) {
 			const registerDoc = new DB_RegisterToken();
 			registerDoc.userId = interaction.user.id;
 			registerDoc.expire = new Date( Date.now() + 1000 * 60 * 60 * 24 );
 			registerDoc.guildId = interaction.guild!.id;
 			registerDoc.token = MakeRandomString( 20, "-" );
-			registerDoc.isPasswordResetToken = false;
+			registerDoc.isPasswordResetToken = true;
 			if ( await registerDoc.save() ) {
 				await interaction.reply( {
-					content: `Token created successfully!\n\nYou can now use this url **${ process.env.BASE_URL }register/${ registerDoc.token }** to register on the admin panel.\n\nThis token expires <t:${ Math.trunc( registerDoc.expire.valueOf() / 1000 ) }:R>`,
+					content: `Token created successfully!\n\nYou can now use this url **${ process.env.BASE_URL }reset/${ registerDoc.token }** to reset your password on the admin panel.\n\nThis token expires <t:${ Math.trunc( registerDoc.expire.valueOf() / 1000 ) }:R>`,
 					ephemeral: true
 				} );
 			}
 		}
 		else {
 			await interaction.reply( {
-				content: `There is already a account with this discord id!\n\nYou can now use this command to reset your password **/reset-password**`,
+				content: `There is no account with this discord id!\n\nYou can now use this command to reset your password **/create-token**`,
 				ephemeral: true
 			} );
 		}

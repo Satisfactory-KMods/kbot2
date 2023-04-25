@@ -16,4 +16,5 @@ export type IAPIResponseBase<T = any> = ResponseBase<T>;
 
 export type TR_Auth_Validate_All = IAPIResponseBase;
 export type TR_Auth_Account_Checkout = IAPIResponseBase<{ token : string }>;
-export type TR_Auth_Account_Post = IAPIResponseBase<{ token : string }>;
+export type TR_Auth_Account_Put = TR_Auth_Account_Checkout;
+export type TR_Auth_Modify_Patch = TR_Auth_Account_Checkout;

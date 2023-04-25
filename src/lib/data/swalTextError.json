@@ -1,0 +1,10 @@
+{
+	"unauthorized": "you are not authorized to do that.",
+	"auth.token": "token can't be created.",
+	"register.create": "Account can't be created. Username already exists.",
+	"api.notfound": "API request not found or failed.",
+	"reset.nouser": "User not found. Did you delete your account?",
+	"reset.save": "Failed to reset password.",
+	"login.password": "Password is wrong for this account.'",
+	"login.nouser": "User not found. Did you delete your account?"
+}

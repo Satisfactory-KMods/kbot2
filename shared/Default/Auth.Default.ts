@@ -4,7 +4,6 @@ import { ERoles }           from "@shared/Enum/ERoles";
 
 export const DefaultUser : IMO_UserAccount = {
 	discordId: "",
-	guilds: [],
 	_id: "",
 	username: "Default User",
 	role: ERoles.member
@@ -17,7 +16,7 @@ export const DefaultResponseFailed : IAPIResponseBase = {
 	Reached: true,
 	MessageCode: "Api.error.Failed"
 };
- 
+
 export const DefaultResponseSuccess : IAPIResponseBase = {
 	Data: undefined,
 	Success: true,

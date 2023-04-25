@@ -15,7 +15,7 @@ const JobOptions : IJobOptions = {
 				await UpdateGuild( guild );
 				await DiscordGuildManager.GetGuild( guild.id.toString() );
 			}
-			await DB_Guilds.updateMany( { guildId: { $nin: Guilds.map( R => R[ 0 ] ) } }, { isInGuild: false } );
+			await DB_Guilds.updateMany( { guildId: { $nin: Guilds.map( R => R.id ) } }, { isInGuild: false } );
 			for await ( const Guild of DB_Guilds.findOne( { isInGuild: false } ) ) {
 				DiscordGuildManager.RemoveGuild( Guild.guildId );
 			}

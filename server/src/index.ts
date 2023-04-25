@@ -65,12 +65,14 @@ Api.use( function( req, res, next ) {
 	res.setHeader( "Access-Control-Allow-Credentials", "true" );
 	next();
 } );
+
 mongoose
 	.connect(
-		`mongodb://${ process.env.MONGODB_HOST }:${ process.env.MONGODB_PORT }/${ process.env.MONGODB_DATABASE }`,
+		`mongodb://${ process.env.MONGODB_HOST }:${ process.env.MONGODB_PORT }`,
 		{
 			user: process.env.MONGODB_USER,
-			pass: process.env.MONGODB_PASSWD
+			pass: process.env.MONGODB_PASSWD,
+			dbName: process.env.MONGODB_DATABASE
 		}
 	)
 	.then( async() => {

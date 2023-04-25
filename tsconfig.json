@@ -26,6 +26,9 @@
 			"@hooks/*": [
 				"./src/hooks/*"
 			],
+			"@lib/*": [
+				"./src/lib/*"
+			],
 			"@comp/*": [
 				"./src/components/*"
 			],
@@ -39,7 +42,7 @@
 				"./shared/*"
 			],
 			"@guild/*": [
-				"./src/routing/guild/[id]/*"
+				"./src/routing/guild/[guildId]/*"
 			],
 			"@server/*": [
 				"./server/src/*"

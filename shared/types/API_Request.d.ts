@@ -3,6 +3,7 @@ import { User } from "@shared/class/User.Class";
 export interface ILoginRequest {
 	username : string;
 	password : string;
+	stayLoggedIn : boolean;
 }
 
 export interface IRegisterRequest extends ILoginRequest {
@@ -21,4 +22,5 @@ export type IRequestBody<T> = RequestWithUser<User> & Partial<T>;
 // ----------------------------------------
 
 export type TReq_Auth_Account_Checkout = IRequestBody<ILoginRequest>;
-export type TReq_Auth_Account_Post = IRequestBody<IRegisterRequest>;
+export type TReq_Auth_Account_Put = IRequestBody<Omit<IRegisterRequest, "stayLoggedIn">>;
+export type TReq_Auth_Modify_Patch = IRequestBody<Omit<IRegisterRequest, "stayLoggedIn", "username">>;

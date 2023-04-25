@@ -21,7 +21,7 @@ export function ApiUrl( Url : TApiPath | string ) {
 export async function MW_Auth( req : Request, res : Response, next : NextFunction ) {
 	const Response : ResponseBase = {
 		...DefaultResponseFailed,
-		MessageCode: "Api.error.Unauthorized"
+		MessageCode: "unauthorized"
 	};
 
 	const AuthHeader = req.headers.authorization;
@@ -54,7 +54,7 @@ export async function MW_Auth( req : Request, res : Response, next : NextFunctio
 export async function MW_Permission( req : Request, res : Response, next : NextFunction, Permission : ERoles ) {
 	const Response : ResponseBase = {
 		...DefaultResponseFailed,
-		MessageCode: "Api.error.Unauthorized"
+		MessageCode: "unauthorized"
 	};
 	if ( req.body.UserClass && req.body.UserClass.HasPermssion( Permission ) ) {
 		next();

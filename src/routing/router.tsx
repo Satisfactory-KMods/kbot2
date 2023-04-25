@@ -3,18 +3,19 @@ import {
 	createRoutesFromElements,
 	Navigate,
 	Route
-}                from "react-router-dom";
-import React     from "react";
-import ErrorPage from "@routing/error/ErrorPage";
+}            from "react-router-dom";
+import React from "react";
+import Index from "@routing/error/[ErrorCode]";
 
 const rootRouter = createBrowserRouter( createRoutesFromElements(
 	<>
-		<Route path="error/:ErrorCode" element={ <ErrorPage/> }/>
+		<Route path="error/:ErrorCode" element={ <Index/> }/>
 
 		<Route lazy={ () => import("@routing/layout") }>
 			<Route index lazy={ () => import("@routing/index") }/>
 			<Route path="/login" lazy={ () => import("@routing/login") }/>
-			<Route path="/register/:authcode" lazy={ () => import("@routing/register/[authcode]") }/>
+			<Route path="/register/:authCode" lazy={ () => import("@routing/register/[authCode]") }/>
+			<Route path="/reset/:authCode" lazy={ () => import("@routing/reset/[authCode]") }/>
 		</Route>
 
 		<Route path="/guild/:guildId" lazy={ () => import("@guild/layout") }>
@@ -25,18 +26,7 @@ const rootRouter = createBrowserRouter( createRoutesFromElements(
 	</>
 ) );
 
-const guildRouter = (
-	<>
-		<Route path="error/:ErrorCode" element={ <ErrorPage/> }/>
-
-		<Route path="/" element={ <Navigate to={ "home" }/> }>
-			<Route path="*" element={ <Navigate to={ "error/404" }/> }/>
-		</Route>
-	</>
-);
-
 
 export {
-	rootRouter,
-	guildRouter
+	rootRouter
 };

@@ -20,6 +20,7 @@ const GuildOptionSchema = new mongoose.Schema<IMO_GuildOptions>( {
 
 const GuildSchema = new mongoose.Schema<IMO_Guild>( {
 	guildId: { type: String, required: true, unique: true },
+	isInGuild: { type: Boolean, default: false },
 	accountIds: { type: [ String ], default: [] },
 	guildData: { type: {}, default: {} },
 	options: {
