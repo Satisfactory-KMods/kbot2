@@ -19,7 +19,6 @@ COPY ./src ./src
 COPY ./server ./server
 COPY ./public ./public
 COPY ./shared ./shared
-COPY .env ./
 
 # create main files
 RUN yarn build
