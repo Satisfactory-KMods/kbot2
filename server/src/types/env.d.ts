@@ -9,6 +9,7 @@ declare global {
 			MONGODB_PASSWD : string;
 			MONGODB_DATABASE : string;
 			TOKEN : string;
+			INVURL : string;
 		}
 	}
 }

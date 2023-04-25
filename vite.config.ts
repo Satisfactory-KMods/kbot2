@@ -2,8 +2,7 @@
 
 import {
 	Alias,
-	defineConfig,
-	loadEnv
+	defineConfig
 }             from "vite";
 import react  from "@vitejs/plugin-react";
 import eslint from "vite-plugin-eslint";
@@ -34,11 +33,8 @@ export default defineConfig( ( { command, mode, ssrBuild } ) => {
 		replacement: join( __dirname, value[ 0 ].replace( "/*", "" ) )
 	} ) );
 	console.log( "Resolve Alias:", alias );
-	const env = loadEnv( mode, process.cwd(), "" );
 	return {
-		define: {
-			__APP_ENV__: env.APP_ENV
-		},
+		envDir: process.cwd(),
 		assetsInclude: [ "**/*.md" ],
 		resolve: {
 			alias

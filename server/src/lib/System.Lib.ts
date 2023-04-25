@@ -34,18 +34,14 @@ export class SystemLib_Class {
 		this.IsDevMode = SystemLib_Class.IsDev();
 		this.UseDebug = SystemLib_Class.IsDev();
 
-		if ( SystemLib_Class.IsDev() ) {
-			this.Log( "SYSTEM", "Try to load:", ".env.dev" );
-			dotenv.config( {
-				path: ".env.dev"
-			} );
-		}
-		else {
-			this.Log( "SYSTEM", "Try to load:", ".env.local" );
-			dotenv.config( {
-				path: ".env.local"
-			} );
-		}
+		this.Log( "SYSTEM", "Try to load:", ".env.dev" );
+		dotenv.config( {
+			path: ".env.development"
+		} );
+		this.Log( "SYSTEM", "Try to load:", ".env.local" );
+		dotenv.config( {
+			path: ".env.production"
+		} );
 		this.Log( "SYSTEM", "Try to load:", ".env" );
 		dotenv.config();
 	}

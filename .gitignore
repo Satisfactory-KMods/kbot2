@@ -6,12 +6,12 @@ node_modules
 /mount
 
 # local env files
-.env.local
+.env.development
 .env.*.local
 
 # dev env files
-.env.dev
-.env.*.dev
+.env.development
+.env.*
 
 # Log files
 npm-debug.log*

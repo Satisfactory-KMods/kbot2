@@ -1,7 +1,7 @@
 import fs   from "fs";
 import path from "path";
 
-export type TTasksRunner = "MakeItClean" | "DiscordGuilds";
+export type TTasksRunner = "MakeItClean" | "DiscordGuilds" | "FicsitQuery";
 
 export interface IJobOptions {
 	Interval : number,

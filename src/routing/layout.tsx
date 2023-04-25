@@ -1,11 +1,18 @@
-import { FC } from "react";
+import { FC }     from "react";
 import {
 	json,
 	Link,
 	LoaderFunction,
 	Outlet
-}             from "react-router-dom";
-import Ribbon from "@comp/elements/Ribbon";
+}                 from "react-router-dom";
+import Ribbon     from "@comp/elements/Ribbon";
+import { Button } from "flowbite-react";
+import {
+	BiBot,
+	SiDiscord,
+	SiGithub,
+	SiPatreon
+}                 from "react-icons/all";
 
 
 const loader : LoaderFunction = async() => {
@@ -27,6 +34,29 @@ const Component : FC = () => {
 					<div className="relative p-6 space-y-4 md:space-y-6 sm:p-8">
 						<Ribbon color="red">Alpha</Ribbon>
 						<Outlet/>
+
+						<div className="flex flex-wrap gap-2">
+							<Button href={ "https://github.com/Kyri123/kbot2" } target="_blank" color="gray"
+									className="flex-1">
+								<SiGithub className="mr-3 h-4 w-4"/>
+								Source
+							</Button>
+							<Button href={ "https://www.patreon.com/kmods" } target="_blank" color="gray"
+									className="flex-1">
+								<SiPatreon className="mr-3 h-4 w-4"/>
+								Donate
+							</Button>
+							<Button href={ "https://discord.gg/BeH4GRRWxc" } target="_blank" color="gray"
+									className="flex-1">
+								<SiDiscord className="mr-3 h-4 w-4"/>
+								Discord
+							</Button>
+							<Button href={ import.meta.env.VITE_INVURL } target="_blank" color="green"
+									className="flex-1">
+								<BiBot className="mr-3 h-4 w-4"/>
+								Invite
+							</Button>
+						</div>
 					</div>
 				</div>
 			</div>

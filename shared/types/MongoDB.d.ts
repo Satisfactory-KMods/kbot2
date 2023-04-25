@@ -58,3 +58,46 @@ export interface IMO_RegisterToken extends IGuildDB {
 	expire : Date,
 	isPasswordResetToken : boolean
 }
+
+
+export interface IMO_Mod extends IMongoDB {
+	id : string;
+	mod_reference : string;
+	name : string;
+	logo : string;
+	short_description : string;
+	source_url : string;
+	creator_id : string;
+	views : number;
+	downloads : number;
+	updated_at : Date;
+	created_at : Date;
+	last_version_date : Date;
+	hidden : boolean;
+	authors : IAuthor[];
+	latestVersions : ILatestVersions;
+}
+
+export interface IAuthor {
+	user_id : string;
+	mod_id : string;
+	role : string;
+	user : IUser;
+}
+
+export interface IUser {
+	id : string;
+	username : string;
+}
+
+export interface ILatestVersions {
+	alpha : IVersion | undefined;
+	beta : IVersion | undefined;
+	release : IVersion | undefined;
+}
+
+export interface IVersion {
+	version : string;
+	sml_version : string;
+	id : string;
+}

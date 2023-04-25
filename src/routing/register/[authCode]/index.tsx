@@ -17,16 +17,8 @@ import {
 	fetchPutJson
 }                                   from "@kyri123/k-reactutils";
 import { EApiAuth }                 from "@shared/Enum/EApiPath";
-import {
-	Button,
-	TextInput
-}                                   from "flowbite-react";
-import {
-	SiDiscord,
-	SiGithub,
-	SiPatreon,
-	SlLogin
-}                                   from "react-icons/all";
+import { TextInput }                from "flowbite-react";
+import { SlLogin }                  from "react-icons/all";
 import LoadButton                   from "@comp/LoadButton";
 import { TReq_Auth_Account_Put }    from "@shared/types/API_Request";
 import { TR_Auth_Account_Checkout } from "@shared/types/API_Response";
@@ -129,20 +121,6 @@ const Component : FC = () => {
 							icon={ <SlLogin className="mr-3 h-4 w-4"/> }>
 					Sign up
 				</LoadButton>
-				<div className="flex flex-wrap gap-2">
-					<Button href={ "https://github.com/Kyri123/kbot2" } target="_blank" color="gray" className="flex-1">
-						<SiGithub className="mr-3 h-4 w-4"/>
-						Source
-					</Button>
-					<Button href={ "https://www.patreon.com/kmods" } target="_blank" color="gray" className="flex-1">
-						<SiPatreon className="mr-3 h-4 w-4"/>
-						Donate
-					</Button>
-					<Button href={ "https://discord.gg/BeH4GRRWxc" } target="_blank" color="gray" className="flex-1">
-						<SiDiscord className="mr-3 h-4 w-4"/>
-						Discord
-					</Button>
-				</div>
 			</form>
 		</>
 	);
