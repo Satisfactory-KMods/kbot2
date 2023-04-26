@@ -1,38 +1,52 @@
 import {
 	FC,
 	PropsWithChildren
-} from "react";
+}                                 from "react";
 import {
 	json,
 	LoaderFunction,
-	Outlet
-} from "react-router-dom";
+	Outlet,
+	useLoaderData
+}                                 from "react-router-dom";
+import { validateLoginWithGuild } from "@hooks/useAuth";
+import guildContext               from "@context/guildContext";
+import { ILoaderGuild }           from "@app/types/routing";
+import TopSubbar                  from "@comp/dashboard/TopSubbar";
+import TopNavbar                  from "@comp/dashboard/TopNavbar";
+import LeftSidebar                from "@comp/dashboard/LeftSidebar";
 
 const loader : LoaderFunction = async( { request, params } ) => {
-	const { guildId } = params;
-	console.log( "layout", guildId );
-	const data = {};
-	return json( data );
+	const query = await validateLoginWithGuild( params.guildId || "" );
+
+	if ( !query.loggedIn || !query.guildData ) {
+		window.location.replace( "/error/401" );
+	}
+
+	return json( query );
 };
 
 const Component : FC<PropsWithChildren> = ( { children } ) => {
+	const { guildData, loggedIn } = useLoaderData() as ILoaderGuild;
+
+	if ( !loggedIn || !guildData ) {
+		return <></>;
+	}
 
 	return (
-		<>
-			<div className={ "d-flex flex-column h-100 w-100" }>
-				<div className={ "flex-1 overflow-y-auto" }
-					 style={ {
-						 backgroundImage: "url(\"/images/background/6.jpg\")",
-						 backgroundOrigin: "content-box",
-						 backgroundRepeat: "no-repeat",
-						 backgroundSize: "cover"
-					 } }>
-
-					<Outlet/>
-
+		<guildContext.Provider value={ guildData }>
+			<div className={ "flex flex-col h-full w-full" }>
+				<TopNavbar/>
+				<div className={ "flex-1 flex" }>
+					<LeftSidebar/>
+					<div className={ "flex-1 flex flex-col" }>
+						<TopSubbar/>
+						<div className={ "flex-1 overflow-y-auto overflow-x-hidden" }>
+							<Outlet/>
+						</div>
+					</div>
 				</div>
 			</div>
-		</>
+		</guildContext.Provider>
 	);
 };
 

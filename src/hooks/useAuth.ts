@@ -83,7 +83,7 @@ const useAuth = () : TUseAuth => {
 
 	const Logout = () => {
 		ResetStorage();
-		window.location.replace( "/login" );
+		window.location.href = "/login";
 	};
 
 	return [ Data, Logout, SetStorage ];

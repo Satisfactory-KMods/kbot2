@@ -38,7 +38,7 @@ const Component : FC = () => {
 						KBot 2.0
 					</Link>
 					{ user.IsValid && (
-						<Button color="gray">
+						<Button color="gray" onClick={ logout }>
 							<BsDoorOpen className="mr-3 h-4 w-4"/>
 							Logout
 						</Button>
