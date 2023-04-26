@@ -8,7 +8,7 @@
 		"dev": "concurrently -m 2 \"vite --host --port 3000\" \"nodemon\"",
 		"build": "yarn build:lint && yarn build:web && yarn build:server",
 		"build:lint": "yarn lint",
-		"build:web": "vite build --mode staging",
+		"build:web": "vite build --mode production",
 		"build:server": "tsc --project ./server/tsconfig.json && tsc-alias -p ./server/tsconfig.json",
 		"lint": "concurrently -m 3 \"yarn lint:server\" \"yarn lint:shared\" \"yarn lint:react\"",
 		"lint:server": "eslint ./server/src/**/*.{ts,tsx,js,jsx} --fix",
