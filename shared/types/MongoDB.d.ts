@@ -31,11 +31,16 @@ export interface IMO_GuildOptions extends IMongoDB {
 	RolePingRules : IMO_RolePingRule[],
 }
 
+export interface IReactionMatchRule {
+	matchString : string;
+	similarity : boolean;
+}
+
 export interface IMO_TextReactions extends IGuildDB {
 	command : string,
 	alias : string[],
 	reactionText : string,
-	autoReactionMatches : string[]
+	autoReactionMatches : IReactionMatchRule[]
 }
 
 export interface IMO_UserAccount extends IMongoDB {

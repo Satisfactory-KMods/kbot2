@@ -15,7 +15,8 @@ export type RequestWithUser<T = any> = {
 	UserClass? : T;
 }
 
-export type IRequestBody<T> = RequestWithUser<User> & Partial<T>;
+export type IRequestBody<T = any> = RequestWithUser<User> & Partial<T>;
+export type IRequestGuildBody<T = any> = RequestWithUser<User> & Partial<T> & { guildId : string };
 
 // ----------------------------------------
 // ----------------- Auth -----------------

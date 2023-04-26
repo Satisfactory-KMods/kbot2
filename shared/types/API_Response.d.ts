@@ -25,3 +25,4 @@ export type TR_Auth_Modify_Patch = TR_Auth_Account_Checkout;
 // -----------------------------------------
 
 export type TR_Guild_Question_Get = IAPIResponseBase<IMO_Guild[]>;
+export type TR_Guild_Question_Checkout = IAPIResponseBase<IMO_Guild>;

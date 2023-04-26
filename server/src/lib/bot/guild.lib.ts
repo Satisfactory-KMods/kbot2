@@ -10,6 +10,7 @@ import {
 	PermissionFlagsBits
 }                            from "discord.js";
 import { IDiscordGuildData } from "@shared/types/discord";
+import { IMO_Guild }         from "@shared/types/MongoDB";
 
 // update a guild or add a new one
 const UpdateGuild = async( dicordGuild : Guild ) => {
@@ -66,8 +67,20 @@ class DiscordGuild {
 
 	public async getGuildData() : Promise<IDiscordGuildData | undefined> {
 		try {
-			const DBData = ( await DB_Guilds.findById( { guildId: this.guildId } ) )!;
+			const DBData = ( await DB_Guilds.findOne( { guildId: this.guildId } ) )!;
 			return DBData.guildData;
+		}
+		catch ( e ) {
+			if ( e instanceof Error ) {
+				SystemLib.LogError( "bot", `Error while getting guild data: ${ BC( "Red" ) }`, e.message );
+			}
+		}
+	}
+
+	public async getGuildDb() : Promise<IMO_Guild | undefined> {
+		try {
+			const DBData = await DB_Guilds.findOne( { guildId: this.guildId } )!;
+			return DBData || undefined;
 		}
 		catch ( e ) {
 			if ( e instanceof Error ) {
@@ -78,6 +91,14 @@ class DiscordGuild {
 
 	public get getGuild() : Guild | undefined {
 		return this.guild;
+	}
+
+	public async userHasPermission( userId : string ) : Promise<boolean> {
+		const DB = await this.getGuildDb();
+		if ( DB?.isInGuild && DB.accountIds.includes( userId ) ) {
+			return true;
+		}
+		return false;
 	}
 
 	private getChannel( channelId : string ) {
@@ -196,7 +217,7 @@ class DiscordGuild {
 		return false;
 	}
 
-	IsValid() : boolean {
+	get IsValid() : boolean {
 		return this.Valid;
 	}
 }
@@ -216,7 +237,7 @@ class DiscordGuildManagerClass {
 		}
 		else {
 			const GuildClass = await DiscordGuild.ConstructGuild( guildId );
-			if ( GuildClass.IsValid() ) {
+			if ( GuildClass.IsValid ) {
 				this.Guilds.set( guildId, GuildClass );
 				return GuildClass;
 			}

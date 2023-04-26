@@ -20,6 +20,9 @@
 			"node"
 		],
 		"paths": {
+			"@context/*": [
+				"./src/context/*"
+			],
 			"@app/*": [
 				"./src/*"
 			],

@@ -2,10 +2,11 @@ import {
 	AllHTMLAttributes,
 	FC,
 	PropsWithChildren,
+	useContext,
 	useMemo
-}                 from "react";
-import { ERoles } from "@shared/Enum/ERoles";
-import useAuth    from "./useAuth";
+}                  from "react";
+import { ERoles }  from "@shared/Enum/ERoles";
+import authContext from "@context/authContext";
 
 export interface IShowConditionProps extends PropsWithChildren, AllHTMLAttributes<HTMLDivElement> {
 	show : boolean;
@@ -31,7 +32,7 @@ export interface IuseAuthCond {
 
 
 const useAuthValidate = ( condition : Partial<IuseAuthCond> ) : Partial<IShowConditionProps> => {
-	const [ user ] = useAuth();
+	const [ user ] = useContext( authContext );
 
 	const show = useMemo( () => {
 		if ( condition.loggedIn !== undefined || condition.role !== undefined ) {
