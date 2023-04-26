@@ -1,18 +1,18 @@
-import { FC }                from "react";
+import { FC }               from "react";
 import {
 	json,
 	LoaderFunction,
 	useLoaderData
-}                            from "react-router-dom";
-import { IMO_TextReactions } from "@shared/types/MongoDB";
+}                           from "react-router-dom";
+import { IMO_ChatCommands } from "@shared/types/MongoDB";
 
 interface ILoaderData {
-	chatReactions : IMO_TextReactions;
+	chatReactions : IMO_ChatCommands;
 }
 
 const loader : LoaderFunction = async( { request, params } ) => {
 	return json<ILoaderData>( {
-		chatReactions: {} as IMO_TextReactions
+		chatReactions: {} as IMO_ChatCommands
 	} );
 };
 

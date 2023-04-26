@@ -1,5 +1,8 @@
 /** @format */
-import { IMO_Guild } from "@shared/types/MongoDB";
+import {
+	IMO_ChatCommands,
+	IMO_Guild
+} from "@shared/types/MongoDB";
 
 type ResponseBase<T = any> = {
 	Success : boolean;
@@ -26,3 +29,12 @@ export type TR_Auth_Modify_Patch = TR_Auth_Account_Checkout;
 
 export type TR_Guild_Question_Get = IAPIResponseBase<IMO_Guild[]>;
 export type TR_Guild_Question_Checkout = IAPIResponseBase<IMO_Guild>;
+
+// ------------------------------------------------
+// ----------------- ChatCommands -----------------
+// ------------------------------------------------
+
+export type TR_CC_Question_GET = IAPIResponseBase<IMO_ChatCommands[]>;
+export type TR_CC_Question_PUT = IAPIResponseBase<IMO_ChatCommands>;
+export type TR_CC_Question_PATCH = IAPIResponseBase<IMO_ChatCommands>;
+export type TR_CC_Question_DELETE = IAPIResponseBase<boolean>;

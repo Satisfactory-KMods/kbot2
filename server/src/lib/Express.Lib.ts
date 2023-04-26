@@ -26,6 +26,11 @@ export async function MW_Auth( req : Request, res : Response, next : NextFunctio
 		MessageCode: "unauthorized"
 	};
 
+	req.body = {
+		...req.body,
+		...req.query
+	};
+
 	const AuthHeader = req.headers.authorization;
 	let Token : string | undefined;
 	try {
@@ -57,6 +62,11 @@ export async function MW_AuthGuild( req : TEResG, res : Response, next : NextFun
 	const Response : ResponseBase = {
 		...DefaultResponseFailed,
 		MessageCode: "unauthorized"
+	};
+
+	req.body = {
+		...req.body,
+		...req.query
 	};
 
 	const AuthHeader = req.headers.authorization;

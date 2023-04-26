@@ -8,7 +8,7 @@ import React from "react";
 
 const rootRouter = createBrowserRouter( createRoutesFromElements(
 	<>
-		<Route lazy={ () => import("@routing/error/[ErrorCode]/Index") }/>
+		<Route path="error/:ErrorCode" lazy={ () => import("@routing/error/[ErrorCode]/Index") }/>
 
 		<Route lazy={ () => import("@routing/Layout") }>
 			<Route index lazy={ () => import("@routing/Index") }/>

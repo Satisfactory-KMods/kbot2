@@ -114,7 +114,7 @@ export default function() {
 			return res.status( 500 ).json( {} );
 		} )
 		.patch( async( req : TERes<TReq_Auth_Modify_Patch>, res : Response ) => {
-			if ( req.body.token && req.body.password && req.body.username ) {
+			if ( req.body.token && req.body.password ) {
 				try {
 					const tokenDoc = await DB_RegisterToken.findOne( {
 						expire: { $gte: new Date() },

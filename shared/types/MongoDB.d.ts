@@ -36,7 +36,7 @@ export interface IReactionMatchRule {
 	similarity : boolean;
 }
 
-export interface IMO_TextReactions extends IGuildDB {
+export interface IMO_ChatCommands extends IGuildDB {
 	command : string,
 	alias : string[],
 	reactionText : string,
