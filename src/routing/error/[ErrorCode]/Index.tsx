@@ -21,7 +21,7 @@ const Component : FC = () => {
 	const [ loggedIn, setLoggedIn ] = useState( false );
 	const { ErrorCode, guildId } = useParams();
 	const { pathname } = useLocation();
-	usePageTitle( `SBS - Error ${ ErrorCode }` );
+	usePageTitle( `Kbot 2.0 - Error ${ ErrorCode }` );
 
 	useEffect( () => {
 		validateLogin().then( res => setLoggedIn( () => res.loggedIn ) );

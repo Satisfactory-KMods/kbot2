@@ -13,7 +13,10 @@ import {
 }                                     from "react-router-dom";
 import { validateLogin }              from "@hooks/useAuth";
 import { ILoaderDataBase }            from "@app/types/routing";
-import { fetchCheckoutJson }          from "@kyri123/k-reactutils";
+import {
+	fetchCheckoutJson,
+	usePageTitle
+}                                     from "@kyri123/k-reactutils";
 import { TReq_Auth_Account_Checkout } from "@shared/types/API_Request";
 import { TR_Auth_Account_Checkout }   from "@shared/types/API_Response";
 import { EApiAuth }                   from "@shared/Enum/EApiPath";
@@ -36,6 +39,7 @@ const loader : LoaderFunction = async() => {
 };
 
 const Component : FC = () => {
+	usePageTitle( `Kbot 2.0 - Login` );
 	const [ , , setToken ] = useContext( authContext );
 	const navigate = useNavigate();
 	const [ isLoading, setIsLoading ] = useState( false );

@@ -14,7 +14,10 @@ import {
 }                                from "@hooks/useAuth";
 import { ILoaderDataBase }       from "@app/types/routing";
 import { IMO_Guild }             from "@shared/types/MongoDB";
-import { fetchGetJson }          from "@kyri123/k-reactutils";
+import {
+	fetchGetJson,
+	usePageTitle
+}                                from "@kyri123/k-reactutils";
 import { EApiGuild }             from "@shared/Enum/EApiPath";
 import { APIRequest }            from "discord.js";
 import { TR_Guild_Question_Get } from "@shared/types/API_Response";
@@ -43,6 +46,7 @@ const loader : LoaderFunction = async() => {
 };
 
 const Component : FC = () => {
+	usePageTitle( `Kbot 2.0 - Select a Server` );
 	const { loggedIn, guilds } = useLoaderData() as ILoaderData;
 	const [ page, setPage ] = useState( 1 );
 
@@ -58,7 +62,7 @@ const Component : FC = () => {
 	if ( !loggedIn ) {
 		return ( <></> );
 	}
-	
+
 	return ( <>
 		<div className="mb-4 flex items-center justify-between text-center">
 			<h5 className="text-3xl font-bold leading-none text-gray-900 dark:text-white text-center">

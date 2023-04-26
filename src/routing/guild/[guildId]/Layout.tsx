@@ -14,6 +14,7 @@ import { ILoaderGuild }           from "@app/types/routing";
 import TopSubbar                  from "@comp/dashboard/TopSubbar";
 import TopNavbar                  from "@comp/dashboard/TopNavbar";
 import LeftSidebar                from "@comp/dashboard/LeftSidebar";
+import { usePageTitle }           from "@kyri123/k-reactutils";
 
 const loader : LoaderFunction = async( { request, params } ) => {
 	const query = await validateLoginWithGuild( params.guildId || "" );
@@ -27,6 +28,7 @@ const loader : LoaderFunction = async( { request, params } ) => {
 
 const Component : FC<PropsWithChildren> = ( { children } ) => {
 	const { guildData, loggedIn } = useLoaderData() as ILoaderGuild;
+	usePageTitle( `Kbot 2.0 - ${ guildData?.guildData.name || "Unkown" }` );
 
 	if ( !loggedIn || !guildData ) {
 		return <></>;

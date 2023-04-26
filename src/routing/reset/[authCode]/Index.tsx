@@ -15,7 +15,8 @@ import {
 import { validateLogin }          from "@hooks/useAuth";
 import {
 	fetchCheckoutJson,
-	fetchPatchJson
+	fetchPatchJson,
+	usePageTitle
 }                                 from "@kyri123/k-reactutils";
 import { EApiAuth }               from "@shared/Enum/EApiPath";
 import { TextInput }              from "flowbite-react";
@@ -52,6 +53,7 @@ const loader : LoaderFunction = async( { params } ) => {
 };
 
 const Component : FC = () => {
+	usePageTitle( `Kbot 2.0 - Reset Password` );
 	const [ , , setToken ] = useContext( authContext );
 	const navigate = useNavigate();
 	const { authCode } = useParams();
