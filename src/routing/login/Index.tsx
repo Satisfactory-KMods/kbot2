@@ -91,7 +91,7 @@ const Component : FC = () => {
 			<form className="space-y-4" action="#" onSubmit={ OnSubmit }>
 				<TextInput color={ inputError[ 0 ] ? "failure" : "gray" } className="w-full mt-6"
 						   placeholder="Discord id or login name" ref={ loginRef }
-						   helperText={ inputError[ 1 ] ? <><span className="font-medium">Oops!</span> Username is too
+						   helperText={ inputError[ 0 ] ? <><span className="font-medium">Oops!</span> Username is too
 							   short... must be 6 character long.</> : undefined }/>
 				<TextInput color={ inputError[ 1 ] ? "failure" : "gray" } className="w-full mt-6" placeholder="Password"
 						   type="password"
