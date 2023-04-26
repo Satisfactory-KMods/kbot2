@@ -197,9 +197,6 @@ export default function() {
 								userId: userDocument.discordId,
 								isPasswordResetToken: true
 							} );
-							await DB_SessionToken.deleteMany( {
-								userId: userDocument._id.toString()
-							} );
 
 							const Token = await CreateSession( userDocument.toJSON() );
 							if ( Token ) {

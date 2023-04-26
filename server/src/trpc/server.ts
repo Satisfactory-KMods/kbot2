@@ -1,14 +1,15 @@
-import { initTRPC }     from "@trpc/server";
-import * as trpcExpress from "@trpc/server/adapters/express";
-import { BC }           from "@server/lib/System.Lib";
-import { auth_login }   from "@server/trpc/routings/auth/account";
-import { User }         from "@shared/class/User.Class";
-import { DiscordGuild } from "@server/lib/bot/guild.lib";
+import { initTRPC }        from "@trpc/server";
+import * as trpcExpress    from "@trpc/server/adapters/express";
+import { BC }              from "@server/lib/System.Lib";
+import { User }            from "@shared/class/User.Class";
+import { DiscordGuild }    from "@server/lib/bot/guild.lib";
 import {
 	MW_Auth,
 	MW_AuthGuild
-}                       from "@server/lib/Express.Lib";
-import { public_error } from "@server/trpc/routings/public/error";
+}                          from "@server/lib/Express.Lib";
+import { public_validate } from "@server/trpc/routings/public/validate";
+import { public_login }    from "@server/trpc/routings/public/login";
+import { guild_validate }  from "@server/trpc/routings/guild/validate";
 
 interface Context {
 	guildId? : string,
@@ -23,7 +24,7 @@ const createContext = async( {
 } : trpcExpress.CreateExpressContextOptions ) => {
 	const ctx : Context = {
 		token: req.body.JsonWebToken,
-		userClass: req.body.UserData,
+		userClass: req.body.UserClass,
 		guildId: req.body.guild?.guildId,
 		guild: req.body.guild
 	};
@@ -40,12 +41,13 @@ export type tRPC = typeof t;
 
 
 const publicRouter = t.router( {
-	error: public_error( t )
+	validate: public_validate( t ),
+	login: public_login( t )
 } );
-const authRouter = t.router( {
-	login: auth_login( t )
+const authRouter = t.router( {} );
+const guildRouter = t.router( {
+	validate: guild_validate( t )
 } );
-const guildRouter = t.router( {} );
 
 
 SystemLib.Log( "start", "register TRCP on", BC( "Red" ), "/api/v2/*" );

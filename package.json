@@ -43,7 +43,8 @@
 		"sass": "^1.62.0",
 		"string-similarity": "^4.0.4",
 		"sweetalert2": "^11.7.3",
-		"sweetalert2-react-content": "^5.0.7"
+		"sweetalert2-react-content": "^5.0.7",
+		"zod": "^3.21.4"
 	},
 	"devDependencies": {
 		"@testing-library/jest-dom": "^5.16.5",

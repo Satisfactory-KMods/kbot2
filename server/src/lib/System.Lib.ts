@@ -3,6 +3,7 @@ import Util         from "util";
 import fs           from "fs";
 import * as console from "console";
 import * as dotenv  from "dotenv";
+import path         from "path";
 
 export type BashColorString =
 	| "Default"
@@ -34,16 +35,18 @@ export class SystemLib_Class {
 		this.IsDevMode = SystemLib_Class.IsDev();
 		this.UseDebug = SystemLib_Class.IsDev();
 
-		this.Log( "SYSTEM", "Try to load:", ".env.dev" );
+		this.Log( "SYSTEM", "Try to load:", ".env.development" );
 		dotenv.config( {
-			path: ".env.development"
+			path: path.join( process.cwd(), ".env.development" )
 		} );
-		this.Log( "SYSTEM", "Try to load:", ".env.local" );
+		this.Log( "SYSTEM", "Try to load:", ".env.production" );
 		dotenv.config( {
-			path: ".env.production"
+			path: path.join( process.cwd(), ".env.production" )
 		} );
 		this.Log( "SYSTEM", "Try to load:", ".env" );
-		dotenv.config();
+		dotenv.config( {
+			path: path.join( process.cwd(), ".env" )
+		} );
 	}
 
 	public DebugMode() : boolean {

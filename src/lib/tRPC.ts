@@ -8,24 +8,41 @@ import type {
 	PublicRouter
 } from "@server/trpc/server";
 
+export const tRPC_token = () => window.localStorage.getItem( "session" ) || "";
+
 const tRPC_Public = createTRPCProxyClient<PublicRouter>( {
 	links: [
 		httpBatchLink( {
-			url: "/api/v2/public"
+			url: "/api/v2/public",
+			headers: () => {
+				return {
+					Authorization: `Bearer ${ tRPC_token() }`
+				};
+			}
 		} )
 	]
 } );
 const tRPC_Auth = createTRPCProxyClient<AuthRouter>( {
 	links: [
 		httpBatchLink( {
-			url: "/api/v2/auth"
+			url: "/api/v2/auth",
+			headers: () => {
+				return {
+					Authorization: `Bearer ${ tRPC_token() }`
+				};
+			}
 		} )
 	]
 } );
 const tRPC_Guild = createTRPCProxyClient<GuildRouter>( {
 	links: [
 		httpBatchLink( {
-			url: "/api/v2/guild"
+			url: "/api/v2/guild",
+			headers: () => {
+				return {
+					Authorization: `Bearer ${ tRPC_token() }`
+				};
+			}
 		} )
 	]
 } );

@@ -73,19 +73,21 @@ export async function MW_AuthGuild( req : TEResG, res : Response, next : NextFun
 	const AuthHeader = req.headers.authorization;
 	let Token : string | undefined;
 	try {
-		Token = AuthHeader && AuthHeader.split( " " )[ 1 ].replaceAll( "\"", "" );
+		Token = AuthHeader && AuthHeader.split( " " )[ 1 ].replaceAll( "\"", "" ).clearWs();
+		req.body.guildId = JSON.parse( req.body.input )[ "0" ].guildId;
 	}
 	catch ( e ) {
 	}
 
 	if ( Token ) {
 		try {
-			const Result = jwt.verify( Token, process.env.JWTToken as string );
+			const Result = jwt.verify( Token, process.env.JWTToken! );
 			if ( typeof Result === "object" ) {
 				const UserData = new User( Token );
 				const Session = await DB_SessionToken.findOne( { token: Token, userid: UserData.Get._id } );
 				if ( Session ) {
 					req.body.UserClass = UserData;
+					req.body.JsonWebToken = Token;
 					if ( req.body.guildId ) {
 						const guild = await DiscordGuildManager.GetGuild( req.body.guildId );
 						if ( guild ) {
@@ -100,6 +102,8 @@ export async function MW_AuthGuild( req : TEResG, res : Response, next : NextFun
 			}
 		}
 		catch ( e ) {
+			// @ts-ignore
+			console.log( e.message );
 		}
 	}
 	res.status( 401 ).json( {

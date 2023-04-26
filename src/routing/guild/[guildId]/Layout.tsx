@@ -1,7 +1,4 @@
-import {
-	FC,
-	PropsWithChildren
-}                                 from "react";
+import { FC }                     from "react";
 import {
 	json,
 	LoaderFunction,
@@ -16,7 +13,7 @@ import TopNavbar                  from "@comp/dashboard/TopNavbar";
 import LeftSidebar                from "@comp/dashboard/LeftSidebar";
 import { usePageTitle }           from "@kyri123/k-reactutils";
 
-const loader : LoaderFunction = async( { request, params } ) => {
+const loader : LoaderFunction = async( { params } ) => {
 	const query = await validateLoginWithGuild( params.guildId || "" );
 
 	if ( !query.loggedIn || !query.guildData ) {
@@ -26,7 +23,7 @@ const loader : LoaderFunction = async( { request, params } ) => {
 	return json( query );
 };
 
-const Component : FC<PropsWithChildren> = ( { children } ) => {
+const Component : FC = () => {
 	const { guildData, loggedIn } = useLoaderData() as ILoaderGuild;
 	usePageTitle( `Kbot 2.0 - ${ guildData?.guildData.name || "Unkown" }` );
 

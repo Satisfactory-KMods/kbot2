@@ -1,61 +1,42 @@
 import {
-	fetchCheckoutJson,
-	fetchGetJson,
 	IQueryOptions,
 	useLocalStorage
 }                            from "@kyri123/k-reactutils";
-import {
-	EApiAuth,
-	EApiGuild
-}                            from "@shared/Enum/EApiPath";
+import { EApiGuild }         from "@shared/Enum/EApiPath";
 import {
 	ILoaderDataBase,
 	ILoaderGuild
 }                            from "@app/types/routing";
-import {
-	IAPIResponseBase,
-	TR_Guild_Question_Checkout
-}                            from "@shared/types/API_Response";
 import { useMemo }           from "react";
 import { User }              from "@shared/class/User.Class";
 import { IRequestGuildBody } from "@shared/types/API_Request";
 import { Params }            from "react-router-dom";
+import {
+	tRPC_Guild,
+	tRPC_Public
+}                            from "@lib/tRPC";
 
 // @return false if the user is not logged in
 const validateLogin = async() : Promise<ILoaderDataBase> => {
-	const sessionToken = window.localStorage.getItem( "session" );
-	if ( sessionToken ) {
-		const Response = await fetchGetJson<object, IAPIResponseBase>( {
-			path: EApiAuth.validate,
-			auth: sessionToken
-		} ).catch( console.warn );
-		if ( Response && Response.Auth ) {
-			return { loggedIn: true };
-		}
+	const token = window.localStorage.getItem( "session" ) || "";
+	const Response = await tRPC_Public.validate.query( { token } ).catch( console.warn );
+
+	const loggedIn = !!Response?.tokenValid;
+	if ( !loggedIn ) {
+		window.localStorage.setItem( "session", "" );
 	}
 
-	window.localStorage.setItem( "session", "" );
-	return { loggedIn: false };
+	return { loggedIn };
 };
 
 const validateLoginWithGuild = async( guildId : string ) : Promise<ILoaderGuild> => {
-	const sessionToken = window.localStorage.getItem( "session" );
-	if ( sessionToken ) {
-		const Response = await fetchCheckoutJson<IRequestGuildBody, TR_Guild_Question_Checkout>( {
-			path: EApiGuild.question,
-			auth: sessionToken,
-			data: {
-				guildId
-			}
-		} ).catch( console.warn );
+	const Response = await tRPC_Guild.validate.query( { guildId } ).catch( console.warn );
 
-		if ( Response && Response.Auth && Response.Data ) {
-			return { loggedIn: true, guildData: Response.Data };
-		}
+	if ( !Response ) {
+		return { loggedIn: false, guildData: undefined };
 	}
 
-	window.localStorage.setItem( "session", "" );
-	return { loggedIn: false, guildData: null };
+	return { loggedIn: Response?.tokenValid, guildData: undefined, ...Response };
 };
 
 

@@ -5,5 +5,5 @@ export interface ILoaderDataBase {
 }
 
 export interface ILoaderGuild extends ILoaderDataBase {
-	guildData : IMO_Guild | null;
+	guildData : IMO_Guild | undefined;
 }
