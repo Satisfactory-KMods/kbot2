@@ -43,7 +43,7 @@ const Component : FC = () => {
 		<div className="flex flex-col items-center justify-center px-6 py-8 mx-auto lg:py-0 h-full">
 			<span className="text-4xl md:text-8xl text-white">Error { Err.code }</span>
 			<span className="text-2xl md:text-4xl mt-5 text-white">{ Err.message }</span>
-			<Button href={ `/` } color="gray"
+			<Button href={ `/guild/${ guildId }/` } color="gray"
 					className="flex items-center justify-center mt-6">Back to Home</Button>
 		</div>
 	);

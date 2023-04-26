@@ -34,6 +34,7 @@ const validateLogin = async() : Promise<ILoaderDataBase> => {
 		}
 	}
 
+	window.localStorage.setItem( "session", "" );
 	return { loggedIn: false };
 };
 
@@ -53,11 +54,12 @@ const validateLoginWithGuild = async( guildId : string ) : Promise<ILoaderGuild>
 		}
 	}
 
+	window.localStorage.setItem( "session", "" );
 	return { loggedIn: false, guildData: null };
 };
 
 
-function getGuildRequest<D extends IRequestGuildBody = IRequestGuildBody>( params : Params<string>, data : Omit<D, "guildId"> ) : Omit<IQueryOptions<D>, "method"> {
+function getGuildRequest<D extends IRequestGuildBody = IRequestGuildBody>( params : Params<string>, data? : Omit<D, "guildId"> ) : Omit<IQueryOptions<D>, "method"> {
 	const { guildId } = params;
 	const sessionToken = window.localStorage.getItem( "session" );
 	return {
@@ -91,6 +93,7 @@ const useAuth = () : TUseAuth => {
 
 export default useAuth;
 export {
+	getGuildRequest,
 	getToken,
 	validateLogin,
 	validateLoginWithGuild

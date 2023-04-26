@@ -56,7 +56,7 @@ const Component : FC = () => {
 
 	const ShowElements = useMemo( () => {
 		return [ ...guilds ].splice( ( page - 1 ) * 5, 5 );
-	}, [ guilds ] );
+	}, [ guilds, page ] );
 
 
 	if ( !loggedIn ) {

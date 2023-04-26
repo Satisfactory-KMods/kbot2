@@ -40,7 +40,7 @@ const UpdateGuild = async( dicordGuild : Guild ) => {
 };
 
 class DiscordGuild {
-	private readonly guildId;
+	public readonly guildId;
 	private Valid = false;
 	private guild : Guild | undefined;
 	private DbId = "";

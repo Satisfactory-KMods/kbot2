@@ -42,8 +42,8 @@ const Component : FC<PropsWithChildren> = ( { children } ) => {
 					<LeftSidebar/>
 					<div className={ "flex-1 flex flex-col" }>
 						<TopSubbar/>
-						<div className={ "flex-1 overflow-y-auto overflow-x-hidden" }>
-							<div className="md:container md:mx-auto px-4">
+						<div className={ "flex-1 overflow-y-auto overflow-x-hidden text-center" }>
+							<div className="py-4 md:max-w-screen-md place-self-center">
 								<Outlet/>
 							</div>
 						</div>

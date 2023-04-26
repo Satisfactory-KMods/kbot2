@@ -5,6 +5,7 @@ import {
 import { IMO_Mod }     from "@shared/types/MongoDB";
 import DB_Mods         from "@server/mongodb/DB_Mods";
 import { IJobOptions } from "@server/tasks/TaskManager";
+import DB_SessionToken from "@server/mongodb/DB_SessionToken";
 
 export interface ModGraphQLRequest {
 	getMods : GetMods;
@@ -49,7 +50,9 @@ const JobOptions : IJobOptions = {
 	Interval: 60000 * 60, // 60 minutes
 	JobName: "FicsitQuery",
 	Task: async() => {
-		if ( process.env.DEV ) {
+		await DB_SessionToken.deleteMany( { expire: { $gte: new Date() } } );
+
+		if ( SystemLib.IsDevMode ) {
 			return;
 		}
 

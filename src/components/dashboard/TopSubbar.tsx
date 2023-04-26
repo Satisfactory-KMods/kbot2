@@ -18,7 +18,7 @@ const TopSubbar : FC = () => {
 
 	return (
 		<div className="p-3 pe-6 flex w-full bg-gray-700 border-y border-gray-600">
-			<a className="flex items-center flex-1" href="/guild/552137040741924874">
+			<a className="flex items-center flex-1" href={ `/guild/${ guildData.id }` }>
 				<img src={ guildData.iconURL || "/images/invalid.png" } alt={ guildData.name }
 					 className="mr-3 h-6 sm:h-9 rounded-full"/>
 				<span

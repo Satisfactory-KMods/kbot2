@@ -10,7 +10,10 @@ import {
 import Package   from "@/package.json";
 import * as fs   from "fs";
 import * as path from "path";
-import { BC }    from "@server/lib/System.Lib";
+import {
+	BC,
+	SystemLib_Class
+}                from "@server/lib/System.Lib";
 
 const Options : ISlashCommandConfig[] = [];
 
@@ -31,7 +34,7 @@ DiscordBot.on( "ready", async() => {
 			type: ActivityType.Streaming
 		} );
 		SystemLib.Log( "bot", "Running on version:", `${ BC( "Red" ) }v${ Package.version }` );
-		await DiscordBot.user.setUsername( "KBot 2.0" );
+		await DiscordBot.user.setUsername( `KBot 2.0${ SystemLib_Class.IsDev() ? " - Dev" : "" }` );
 	}
 } );
 

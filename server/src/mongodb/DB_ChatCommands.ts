@@ -4,7 +4,7 @@ import * as mongoose        from "mongoose";
 const ChatCommandsSchema = new mongoose.Schema<IMO_ChatCommands>( {
 	guildId: { type: String, required: true },
 	command: { type: String, required: true },
-	alias: { type: [ String ], required: true },
+	alias: { type: [ String ], required: true, default: [] },
 	reactionText: { type: String, required: true },
 	autoReactionMatches: {
 		type: [
@@ -12,7 +12,7 @@ const ChatCommandsSchema = new mongoose.Schema<IMO_ChatCommands>( {
 				matchString: { type: String, required: true },
 				similarity: { type: Boolean, required: true }
 			}
-		], required: true
+		], required: true, default: []
 	}
 } );
 
