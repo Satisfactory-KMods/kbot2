@@ -19,6 +19,8 @@
 		"@kyri123/k-javascript-utils": "^0.3.0-build.14",
 		"@kyri123/k-reactutils": "^0.2.9-build.34",
 		"@sweetalert2/theme-dark": "^5.0.15",
+		"@trpc/client": "^10.21.1",
+		"@trpc/server": "^10.21.1",
 		"@types/string-similarity": "^4.0.0",
 		"compressing": "^1.9.0",
 		"discord.js": "^14.9.0",
@@ -39,8 +41,6 @@
 		"react-router-dom": "^6.10.0",
 		"react-select": "^5.7.2",
 		"sass": "^1.62.0",
-		"socket.io": "^4.6.1",
-		"socket.io-client": "^4.6.1",
 		"string-similarity": "^4.0.4",
 		"sweetalert2": "^11.7.3",
 		"sweetalert2-react-content": "^5.0.7"

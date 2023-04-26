@@ -1,5 +1,4 @@
 import * as path            from "path";
-import { Server }           from "socket.io";
 import http                 from "http";
 import express              from "express";
 import { InstallRoutings }  from "./routings/initRouter";
@@ -12,10 +11,6 @@ import {
 	BC,
 	SystemLib_Class
 }                           from "@server/lib/System.Lib";
-import {
-	IEmitEvents,
-	IListenEvents
-}                           from "@shared/types/SocketIO";
 import { TaskManagerClass } from "@server/tasks/TaskManager";
 import { Revalidate }       from "@server/mongodb/DB_Guilds";
 import * as console         from "console";
@@ -25,22 +20,13 @@ global.__RootDir = process.cwd();
 global.__MountDir = path.join( __RootDir, "mount" );
 ( !fs.existsSync( path.join( __MountDir, "Logs" ) ) ) && fs.mkdirSync( path.join( __MountDir, "Logs" ), { recursive: true } );
 global.__LogFile = path.join( __MountDir, "Logs", `${ Date.now() }.log` );
- 
+
 global.SystemLib = new SystemLib_Class();
 SystemLib.Log( "Start", "SystemLib was created" );
 
 SystemLib.Log( "Start", "Create apps" );
 global.Api = express();
 global.HttpServer = http.createServer( global.Api );
-
-global.SocketIO = new Server<IListenEvents, IEmitEvents>( global.HttpServer, {
-	path: "/api/v1/io/",
-	cors: {
-		origin: "*",
-		methods: [ "GET", "POST", "PUT", "PATCH", "DELETE" ],
-		credentials: false
-	}
-} );
 
 SystemLib.Log( "Start", "Configure express app" );
 Api.use( express.json() );
@@ -66,6 +52,7 @@ Api.use( function( req, res, next ) {
 	next();
 } );
 
+
 mongoose
 	.connect(
 		`mongodb://${ process.env.MONGODB_HOST }:${ process.env.MONGODB_PORT }`,
@@ -89,19 +76,8 @@ mongoose
 			}
 		}
 
-
-		global.DownloadIPCached = [];
-		SystemLib.Log( "Start", "Create SocketIO" );
-		// Sockets need to connect on a room otherwise we will not be able to send messages
-		SocketIO.on( "connection", function( socket ) {
-			const query = socket.handshake.query;
-			const roomName = query.roomName;
-			if ( !roomName || Array.isArray( roomName ) ) {
-				socket.disconnect( true );
-				return;
-			}
-			socket.join( roomName as string );
-		} );
+		SystemLib.Log( "Start", "Create TRCP Server" );
+		await import( "@server/trpc/server" );
 
 		// Register Router and Frontend
 		SystemLib.Log( "Start", "Register routings" );

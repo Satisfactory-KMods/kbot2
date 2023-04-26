@@ -40,11 +40,15 @@ const Component : FC<PropsWithChildren> = ( { children } ) => {
 				<TopNavbar/>
 				<div className={ "flex-1 flex" }>
 					<LeftSidebar/>
-					<div className={ "flex-1 flex flex-col" }>
+					<div className={ "grow flex flex-col" }>
 						<TopSubbar/>
-						<div className={ "flex-1 overflow-y-auto overflow-x-hidden text-center" }>
-							<div className="py-4 md:max-w-screen-md place-self-center">
-								<Outlet/>
+						<div className="h-full overflow-x-hidden auto">
+							<div
+								className={ "flex flex-col mx-auto md:h-full lg:py-0 w-full md:max-w-screen-xl" }>
+								<div className="flex sm:max-w-md w-full">
+									<Outlet/>
+									123123123
+								</div>
 							</div>
 						</div>
 					</div>

@@ -21,11 +21,6 @@ export function ApiUrl( Url : TApiPath | string ) {
 
 // middleware to check the JWT token for
 export async function MW_Auth( req : Request, res : Response, next : NextFunction ) {
-	const Response : ResponseBase = {
-		...DefaultResponseFailed,
-		MessageCode: "unauthorized"
-	};
-
 	req.body = {
 		...req.body,
 		...req.query
@@ -55,15 +50,21 @@ export async function MW_Auth( req : Request, res : Response, next : NextFunctio
 		catch ( e ) {
 		}
 	}
-	res.json( Response );
+	res.status( 401 ).json( {
+		"error": {
+			"message": "unauthorized",
+			"code": -32001,
+			"data": {
+				"code": "unauthorized",
+				"httpStatus": 401,
+				"stack": "",
+				"path": "error"
+			}
+		}
+	} );
 }
 
 export async function MW_AuthGuild( req : TEResG, res : Response, next : NextFunction ) {
-	const Response : ResponseBase = {
-		...DefaultResponseFailed,
-		MessageCode: "unauthorized"
-	};
-
 	req.body = {
 		...req.body,
 		...req.query
@@ -101,7 +102,18 @@ export async function MW_AuthGuild( req : TEResG, res : Response, next : NextFun
 		catch ( e ) {
 		}
 	}
-	res.json( Response );
+	res.status( 401 ).json( {
+		"error": {
+			"message": "unauthorized",
+			"code": -32001,
+			"data": {
+				"code": "unauthorized",
+				"httpStatus": 401,
+				"stack": "",
+				"path": "error"
+			}
+		}
+	} );
 }
 
 export async function MW_Permission( req : Request, res : Response, next : NextFunction, Permission : ERoles ) {
