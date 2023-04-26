@@ -1,6 +1,7 @@
 import {
 	FC,
 	FormEvent,
+	useContext,
 	useRef,
 	useState
 }                                 from "react";
@@ -27,6 +28,7 @@ import {
 	fireSwalFromApi,
 	fireToastFromApi
 }                                 from "@lib/sweetAlert";
+import authContext                from "@context/authContext";
 
 interface ILoaderData extends ILoaderDataBase {
 	tokenValid : boolean;
@@ -50,6 +52,7 @@ const loader : LoaderFunction = async( { params } ) => {
 };
 
 const Component : FC = () => {
+	const [ , , setToken ] = useContext( authContext );
 	const navigate = useNavigate();
 	const { authCode } = useParams();
 	const [ isLoading, setIsLoading ] = useState( false );
@@ -80,7 +83,7 @@ const Component : FC = () => {
 			if ( Response ) {
 				if ( Response.Success ) {
 					fireSwalFromApi( Response );
-					window.localStorage.setItem( "session", Response.Data.token );
+					setToken( Response.Data.token );
 					navigate( "/" );
 				}
 				else {

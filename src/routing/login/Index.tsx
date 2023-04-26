@@ -1,6 +1,7 @@
 import {
 	FC,
 	FormEvent,
+	useContext,
 	useRef,
 	useState
 }                                     from "react";
@@ -24,6 +25,7 @@ import {
 import LoadButton                     from "@comp/LoadButton";
 import { SlLogin }                    from "react-icons/all";
 import { fireToastFromApi }           from "@lib/sweetAlert";
+import authContext                    from "@context/authContext";
 
 const loader : LoaderFunction = async() => {
 	const result = await validateLogin();
@@ -34,6 +36,7 @@ const loader : LoaderFunction = async() => {
 };
 
 const Component : FC = () => {
+	const [ , , setToken ] = useContext( authContext );
 	const navigate = useNavigate();
 	const [ isLoading, setIsLoading ] = useState( false );
 	const [ inputError, setInputError ] = useState( [ false, false ] );
@@ -68,7 +71,7 @@ const Component : FC = () => {
 
 			if ( Response ) {
 				if ( Response.Success ) {
-					window.localStorage.setItem( "session", Response.Data.token );
+					setToken( Response.Data.token );
 					navigate( "/" );
 				}
 				else {

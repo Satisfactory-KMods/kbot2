@@ -58,7 +58,7 @@ const Component : FC = () => {
 	if ( !loggedIn ) {
 		return ( <></> );
 	}
-	console.log( guilds );
+	
 	return ( <>
 		<div className="mb-4 flex items-center justify-between text-center">
 			<h5 className="text-3xl font-bold leading-none text-gray-900 dark:text-white text-center">
