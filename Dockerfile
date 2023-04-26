@@ -8,7 +8,7 @@ COPY *.lock ./
 RUN yarn install
 
 # Copy main configs
-COPY .env.production ./
+COPY .env.* ./
 COPY *.ts ./
 COPY *.js ./
 COPY *.cjs ./
