@@ -12,7 +12,7 @@ export const guild_validate = ( tRPC : tRPC ) => {
 			guildData? : IMO_Guild;
 		}>( async( { input, ctx } ) => {
 			try {
-				if ( input.guildId && ctx.userClass && ctx.userClass.IsValid ) {
+				if ( input.guildId && ctx.userClass?.IsValid ) {
 					const guildDocument = await DB_Guilds.findOne( {
 						guildId: input.guildId,
 						accountIds: { $in: ctx.userClass.Get.discordId }

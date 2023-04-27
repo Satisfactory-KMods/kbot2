@@ -42,9 +42,8 @@ const Component : FC = () => {
 						<div className="h-full overflow-x-hidden auto">
 							<div
 								className={ "flex flex-col mx-auto md:h-full lg:py-0 w-full md:max-w-screen-xl" }>
-								<div className="flex sm:max-w-md w-full">
+								<div className="w-full py-4">
 									<Outlet/>
-									123123123
 								</div>
 							</div>
 						</div>

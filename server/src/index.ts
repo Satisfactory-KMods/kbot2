@@ -1,7 +1,6 @@
 import * as path            from "path";
 import http                 from "http";
 import express              from "express";
-import { InstallRoutings }  from "./routings/initRouter";
 import process              from "process";
 import * as mongoose        from "mongoose";
 import "@kyri123/k-javascript-utils/lib/useAddons";
@@ -81,10 +80,7 @@ mongoose
 
 		// Register Router and Frontend
 		SystemLib.Log( "Start", "Register routings" );
-		global.Router = express.Router();
-		await InstallRoutings( path.join( __BaseDir, "routings/router" ) );
 
-		Api.use( Router );
 		Api.get( "*", function( req, res ) {
 			res.sendFile( path.join( __RootDir, "dist", "index.html" ) );
 		} );

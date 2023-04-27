@@ -1,0 +1,1 @@
+export const messageTextLimit = 2000;

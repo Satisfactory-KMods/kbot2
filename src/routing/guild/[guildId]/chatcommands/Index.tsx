@@ -1,25 +1,26 @@
-import { FC }                   from "react";
+import { FC }               from "react";
 import {
 	json,
 	LoaderFunction,
 	useLoaderData
-}                               from "react-router-dom";
-import { IMO_ChatCommands }     from "@shared/types/MongoDB";
-import { fetchGetJson }         from "@kyri123/k-reactutils";
-import { TR_CC_Question_GET }   from "@shared/types/API_Response";
-import { TReq_CC_Question_GET } from "@shared/types/API_Request";
-import { getGuildRequest }      from "@hooks/useAuth";
-import ChatCommandEditor        from "@comp/chatCommands/ChatCommandEditor";
-import { Accordion }            from "flowbite-react";
-import ChatCommandElement       from "@comp/chatCommands/ChatCommandElement";
+}                           from "react-router-dom";
+import { IMO_ChatCommands } from "@shared/types/MongoDB";
+import ChatCommandEditor    from "@comp/chatCommands/ChatCommandEditor";
+import { Accordion }        from "flowbite-react";
+import ChatCommandElement   from "@comp/chatCommands/ChatCommandElement";
+import {
+	tRCP_handleError,
+	tRPC_Guild
+}                           from "@lib/tRPC";
 
 interface ILoaderData {
 	chatReactions : IMO_ChatCommands[];
 }
 
 const loader : LoaderFunction = async( { request, params } ) => {
-	const chatReactionsResult = await fetchGetJson<TReq_CC_Question_GET, TR_CC_Question_GET>( getGuildRequest<TReq_CC_Question_GET>( params ) );
-	const chatReactions = chatReactionsResult?.Data || [];
+	const { guildId } = params;
+	const chatReactionsResult = await tRPC_Guild.chatcommands.getcommands.query( { guildId: guildId! } ).catch( tRCP_handleError );
+	const chatReactions : IMO_ChatCommands[] = chatReactionsResult?.commands || [];
 
 	return json<ILoaderData>( {
 		chatReactions

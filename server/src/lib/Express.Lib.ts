@@ -1,18 +1,15 @@
-import { TApiPath }              from "@shared/Enum/EApiPath";
+import { TApiPath }            from "@shared/Enum/EApiPath";
 import {
 	Request,
 	Response
-}                                from "express";
-import { Connect }               from "vite";
-import { ResponseBase }          from "@shared/types/API_Response";
-import { DefaultResponseFailed } from "@shared/Default/Auth.Default";
-import DB_SessionToken           from "@server/mongodb/DB_SessionToken";
-import { User }                  from "@shared/class/User.Class";
-import * as jwt                  from "jsonwebtoken";
-import { ERoles }                from "@shared/Enum/ERoles";
-import { TEResG }                from "@server/types/express";
-import { DiscordGuildManager }   from "@server/lib/bot/guild.lib";
-import { TRPCError }             from "@trpc/server";
+}                              from "express";
+import { Connect }             from "vite";
+import DB_SessionToken         from "@server/mongodb/DB_SessionToken";
+import { User }                from "@shared/class/User.Class";
+import * as jwt                from "jsonwebtoken";
+import { TEResG }              from "@server/types/express";
+import { DiscordGuildManager } from "@server/lib/bot/guild.lib";
+import { TRPCError }           from "@trpc/server";
 import NextFunction = Connect.NextFunction;
 
 export function ApiUrl( Url : TApiPath | string ) {
@@ -121,17 +118,6 @@ export async function MW_AuthGuild( req : TEResG, res : Response, next : NextFun
 	} );
 }
 
-export async function MW_Permission( req : Request, res : Response, next : NextFunction, Permission : ERoles ) {
-	const Response : ResponseBase = {
-		...DefaultResponseFailed,
-		MessageCode: "unauthorized"
-	};
-	if ( req.body.UserClass && req.body.UserClass.HasPermssion( Permission ) ) {
-		next();
-		return;
-	}
-	res.json( Response );
-}
 
 export function handleTRCPErr( e : unknown ) {
 	if ( e instanceof TRPCError ) {

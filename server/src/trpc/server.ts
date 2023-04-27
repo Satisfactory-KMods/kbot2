@@ -14,6 +14,7 @@ import { public_createAccount } from "@server/trpc/routings/public/createAccount
 import { public_resetPassword } from "@server/trpc/routings/public/resetPassword";
 import { public_checkToken }    from "@server/trpc/routings/public/checkToken";
 import { auth_getGuilds }       from "@server/trpc/routings/auth/getGuilds";
+import { guild_chatCommands }   from "@server/trpc/routings/guild/chatCommands";
 
 interface Context {
 	guildId? : string,
@@ -54,7 +55,8 @@ const authRouter = t.router( {
 	getguilds: auth_getGuilds( t )
 } );
 const guildRouter = t.router( {
-	validate: guild_validate( t )
+	validate: guild_validate( t ),
+	chatcommands: guild_chatCommands( t )
 } );
 
 

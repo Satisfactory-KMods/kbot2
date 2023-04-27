@@ -1,5 +1,18 @@
 import { IMO_ChatCommands } from "@shared/types/MongoDB";
 import * as mongoose        from "mongoose";
+import z                    from "zod";
+import { messageTextLimit } from "@shared/Default/discord";
+
+const ZChatCommands = z.object( {
+	guildId: z.string().min( 5, { message: "empty guild id" } ),
+	command: z.string().max( messageTextLimit, { message: `Limit for a message is ${ messageTextLimit }` } ),
+	alias: z.array( z.string().max( messageTextLimit, { message: `Limit for a message is ${ messageTextLimit }` } ) ),
+	reactionText: z.string().min( 1, { message: "Empty messages are not allowed" } ).max( messageTextLimit, { message: `Limit for a message is ${ messageTextLimit }` } ),
+	autoReactionMatches: z.array( z.object( {
+		matchString: z.string().max( messageTextLimit, { message: `Limit for a message is ${ messageTextLimit }` } ),
+		similarity: z.boolean()
+	} ) )
+} );
 
 const ChatCommandsSchema = new mongoose.Schema<IMO_ChatCommands>( {
 	guildId: { type: String, required: true },
@@ -24,6 +37,7 @@ const Revalidate = async() => {
 
 export default DB_ChatCommands;
 export {
+	ZChatCommands,
 	ChatCommandsSchema,
 	Revalidate
 };

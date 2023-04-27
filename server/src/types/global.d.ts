@@ -9,7 +9,6 @@ export declare global {
 	var Cached_DiscordGuildManager : DiscordGuildManagerClass;
 	var SystemLib : SystemLib_Class;
 	var Api : core.Express;
-	var Router : core.Router;
 	var HttpServer : http.Server<
 		typeof http.IncomingMessage,
 		typeof http.ServerResponse
