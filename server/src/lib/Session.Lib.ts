@@ -4,13 +4,13 @@ import DB_SessionToken     from "@server/mongodb/DB_SessionToken";
 
 // create a new session token and register it in the database
 // if the token is not registered in the database the token will be invalid too. (small protection to modify the token)
-export async function CreateSession( User : Partial<IMO_UserAccount> ) : Promise<string | undefined> {
+export async function CreateSession( User : Partial<IMO_UserAccount>, stayLoggedIn? : boolean ) : Promise<string | undefined> {
 	delete User.__v;
 	delete User.salt;
 	delete User.hash;
 	try {
 		const Token = jwt.sign( User, process.env.JWTToken || "", {
-			expiresIn: "7d"
+			expiresIn: stayLoggedIn ? "28d" : "1d"
 		} );
 		const Decoded = jwt.verify( Token, process.env.JWTToken || "" ) as jwt.JwtPayload;
 		if ( Decoded ) {

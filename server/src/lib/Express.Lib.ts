@@ -12,6 +12,7 @@ import * as jwt                  from "jsonwebtoken";
 import { ERoles }                from "@shared/Enum/ERoles";
 import { TEResG }                from "@server/types/express";
 import { DiscordGuildManager }   from "@server/lib/bot/guild.lib";
+import { TRPCError }             from "@trpc/server";
 import NextFunction = Connect.NextFunction;
 
 export function ApiUrl( Url : TApiPath | string ) {
@@ -130,4 +131,14 @@ export async function MW_Permission( req : Request, res : Response, next : NextF
 		return;
 	}
 	res.json( Response );
+}
+
+export function handleTRCPErr( e : unknown ) {
+	if ( e instanceof TRPCError ) {
+		throw new TRPCError( { message: e.message, code: e.code } );
+	}
+	else if ( e instanceof Error ) {
+		SystemLib.LogError( "tRCP", e.message );
+		throw new TRPCError( { message: "Something goes wrong!", code: "INTERNAL_SERVER_ERROR" } );
+	}
 }

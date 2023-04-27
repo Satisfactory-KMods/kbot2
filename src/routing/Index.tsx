@@ -2,27 +2,22 @@ import {
 	FC,
 	useMemo,
 	useState
-}                                from "react";
+}                          from "react";
 import {
 	json,
 	LoaderFunction,
 	useLoaderData
-}                                from "react-router-dom";
+}                          from "react-router-dom";
+import { validateLogin }   from "@hooks/useAuth";
+import { ILoaderDataBase } from "@app/types/routing";
+import { IMO_Guild }       from "@shared/types/MongoDB";
+import { usePageTitle }    from "@kyri123/k-reactutils";
+import GuildSelectRow      from "@comp/pageComponents/GuildSelectRow";
+import { Pagination }      from "flowbite-react";
 import {
-	getToken,
-	validateLogin
-}                                from "@hooks/useAuth";
-import { ILoaderDataBase }       from "@app/types/routing";
-import { IMO_Guild }             from "@shared/types/MongoDB";
-import {
-	fetchGetJson,
-	usePageTitle
-}                                from "@kyri123/k-reactutils";
-import { EApiGuild }             from "@shared/Enum/EApiPath";
-import { APIRequest }            from "discord.js";
-import { TR_Guild_Question_Get } from "@shared/types/API_Response";
-import GuildSelectRow            from "@comp/pageComponents/GuildSelectRow";
-import { Pagination }            from "flowbite-react";
+	tRCP_handleError,
+	tRPC_Auth
+}                          from "@lib/tRPC";
 
 interface ILoaderData extends ILoaderDataBase {
 	guilds : IMO_Guild[];
@@ -34,14 +29,11 @@ const loader : LoaderFunction = async() => {
 		window.location.replace( "/login" );
 	}
 
-	const guilds = await fetchGetJson<APIRequest, TR_Guild_Question_Get>( {
-		path: EApiGuild.question,
-		auth: getToken()
-	} );
+	const guilds = ( await tRPC_Auth.getguilds.query().catch( tRCP_handleError ) )?.guilds || [] as IMO_Guild[];
 
 	return json<ILoaderData>( {
 		...result,
-		guilds: ( guilds?.Data || [] )
+		guilds
 	} );
 };
 
@@ -71,7 +63,7 @@ const Component : FC = () => {
 		</div>
 		<div className="flow-root -mx-8 border-y border-gray-700">
 			<ul className="divide-y divide-gray-200 dark:divide-gray-700">
-				{ guilds.map( ( guild ) => ( <GuildSelectRow guild={ guild } key={ guild._id }/> ) ) }
+				{ ShowElements.map( ( guild ) => ( <GuildSelectRow guild={ guild } key={ guild._id }/> ) ) }
 			</ul>
 		</div>
 		{ TotalPage > 1 && <div className="flex items-center justify-center text-center">

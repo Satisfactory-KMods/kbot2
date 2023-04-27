@@ -1,28 +1,26 @@
 import {
 	createTRPCProxyClient,
-	httpBatchLink
-} from "@trpc/client";
+	httpBatchLink,
+	TRPCClientError
+}                          from "@trpc/client";
 import type {
 	AuthRouter,
 	GuildRouter,
 	PublicRouter
-} from "@server/trpc/server";
+}                          from "@server/trpc/server";
+import { fireSwalFromApi } from "@lib/sweetAlert";
 
 export const tRPC_token = () => window.localStorage.getItem( "session" ) || "";
 
-const tRPC_Public = createTRPCProxyClient<PublicRouter>( {
+export const tRPC_Public = createTRPCProxyClient<PublicRouter>( {
 	links: [
 		httpBatchLink( {
-			url: "/api/v2/public",
-			headers: () => {
-				return {
-					Authorization: `Bearer ${ tRPC_token() }`
-				};
-			}
+			url: "/api/v2/public"
 		} )
 	]
 } );
-const tRPC_Auth = createTRPCProxyClient<AuthRouter>( {
+
+export const tRPC_Auth = createTRPCProxyClient<AuthRouter>( {
 	links: [
 		httpBatchLink( {
 			url: "/api/v2/auth",
@@ -34,7 +32,8 @@ const tRPC_Auth = createTRPCProxyClient<AuthRouter>( {
 		} )
 	]
 } );
-const tRPC_Guild = createTRPCProxyClient<GuildRouter>( {
+
+export const tRPC_Guild = createTRPCProxyClient<GuildRouter>( {
 	links: [
 		httpBatchLink( {
 			url: "/api/v2/guild",
@@ -47,8 +46,8 @@ const tRPC_Guild = createTRPCProxyClient<GuildRouter>( {
 	]
 } );
 
-export {
-	tRPC_Public,
-	tRPC_Auth,
-	tRPC_Guild
+export const tRCP_handleError = ( e : any ) => {
+	if ( e instanceof TRPCClientError ) {
+		fireSwalFromApi( e.message );
+	}
 };

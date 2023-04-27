@@ -4,29 +4,27 @@ import {
 	useContext,
 	useRef,
 	useState
-}                                   from "react";
+}                          from "react";
 import {
 	json,
 	LoaderFunction,
 	useLoaderData,
 	useNavigate,
 	useParams
-}                                   from "react-router-dom";
-import { validateLogin }            from "@hooks/useAuth";
+}                          from "react-router-dom";
+import { validateLogin }   from "@hooks/useAuth";
+import { usePageTitle }    from "@kyri123/k-reactutils";
+import { TextInput }       from "flowbite-react";
+import { SlLogin }         from "react-icons/all";
+import LoadButton          from "@comp/LoadButton";
+import { ILoaderDataBase } from "@app/types/routing";
+import { fireSwalFromApi } from "@lib/sweetAlert";
+import authContext         from "@context/authContext";
 import {
-	fetchCheckoutJson,
-	fetchPutJson,
-	usePageTitle
-}                                   from "@kyri123/k-reactutils";
-import { EApiAuth }                 from "@shared/Enum/EApiPath";
-import { TextInput }                from "flowbite-react";
-import { SlLogin }                  from "react-icons/all";
-import LoadButton                   from "@comp/LoadButton";
-import { TReq_Auth_Account_Put }    from "@shared/types/API_Request";
-import { TR_Auth_Account_Checkout } from "@shared/types/API_Response";
-import { ILoaderDataBase }          from "@app/types/routing";
-import { fireToastFromApi }         from "@lib/sweetAlert";
-import authContext                  from "@context/authContext";
+	tRCP_handleError,
+	tRPC_Public
+}                          from "@lib/tRPC";
+import { EApiTokenType }   from "@shared/Enum/EApiMethods";
 
 interface ILoaderData extends ILoaderDataBase {
 	tokenValid : boolean;
@@ -35,16 +33,13 @@ interface ILoaderData extends ILoaderDataBase {
 const loader : LoaderFunction = async( { params } ) => {
 	const { authCode } = params;
 	const result = await validateLogin();
-	if ( result.loggedIn ) {
-		window.location.replace( "/" );
-	}
 
-	const Response = await fetchCheckoutJson<{ authCode? : string }, { tokenOk : boolean }>( {
-		path: EApiAuth.validate,
-		data: { authCode }
-	} ).catch( console.warn );
+	const Response = await tRPC_Public.checktoken.mutate( {
+		token: authCode!,
+		type: EApiTokenType.reg
+	} ).catch( tRCP_handleError );
 
-	const tokenValid = !( !Response || !Response.tokenOk );
+	const tokenValid = !!Response?.valid;
 	if ( !tokenValid ) {
 		window.location.replace( "/error/401" );
 	}
@@ -78,19 +73,16 @@ const Component : FC = () => {
 				return;
 			}
 			setIsLoading( true );
-			const Response = await fetchPutJson<TReq_Auth_Account_Put, TR_Auth_Account_Checkout>( {
-				path: EApiAuth.account,
-				data: { username, password, passwordAgain, token: authCode! }
-			} ).catch( console.warn );
+			const Response = await tRPC_Public.register.mutate( {
+				username,
+				password,
+				token: authCode!
+			} ).catch( tRCP_handleError );
 
 			if ( Response ) {
-				if ( Response.Success ) {
-					setToken( Response.Data.token );
-					navigate( "/" );
-				}
-				else {
-					fireToastFromApi( Response );
-				}
+				fireSwalFromApi( Response.message, true );
+				setToken( Response.token );
+				navigate( "/" );
 			}
 		}
 
@@ -108,22 +100,22 @@ const Component : FC = () => {
 			</h1>
 			<form className="space-y-4" action="#" onSubmit={ onSubmit }>
 				<TextInput color={ inputError[ 0 ] ? "failure" : "gray" } className="w-full mt-6"
-						   placeholder="Login name" ref={ loginRef }
-						   helperText={ inputError[ 0 ] ? <><span className="font-medium">Oops!</span> Username is too
-							   short... must be 6 character long.</> : undefined }/>
+				           placeholder="Login name" ref={ loginRef }
+				           helperText={ inputError[ 0 ] ? <><span className="font-medium">Oops!</span> Username is too
+					           short... must be 6 character long.</> : undefined }/>
 				<TextInput color={ inputError[ 1 ] ? "failure" : "gray" } className="w-full mt-6" placeholder="Password"
-						   type="password"
-						   ref={ passwordRef }
-						   helperText={ inputError[ 1 ] ? <><span className="font-medium">Oops!</span> Password is too
-							   short... must be 8 character long.</> : undefined }/>
+				           type="password"
+				           ref={ passwordRef }
+				           helperText={ inputError[ 1 ] ? <><span className="font-medium">Oops!</span> Password is too
+					           short... must be 8 character long.</> : undefined }/>
 				<TextInput color={ inputError[ 2 ] ? "failure" : "gray" } className="w-full mt-6" placeholder="Password"
-						   type="password"
-						   ref={ passwordAgainRef }
-						   helperText={ inputError[ 2 ] ? <><span className="font-medium">Oops!</span> Password must
-							   match</> : undefined }/>
+				           type="password"
+				           ref={ passwordAgainRef }
+				           helperText={ inputError[ 2 ] ? <><span className="font-medium">Oops!</span> Password must
+					           match</> : undefined }/>
 
 				<LoadButton className="w-full" isLoading={ isLoading } type={ "submit" }
-							icon={ <SlLogin className="mr-3 h-4 w-4"/> }>
+				            icon={ <SlLogin className="mr-3 h-4 w-4"/> }>
 					Sign up
 				</LoadButton>
 			</form>

@@ -1,77 +1,78 @@
 {
-	"compilerOptions": {
-		"outDir": "../dist-server",
-		"rootDirs": [
-			"server/src",
-			"shared"
-		],
-		"types": [
-			"node"
-		],
-		"target": "ESNext",
-		"module": "commonjs",
-		"strict": true,
-		"moduleResolution": "Node",
-		"importHelpers": true,
-		"experimentalDecorators": true,
-		"esModuleInterop": true,
-		"skipLibCheck": true,
-		"allowSyntheticDefaultImports": true,
-		"resolveJsonModule": true,
-		"forceConsistentCasingInFileNames": true,
-		"removeComments": true,
-		"noImplicitAny": false,
-		"isolatedModules": false,
-		"lib": [
-			"ESNext"
-		],
-		"typeRoots": [
-			"node_modules/@types",
-			"src/types",
-			"shared/types",
-			"./src/types"
-		],
-		"paths": {
-			"@bot/*": [
-				"server/src/bot/*"
-			],
-			"@/*": [
-				"./*"
-			],
-			"@app/*": [
-				"src/*"
-			],
-			"@shared/*": [
-				"shared/*"
-			],
-			"@server/*": [
-				"server/src/*"
-			],
-			"@hooks/*": [
-				"src/hooks/*"
-			],
-			"@comp/*": [
-				"src/components/*"
-			],
-			"@style/*": [
-				"src/style/*"
-			],
-			"@routing/*": [
-				"src/routing/*"
-			]
-		},
-		"sourceMap": false,
-		"baseUrl": "../"
-	},
-	"files": [
-		"./src/types/global.d.ts"
-	],
-	"include": [
-		"./src/**/*.ts",
-		"../shared/**/*.ts"
-	],
-	"exclude": [
-		"node_modules",
-		"dist"
-	]
+  "compilerOptions": {
+    "outDir": "../dist-server",
+    "rootDirs": [
+      "server/src",
+      "shared"
+    ],
+    "types": [
+      "node"
+    ],
+    "target": "ESNext",
+    "module": "commonjs",
+    "strict": true,
+    "moduleResolution": "Node",
+    "importHelpers": true,
+    "declaration": false,
+    "experimentalDecorators": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true,
+    "forceConsistentCasingInFileNames": true,
+    "removeComments": true,
+    "noImplicitAny": false,
+    "isolatedModules": false,
+    "lib": [
+      "ESNext"
+    ],
+    "typeRoots": [
+      "node_modules/@types",
+      "src/types",
+      "shared/types",
+      "./src/types"
+    ],
+    "paths": {
+      "@bot/*": [
+        "server/src/bot/*"
+      ],
+      "@/*": [
+        "./*"
+      ],
+      "@app/*": [
+        "src/*"
+      ],
+      "@shared/*": [
+        "shared/*"
+      ],
+      "@server/*": [
+        "server/src/*"
+      ],
+      "@hooks/*": [
+        "src/hooks/*"
+      ],
+      "@comp/*": [
+        "src/components/*"
+      ],
+      "@style/*": [
+        "src/style/*"
+      ],
+      "@routing/*": [
+        "src/routing/*"
+      ]
+    },
+    "sourceMap": false,
+    "baseUrl": "../"
+  },
+  "files": [
+    "./src/types/global.d.ts"
+  ],
+  "include": [
+    "./src/**/*.ts",
+    "../shared/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
 } 

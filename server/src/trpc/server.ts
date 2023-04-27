@@ -1,15 +1,19 @@
-import { initTRPC }        from "@trpc/server";
-import * as trpcExpress    from "@trpc/server/adapters/express";
-import { BC }              from "@server/lib/System.Lib";
-import { User }            from "@shared/class/User.Class";
-import { DiscordGuild }    from "@server/lib/bot/guild.lib";
+import * as trpc                from "@trpc/server";
+import * as trpcExpress         from "@trpc/server/adapters/express";
+import { BC }                   from "@server/lib/System.Lib";
+import { User }                 from "@shared/class/User.Class";
+import { DiscordGuild }         from "@server/lib/bot/guild.lib";
 import {
 	MW_Auth,
 	MW_AuthGuild
-}                          from "@server/lib/Express.Lib";
-import { public_validate } from "@server/trpc/routings/public/validate";
-import { public_login }    from "@server/trpc/routings/public/login";
-import { guild_validate }  from "@server/trpc/routings/guild/validate";
+}                               from "@server/lib/Express.Lib";
+import { public_validate }      from "@server/trpc/routings/public/validate";
+import { public_login }         from "@server/trpc/routings/public/login";
+import { guild_validate }       from "@server/trpc/routings/guild/validate";
+import { public_createAccount } from "@server/trpc/routings/public/createAccount";
+import { public_resetPassword } from "@server/trpc/routings/public/resetPassword";
+import { public_checkToken }    from "@server/trpc/routings/public/checkToken";
+import { auth_getGuilds }       from "@server/trpc/routings/auth/getGuilds";
 
 interface Context {
 	guildId? : string,
@@ -19,8 +23,7 @@ interface Context {
 }
 
 const createContext = async( {
-	req,
-	res
+	req
 } : trpcExpress.CreateExpressContextOptions ) => {
 	const ctx : Context = {
 		token: req.body.JsonWebToken,
@@ -32,7 +35,7 @@ const createContext = async( {
 	return ctx;
 };
 
-const t = initTRPC.context<Context>().create( {
+const t = trpc.initTRPC.context<Context>().create( {
 	isServer: true,
 	isDev: SystemLib.IsDevMode
 } );
@@ -41,10 +44,15 @@ export type tRPC = typeof t;
 
 
 const publicRouter = t.router( {
+	checktoken: public_checkToken( t ),
 	validate: public_validate( t ),
-	login: public_login( t )
+	login: public_login( t ),
+	register: public_createAccount( t ),
+	resetpassword: public_resetPassword( t )
 } );
-const authRouter = t.router( {} );
+const authRouter = t.router( {
+	getguilds: auth_getGuilds( t )
+} );
 const guildRouter = t.router( {
 	validate: guild_validate( t )
 } );

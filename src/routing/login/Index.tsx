@@ -4,31 +4,28 @@ import {
 	useContext,
 	useRef,
 	useState
-}                                     from "react";
+}                          from "react";
 import {
 	json,
 	LoaderFunction,
 	useLoaderData,
 	useNavigate
-}                                     from "react-router-dom";
-import { validateLogin }              from "@hooks/useAuth";
-import { ILoaderDataBase }            from "@app/types/routing";
-import {
-	fetchCheckoutJson,
-	usePageTitle
-}                                     from "@kyri123/k-reactutils";
-import { TReq_Auth_Account_Checkout } from "@shared/types/API_Request";
-import { TR_Auth_Account_Checkout }   from "@shared/types/API_Response";
-import { EApiAuth }                   from "@shared/Enum/EApiPath";
+}                          from "react-router-dom";
+import { validateLogin }   from "@hooks/useAuth";
+import { ILoaderDataBase } from "@app/types/routing";
+import { usePageTitle }    from "@kyri123/k-reactutils";
 import {
 	Checkbox,
 	Label,
 	TextInput
-}                                     from "flowbite-react";
-import LoadButton                     from "@comp/LoadButton";
-import { SlLogin }                    from "react-icons/all";
-import { fireToastFromApi }           from "@lib/sweetAlert";
-import authContext                    from "@context/authContext";
+}                          from "flowbite-react";
+import LoadButton          from "@comp/LoadButton";
+import { SlLogin }         from "react-icons/all";
+import authContext         from "@context/authContext";
+import {
+	tRCP_handleError,
+	tRPC_Public
+}                          from "@lib/tRPC";
 
 const loader : LoaderFunction = async() => {
 	const result = await validateLogin();
@@ -57,30 +54,26 @@ const Component : FC = () => {
 	const OnSubmit = async( event : FormEvent<HTMLFormElement> ) => {
 		event.preventDefault();
 
-		const username = loginRef.current?.value;
-		const password = passwordRef.current?.value;
-		const stayLoggedIn = !!stayLoggedInRef.current?.checked;
+		const login : string | undefined = loginRef.current?.value;
+		const password : string | undefined = passwordRef.current?.value;
+		const stayLoggedIn : boolean | undefined = !!stayLoggedInRef.current?.checked;
 
-		if ( username !== undefined && password !== undefined ) {
-			setInputError( [ username.length < 6, password.length < 8 ] );
-			if ( username.length < 6 || password.length < 8 ) {
+		if ( login !== undefined && password !== undefined ) {
+			setInputError( [ login.length < 6, password.length < 8 ] );
+			if ( login.length < 6 || password.length < 8 ) {
 				return;
 			}
 
 			setIsLoading( true );
-			const Response = await fetchCheckoutJson<TReq_Auth_Account_Checkout, TR_Auth_Account_Checkout>( {
-				path: EApiAuth.account,
-				data: { username, password, stayLoggedIn }
-			} ).catch( console.warn );
+			const Response = await tRPC_Public.login.mutate( {
+				login,
+				password,
+				stayLoggedIn
+			} ).catch( tRCP_handleError );
 
 			if ( Response ) {
-				if ( Response.Success ) {
-					setToken( Response.Data.token );
-					navigate( "/" );
-				}
-				else {
-					fireToastFromApi( Response );
-				}
+				setToken( Response.token );
+				navigate( "/" );
 			}
 		}
 
@@ -94,14 +87,14 @@ const Component : FC = () => {
 			</h1>
 			<form className="space-y-4" action="#" onSubmit={ OnSubmit }>
 				<TextInput color={ inputError[ 0 ] ? "failure" : "gray" } className="w-full mt-6"
-						   placeholder="Discord id or login name" ref={ loginRef }
-						   helperText={ inputError[ 0 ] ? <><span className="font-medium">Oops!</span> Username is too
-							   short... must be 6 character long.</> : undefined }/>
+				           placeholder="Discord id or login name" ref={ loginRef }
+				           helperText={ inputError[ 0 ] ? <><span className="font-medium">Oops!</span> Username is too
+					           short... must be 6 character long.</> : undefined }/>
 				<TextInput color={ inputError[ 1 ] ? "failure" : "gray" } className="w-full mt-6" placeholder="Password"
-						   type="password"
-						   ref={ passwordRef }
-						   helperText={ inputError[ 1 ] ? <><span className="font-medium">Oops!</span> Password is too
-							   short... must be 8 character long.</> : undefined }/>
+				           type="password"
+				           ref={ passwordRef }
+				           helperText={ inputError[ 1 ] ? <><span className="font-medium">Oops!</span> Password is too
+					           short... must be 8 character long.</> : undefined }/>
 
 				<div className="flex items-center gap-2 mt-6">
 					<Checkbox id="remember" defaultChecked={ true } ref={ stayLoggedInRef }/>
@@ -111,7 +104,7 @@ const Component : FC = () => {
 				</div>
 
 				<LoadButton className="w-full" isLoading={ isLoading } type={ "submit" }
-							icon={ <SlLogin className="mr-3 h-4 w-4"/> }>
+				            icon={ <SlLogin className="mr-3 h-4 w-4"/> }>
 					Sign In
 				</LoadButton>
 			</form>
