@@ -31,7 +31,14 @@ const Component : FC = () => {
 	const { chatReactions } = useLoaderData() as ILoaderData;
 
 	return ( <>
-		<ChatCommandEditor/>
+		<div
+			className="flex rounded-lg border border-gray-200 bg-white shadow-md dark:border-gray-700 dark:bg-gray-800 flex-col w-full p-0">
+			<div className="flex h-full flex-col justify-center gap-4 p-0">
+				<div className="flex flex-col gap-2">
+					<ChatCommandEditor/>
+				</div>
+			</div>
+		</div>
 		{ chatReactions.length > 0 && <Accordion>
 			{ chatReactions.map( ( reaction ) => ( <ChatCommandElement key={ reaction._id } data={ reaction }/> ) ) }
 		</Accordion> }
