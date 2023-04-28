@@ -63,8 +63,8 @@ const ChatCommandEditor : FC<IChatCommandEditorProps> = ( { editData, onUpdated,
 	const buildData = () : Omit<IMO_ChatCommands, "_id" | "__v" | "createdAt" | "updatedAt"> => {
 		return {
 			guildId: guildId!,
-			command: commandRef.current!.value,
-			alias: aliasCommands.map( e => e.value ),
+			command: commandRef.current!.value.toLowerCase(),
+			alias: aliasCommands.map( e => e.value.toLowerCase() ),
 			reactionText,
 			autoReactionMatches: autoReactions
 		};
@@ -175,8 +175,8 @@ const ChatCommandEditor : FC<IChatCommandEditorProps> = ( { editData, onUpdated,
 					                 placeholder="Type a command alias and press enter"
 					                 onCreateOption={ V => setAliasCommands( aliasCommands => aliasCommands.concat( [
 						                 {
-							                 label: V,
-							                 value: V
+							                 label: V.toLowerCase(),
+							                 value: V.toLowerCase()
 						                 }
 					                 ] ) ) }
 					                 classNamePrefix="my-react-select" isMulti={ true } value={ aliasCommands }
