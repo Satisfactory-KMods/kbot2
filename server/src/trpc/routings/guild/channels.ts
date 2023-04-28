@@ -23,7 +23,7 @@ export const guild_channels =
 					switch ( type ) {
 						case EChannelType.voice:
 							channels = ( await guild.getGuild?.channels.fetch()
-								.then( r => r.filter( e => e?.type === ChannelType.GuildVoice ) )
+								.then( r => r.filter( e => e?.type === ChannelType.GuildVoice || e?.type === ChannelType.GuildAnnouncement ) )
 								.then( r => r.map( e => e?.toJSON() as any ) )
 								.catch( e => [] as any[] ) ) || [];
 							break;
