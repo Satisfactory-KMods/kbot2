@@ -7,6 +7,7 @@ import {
 	guildProcedure,
 	router
 }                                         from "@server/trpc/trpc";
+import _                                  from "lodash";
 
 export const guild_chatCommands =
 	router( {
@@ -69,30 +70,50 @@ export const guild_chatCommands =
 			message : string,
 			command : IMO_ChatCommands
 		}>( async( { input } ) => {
-			const { data, id } = input;
+			const { data, id, guildId } = input;
 			try {
-				if ( !await DB_ChatCommands.exists( {
-					$or: [
-						{ command: data.command },
-						{ alias: data.command },
-						{ alias: { $in: data.alias } },
-						{ command: data.alias }
-					]
-				} ) ) {
-					const commandDocument = await DB_ChatCommands.findByIdAndUpdate( id, data, { new: true } );
-					if ( commandDocument ) {
+				const commandDocument = await DB_ChatCommands.findById( id );
+				if ( commandDocument ) {
+					if ( !_.isEqual( commandDocument.command, data.command ) ) {
+						const duplicated = !!( await DB_ChatCommands.exists( {
+							guildId, $or: [
+								{ command: data.command },
+								{ alias: data.command }
+							]
+						} ) );
+						if ( duplicated ) {
+							throw new TRPCError( {
+								message: `Duplicate command found! (${ data.command })`,
+								code: "INTERNAL_SERVER_ERROR"
+							} );
+						}
+					}
+
+					if ( !_.isEqual( commandDocument.alias, data.alias ) ) {
+						const duplicated = await DB_ChatCommands.findOne( {
+							guildId, $or: [
+								{ command: data.alias },
+								{ alias: { $in: data.alias } }
+							]
+						} );
+						if ( duplicated ) {
+							throw new TRPCError( {
+								message: `Duplicate command alias found! (${ data.alias.filter( e => duplicated.alias.includes( e ) || duplicated.command === e ) })`,
+								code: "INTERNAL_SERVER_ERROR"
+							} );
+						}
+					}
+
+					const commandDocumentModified = await DB_ChatCommands.findByIdAndUpdate( id, data, { new: true } );
+					if ( commandDocumentModified ) {
 						return {
 							message: "Command modified!",
-							command: commandDocument.toJSON()
+							command: commandDocumentModified.toJSON()
 						};
 					}
-					throw new TRPCError( {
-						message: "Invalid command id. Looks like it was removed. or something went wrong.",
-						code: "INTERNAL_SERVER_ERROR"
-					} );
 				}
 				throw new TRPCError( {
-					message: "Duplicate command or command alias found!",
+					message: "Invalid command id. Looks like it was removed. or something went wrong.",
 					code: "INTERNAL_SERVER_ERROR"
 				} );
 			}

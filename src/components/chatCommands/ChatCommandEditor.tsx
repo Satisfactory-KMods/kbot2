@@ -35,14 +35,19 @@ import {
 }                           from "@lib/tRPC";
 import { useParams }        from "react-router-dom";
 import { messageTextLimit } from "@shared/Default/discord";
-import { fireToastFromApi } from "@lib/sweetAlert";
+import {
+	fireSwalFromApi,
+	fireToastFromApi
+}                           from "@lib/sweetAlert";
+import ButtonGroup          from "flowbite-react/lib/esm/components/Button/ButtonGroup";
 
 interface IChatCommandEditorProps {
 	editData? : IMO_ChatCommands;
 	onUpdated? : ( command : IMO_ChatCommands ) => void;
+	onRemoved? : ( command : IMO_ChatCommands ) => void;
 }
 
-const ChatCommandEditor : FC<IChatCommandEditorProps> = ( { editData, onUpdated } ) => {
+const ChatCommandEditor : FC<IChatCommandEditorProps> = ( { editData, onUpdated, onRemoved } ) => {
 	const { guildId } = useParams();
 	const Id = useId();
 	const [ onUpdate, updatePage ] = useToggle( false );
@@ -75,8 +80,12 @@ const ChatCommandEditor : FC<IChatCommandEditorProps> = ( { editData, onUpdated 
 			} ).catch( tRCP_handleError );
 
 			if ( response && response.command ) {
-				fireToastFromApi( response.message );
+				fireToastFromApi( response.message, true );
 				onUpdated && onUpdated( response.command );
+			}
+			if ( !response ) {
+				setIsLoading( false );
+				return;
 			}
 		}
 		else {
@@ -86,8 +95,12 @@ const ChatCommandEditor : FC<IChatCommandEditorProps> = ( { editData, onUpdated 
 			} ).catch( tRCP_handleError );
 
 			if ( response && response.command ) {
-				fireToastFromApi( response.message );
+				fireToastFromApi( response.message, true );
 				onUpdated && onUpdated( response.command );
+			}
+			if ( !response ) {
+				setIsLoading( false );
+				return;
 			}
 		}
 		updatePage();
@@ -107,8 +120,34 @@ const ChatCommandEditor : FC<IChatCommandEditorProps> = ( { editData, onUpdated 
 		}
 	};
 
-	const removeReaction = ( idx : number ) => {
-		setAutoReactions( curr => curr.filter( ( e, i ) => i !== idx ) );
+	const removeReaction = async( idx : number ) => {
+		setAutoReactions( c => c.filter( ( e, i ) => i !== idx ) );
+	};
+
+	const removeCommand = async() => {
+		if ( editData ) {
+			const accept = await fireSwalFromApi( "Do you really want to remove this reaction?", false, {
+				icon: "question",
+				showConfirmButton: true,
+				showCancelButton: true
+			} );
+
+			if ( accept?.isConfirmed ) {
+				setIsLoading( true );
+				const response = await tRPC_Guild.chatcommands.rm.mutate( {
+					guildId: guildId!,
+					id: editData._id!
+				} ).catch( tRCP_handleError );
+
+				if ( response && response.message ) {
+					fireToastFromApi( response.message, true );
+					if ( onRemoved ) {
+						onRemoved( editData );
+					}
+				}
+			}
+			setIsLoading( false );
+		}
 	};
 
 	useEffect( () => {
@@ -199,9 +238,16 @@ const ChatCommandEditor : FC<IChatCommandEditorProps> = ( { editData, onUpdated 
 				</Tabs.Item>
 			</Tabs.Group>
 			<hr className="border-gray-600"/>
-			<div className="p-3 bg-gray-700 rounded-b-lg">
-				<LoadButton isLoading={ isLoading } color="green" type="button" onClick={ onSubmit }
-				            icon={ <BiSave size={ 20 } className="me-2"/> }>Save</LoadButton>
+			<div className="p-3 rounded-b-lg">
+				{ editData !== undefined ? ( <ButtonGroup>
+					<LoadButton isLoading={ isLoading } color="green" type="button" onClick={ onSubmit }
+					            icon={ <BiSave size={ 20 } className="me-2"/> }>Save</LoadButton>
+					<LoadButton isLoading={ isLoading } color="red" type="button" onClick={ removeCommand }
+					            icon={ <BiTrash size={ 20 } className="me-2"/> }>Remove</LoadButton>
+				</ButtonGroup> ) : (
+					<LoadButton isLoading={ isLoading } color="green" type="button" onClick={ onSubmit }
+					            icon={ <BiSave size={ 20 } className="me-2"/> }>Save</LoadButton>
+				) }
 			</div>
 		</div>
 	);

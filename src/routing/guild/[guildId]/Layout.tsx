@@ -33,13 +33,13 @@ const Component : FC = () => {
 
 	return (
 		<guildContext.Provider value={ guildData }>
-			<div className={ "flex flex-col h-full w-full" }>
-				<TopNavbar/>
+			<div className={ "flex h-screen overflow-y-hidden" }>
 				<div className={ "flex-1 flex" }>
 					<LeftSidebar/>
-					<div className={ "grow flex flex-col" }>
+					<div className={ "flex flex-col flex-1 h-full overflow-hidden" }>
+						<TopNavbar/>
 						<TopSubbar/>
-						<div className="h-full overflow-x-hidden auto">
+						<div className="flex-1 max-h-full p-5 overflow-hidden overflow-y-scroll">
 							<div
 								className={ "flex flex-col mx-auto md:h-full lg:py-0 w-full md:max-w-screen-xl" }>
 								<div className="w-full p-4">

@@ -1,20 +1,22 @@
 import {
 	FC,
+	useContext,
 	useState
-}                           from "react";
+}                                   from "react";
 import {
 	json,
 	LoaderFunction,
 	useLoaderData
-}                           from "react-router-dom";
-import { IMO_ChatCommands } from "@shared/types/MongoDB";
-import ChatCommandEditor    from "@comp/chatCommands/ChatCommandEditor";
-import { Accordion }        from "flowbite-react";
-import ChatCommandElement   from "@comp/chatCommands/ChatCommandElement";
+}                                   from "react-router-dom";
+import { IMO_ChatCommands }         from "@shared/types/MongoDB";
+import ChatCommandEditor            from "@comp/chatCommands/ChatCommandEditor";
+import { Accordion }                from "flowbite-react";
 import {
 	tRCP_handleError,
 	tRPC_Guild
-}                           from "@lib/tRPC";
+}                                   from "@lib/tRPC";
+import { HiOutlineArrowCircleDown } from "react-icons/all";
+import guildContext                 from "@context/guildContext";
 
 interface ILoaderData {
 	chatReactions : IMO_ChatCommands[];
@@ -31,21 +33,24 @@ const loader : LoaderFunction = async( { params } ) => {
 };
 
 const Component : FC = () => {
+	const { options } = useContext( guildContext );
 	const { chatReactions } = useLoaderData() as ILoaderData;
 	const [ commands, setCommands ] = useState<IMO_ChatCommands[]>( () => chatReactions );
 
 	const OnUpdateChatCommand = ( command : IMO_ChatCommands ) => {
 		const commandIndex = commands.findIndex( e => e._id === command._id );
 		if ( commandIndex >= 0 ) {
-			setCommands( curr => {
-				const next = [ ...curr ];
-				next[ commandIndex ] = command;
-				return next;
-			} );
+			const next = [ ...commands ];
+			next[ commandIndex ] = command;
+			setCommands( next );
 		}
 		else {
-			setCommands( curr => curr.concat( [ command ] ) );
+			setCommands( commands.concat( [ command ] ) );
 		}
+	};
+
+	const OnRemoveChatCommand = ( command : IMO_ChatCommands ) => {
+		setCommands( c => c.filter( e => e._id !== command._id ) );
 	};
 
 	return ( <>
@@ -57,9 +62,18 @@ const Component : FC = () => {
 				</div>
 			</div>
 		</div>
-		{ commands.length > 0 && <Accordion>
+		{ commands.length > 0 && <Accordion collapseAll={ true } arrowIcon={ HiOutlineArrowCircleDown }>
 			{ commands.map( ( reaction ) => (
-				<ChatCommandElement onUpdated={ OnUpdateChatCommand } key={ reaction._id } data={ reaction }/> ) ) }
+				<Accordion.Panel key={ reaction._id }>
+					<Accordion.Title>
+						{ options.chatCommandPrefix }{ reaction.command }
+					</Accordion.Title>
+					<Accordion.Content>
+						<ChatCommandEditor onUpdated={ OnUpdateChatCommand } onRemoved={ OnRemoveChatCommand }
+						                   editData={ reaction }/>
+					</Accordion.Content>
+				</Accordion.Panel>
+			) ) }
 		</Accordion> }
 	</> );
 };

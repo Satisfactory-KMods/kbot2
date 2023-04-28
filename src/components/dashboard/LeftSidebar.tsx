@@ -24,7 +24,9 @@ const LeftSidebar : FC = () => {
 	const { guildData } = useContext( guildContext );
 
 	return (
-		<div className="w-fit h-full dark:bg-gray-800 flex flex-col">
+		<div className="w-fit h-full dark:bg-gray-800 flex flex-col border-r border-gray-600">
+			<img src="/images/logo.png" className="mr-3 h-10 w-10 m-3"
+			     alt="KBot Logo"/>
 			<Sidebar className="grow-0 h-0" collapsed={ true } theme={ {
 				root: {
 					inner: "h-full overflow-y-auto overflow-x-hidden bg-white py-4 px-3 dark:bg-gray-800"
@@ -48,19 +50,19 @@ const LeftSidebar : FC = () => {
 			} } className="flex-1 grow h-full">
 				<Sidebar.ItemGroup>
 					<Sidebar.Item as={ Link } target="_blank" to={ import.meta.env.VITE_INVURL }
-								  icon={ BiBot }>
+					              icon={ BiBot }>
 						Invite
 					</Sidebar.Item>
 					<Sidebar.Item as={ Link } target="_blank" to="https://github.com/Kyri123/kbot2"
-								  icon={ SiGithub }>
+					              icon={ SiGithub }>
 						Source
 					</Sidebar.Item>
 					<Sidebar.Item as={ Link } target="_blank" to="https://discord.gg/BeH4GRRWxc"
-								  icon={ SiDiscord }>
+					              icon={ SiDiscord }>
 						Discord
 					</Sidebar.Item>
 					<Sidebar.Item as={ Link } target="_blank" to="https://www.patreon.com/kmods"
-								  icon={ SiPatreon }>
+					              icon={ SiPatreon }>
 						Donate
 					</Sidebar.Item>
 				</Sidebar.ItemGroup>

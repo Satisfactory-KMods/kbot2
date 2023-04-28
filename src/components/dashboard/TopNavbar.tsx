@@ -23,11 +23,6 @@ const TopNavbar : FC = () => {
 	return (
 		<Navbar fluid={ true } rounded={ false }>
 			<Navbar.Brand as={ Link } to={ `/guild/${ guildId }` }>
-				<img src="/images/logo.png" className="mr-3 h-6 sm:h-9 rounded-full"
-					 alt="KBot Logo"/>
-				<span className="self-center whitespace-nowrap text-xl font-semibold dark:text-white">
-				  KBot 2.0
-				</span>
 			</Navbar.Brand>
 			<Navbar.Toggle/>
 			<Navbar.Collapse>
