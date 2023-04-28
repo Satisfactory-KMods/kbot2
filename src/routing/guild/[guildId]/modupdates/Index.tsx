@@ -111,6 +111,7 @@ const Component : FC = () => {
 	const [ selectedBugChannel, setSelectedBugChannel ] = useState( () => channelToSelectedSingle( textChannels, guildData.options.bugChannelId ) || channelToSelectedSingle( forumChannels, guildData.options.bugChannelId ) );
 	const [ selectedSuggestionChannel, setSelectedSuggestionChannel ] = useState( () => channelToSelectedSingle( textChannels, guildData.options.suggestionChannelId ) || channelToSelectedSingle( forumChannels, guildData.options.suggestionChannelId ) );
 	const [ selectedForumChannel, setSelectedForumChannel ] = useState( () => channelToSelectedSingle( forumChannels, guildData.options.changelogForumId ) );
+	const [ defaultPingRole, setDefaultPingRole ] = useState( () => roleToSelectedSingle( roles, guildData.options.defaultPingRole || "0" ) );
 	const [ blacklistedMods, setblacklistedMods ] = useState( () => modsToSelectionMulti( mods, guildData.options.blacklistedMods ) );
 	const [ RolePingRules, setRolePingRules ] = useState<MO_RolePingRule[]>( () => guildData.options.RolePingRules );
 	const [ ficsitUserIds, setFicsitUserIds ] = useState<MultiValue<Selection>>( () => guildData.options.ficsitUserIds.map( id => ( {
@@ -129,6 +130,7 @@ const Component : FC = () => {
 		const response = await tRPC_Guild.modupdates.updateconfig.mutate( {
 			guildId: guildId!,
 			data: {
+				defaultPingRole: defaultPingRole?.value || "0",
 				modsAnnounceHiddenMods,
 				modsUpdateAnnouncement,
 				suggestionChannelId: selectedSuggestionChannel?.value || "",
@@ -174,6 +176,16 @@ const Component : FC = () => {
 								        isClearable={ true }
 								        classNamePrefix="my-react-select" isMulti={ true } value={ blacklistedMods }
 								        onChange={ setblacklistedMods }/>
+
+
+								<div className="mb-3 block">
+									<Label value="Default ping role"/>
+								</div>
+								<Select options={ roleOptions }
+								        className="mt-2 mb-3 my-react-select-container w-full"
+								        isClearable={ true }
+								        classNamePrefix="my-react-select" isMulti={ false } value={ defaultPingRole }
+								        onChange={ setDefaultPingRole }/>
 
 
 								<div className="mb-3 block">

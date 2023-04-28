@@ -37,6 +37,7 @@ export interface MO_GuildOptions extends MongoDBSchema {
 	modsAnnounceHiddenMods : boolean;
 	blacklistedMods : string[],
 	ficsitUserIds : string[],
+	defaultPingRole : string,
 	chatCommandPrefix : string,
 	changelogForumId : string,
 	updateTextChannelId : string,

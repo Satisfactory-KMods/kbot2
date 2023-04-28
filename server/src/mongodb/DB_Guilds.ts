@@ -22,6 +22,7 @@ const GuildOptionSchema = new mongoose.Schema<MO_GuildOptions>( {
 	chatCommandPrefix: { type: String, default: "." },
 	changelogForumId: { type: String, default: "" },
 	updateTextChannelId: { type: String, default: "" },
+	defaultPingRole: { type: String, default: "0" },
 	RolePingRules: {
 		type: [
 			{

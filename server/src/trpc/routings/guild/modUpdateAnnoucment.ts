@@ -31,6 +31,7 @@ export const guild_modUpdateAnnoucment =
 
 		updateconfig: guildProcedure.input( z.object( {
 			data: z.object( {
+				defaultPingRole: z.string(),
 				modsUpdateAnnouncement: z.boolean(),
 				modsAnnounceHiddenMods: z.boolean(),
 				suggestionChannelId: z.string().refine( e => ( !isNaN( parseFloat( e ) ) || e === "" ), "Invalid channel input" ),

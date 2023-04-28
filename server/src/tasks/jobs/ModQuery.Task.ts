@@ -187,7 +187,7 @@ const JobOptions : JobOptions = {
 										]
 									} );
 
-									const role = await guildClass.role( guild.options.modToRole?.find( r => r.modRef === mod.mod_reference )?.roleId || "0" );
+									const role = await guildClass.role( guild.options.modToRole?.find( r => r.modRef === mod.mod_reference )?.roleId || ( guild.options.defaultPingRole?.length > 0 ? guild.options.defaultPingRole : "0" ) );
 									let roleId = "0";
 									if ( role ) {
 										roleId = role.id;
