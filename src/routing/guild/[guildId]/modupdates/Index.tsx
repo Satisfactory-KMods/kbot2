@@ -122,7 +122,7 @@ const Component : FC = () => {
 	const textChannelOptions = useMemo( () => channelToSelection( textChannels ), [ textChannels ] );
 	const forumChannelOptions = useMemo( () => channelToSelection( forumChannels ), [ forumChannels ] );
 	const bothChannelOptions = useMemo( () => channelToSelection( forumChannels ).concat( channelToSelection( textChannels ) ), [ forumChannels, textChannels ] );
-	const modOptions = useMemo( () => modsToSelection( mods ), [ mods ] );
+	const modOptions = useMemo( () => modsToSelection( mods.filter( e => ficsitUserIds.map( e => e.value ).includes( e.creator_id ) ) ), [ mods, ficsitUserIds ] );
 
 	const onSubmit = async() => {
 		setIsLoading( true );

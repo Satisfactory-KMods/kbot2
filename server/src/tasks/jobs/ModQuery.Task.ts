@@ -102,8 +102,7 @@ const JobOptions : JobOptions = {
 
 					if ( annoucementChannel || threadChannel ) {
 						for await ( const mod of await DB_Mods.find( {
-							"authors.user_id": guild.options.ficsitUserIds,
-							"authors.role": "creator"
+							creator_id: guild.options.ficsitUserIds
 						} ) ) {
 
 							if ( !guild.options.blacklistedMods?.includes( mod.mod_reference ) ) {
