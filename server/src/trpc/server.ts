@@ -1,8 +1,5 @@
-import * as trpc                from "@trpc/server";
 import * as trpcExpress         from "@trpc/server/adapters/express";
 import { BC }                   from "@server/lib/System.Lib";
-import { User }                 from "@shared/class/User.Class";
-import { DiscordGuild }         from "@server/lib/bot/guild.lib";
 import {
 	MW_Auth,
 	MW_AuthGuild
@@ -15,48 +12,25 @@ import { public_resetPassword } from "@server/trpc/routings/public/resetPassword
 import { public_checkToken }    from "@server/trpc/routings/public/checkToken";
 import { auth_getGuilds }       from "@server/trpc/routings/auth/getGuilds";
 import { guild_chatCommands }   from "@server/trpc/routings/guild/chatCommands";
+import {
+	createContext,
+	router
+}                               from "@server/trpc/trpc";
 
-interface Context {
-	guildId? : string,
-	token? : string,
-	userClass? : User,
-	guild? : DiscordGuild
-}
 
-const createContext = async( {
-	req
-} : trpcExpress.CreateExpressContextOptions ) => {
-	const ctx : Context = {
-		token: req.body.JsonWebToken,
-		userClass: req.body.UserClass,
-		guildId: req.body.guild?.guildId,
-		guild: req.body.guild
-	};
-
-	return ctx;
-};
-
-const t = trpc.initTRPC.context<Context>().create( {
-	isServer: true,
-	isDev: SystemLib.IsDevMode
+const publicRouter = router( {
+	checktoken: public_checkToken,
+	validate: public_validate,
+	login: public_login,
+	register: public_createAccount,
+	resetpassword: public_resetPassword
 } );
-
-export type tRPC = typeof t;
-
-
-const publicRouter = t.router( {
-	checktoken: public_checkToken( t ),
-	validate: public_validate( t ),
-	login: public_login( t ),
-	register: public_createAccount( t ),
-	resetpassword: public_resetPassword( t )
+const authRouter = router( {
+	getguilds: auth_getGuilds
 } );
-const authRouter = t.router( {
-	getguilds: auth_getGuilds( t )
-} );
-const guildRouter = t.router( {
-	validate: guild_validate( t ),
-	chatcommands: guild_chatCommands( t )
+const guildRouter = router( {
+	validate: guild_validate,
+	chatcommands: guild_chatCommands
 } );
 
 

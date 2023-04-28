@@ -2,12 +2,13 @@ import { IMO_ChatCommands } from "@shared/types/MongoDB";
 import * as mongoose        from "mongoose";
 import z                    from "zod";
 import { messageTextLimit } from "@shared/Default/discord";
+import { rGuildId }         from "@server/zod/refineGuildId";
 
 const ZChatCommands = z.object( {
-	guildId: z.string().min( 5, { message: "empty guild id" } ),
-	command: z.string().max( messageTextLimit, { message: `Limit for a message is ${ messageTextLimit }` } ),
+	guildId: z.string().refine( rGuildId.c, rGuildId.m ),
+	command: z.string().min( 1, { message: "Empty command is not allowed" } ).max( messageTextLimit, { message: `Limit for a message is ${ messageTextLimit }` } ),
 	alias: z.array( z.string().max( messageTextLimit, { message: `Limit for a message is ${ messageTextLimit }` } ) ),
-	reactionText: z.string().min( 1, { message: "Empty messages are not allowed" } ).max( messageTextLimit, { message: `Limit for a message is ${ messageTextLimit }` } ),
+	reactionText: z.string().min( 1, { message: "Empty message is not allowed" } ).max( messageTextLimit, { message: `Limit for a message is ${ messageTextLimit }` } ),
 	autoReactionMatches: z.array( z.object( {
 		matchString: z.string().max( messageTextLimit, { message: `Limit for a message is ${ messageTextLimit }` } ),
 		similarity: z.boolean()

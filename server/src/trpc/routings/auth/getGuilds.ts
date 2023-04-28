@@ -1,11 +1,11 @@
-import type { tRPC }     from "@server/trpc/server";
-import { IMO_Guild }     from "@shared/types/MongoDB";
-import { TRPCError }     from "@trpc/server";
-import DB_Guilds         from "@server/mongodb/DB_Guilds";
-import { handleTRCPErr } from "@server/lib/Express.Lib";
+import { IMO_Guild }       from "@shared/types/MongoDB";
+import { TRPCError }       from "@trpc/server";
+import DB_Guilds           from "@server/mongodb/DB_Guilds";
+import { handleTRCPErr }   from "@server/lib/Express.Lib";
+import { publicProcedure } from "@server/trpc/trpc";
 
-export const auth_getGuilds = ( tRPC : tRPC ) => {
-	return tRPC.procedure.query<{
+export const auth_getGuilds =
+	publicProcedure.query<{
 		guilds : IMO_Guild[];
 	}>( async( { ctx } ) => {
 		const { userClass } = ctx;
@@ -22,4 +22,3 @@ export const auth_getGuilds = ( tRPC : tRPC ) => {
 		}
 		throw new TRPCError( { message: "Something goes wrong!", code: "INTERNAL_SERVER_ERROR" } );
 	} );
-};

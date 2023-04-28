@@ -1,12 +1,12 @@
-import type { tRPC }     from "@server/trpc/server";
-import { z }             from "zod";
-import { TRPCError }     from "@trpc/server";
-import { EApiTokenType } from "@shared/Enum/EApiMethods";
-import { handleTRCPErr } from "@server/lib/Express.Lib";
-import DB_RegisterToken  from "@server/mongodb/DB_RegisterToken";
+import { z }               from "zod";
+import { TRPCError }       from "@trpc/server";
+import { EApiTokenType }   from "@shared/Enum/EApiMethods";
+import { handleTRCPErr }   from "@server/lib/Express.Lib";
+import DB_RegisterToken    from "@server/mongodb/DB_RegisterToken";
+import { publicProcedure } from "@server/trpc/trpc";
 
-export const public_checkToken = ( tRPC : tRPC ) => {
-	return tRPC.procedure.input( z.object( {
+export const public_checkToken =
+	publicProcedure.input( z.object( {
 		token: z.string().min( 20, { message: "Token is to short!" } ),
 		type: z.nativeEnum( EApiTokenType )
 	} ) ).mutation<{
@@ -27,4 +27,3 @@ export const public_checkToken = ( tRPC : tRPC ) => {
 		}
 		throw new TRPCError( { code: "BAD_REQUEST" } );
 	} );
-};

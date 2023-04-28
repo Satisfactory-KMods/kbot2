@@ -1,17 +1,16 @@
-import type { tRPC }                      from "@server/trpc/server";
 import { IMO_ChatCommands }               from "@shared/types/MongoDB";
 import { handleTRCPErr }                  from "@server/lib/Express.Lib";
 import { TRPCError }                      from "@trpc/server";
 import DB_ChatCommands, { ZChatCommands } from "@server/mongodb/DB_ChatCommands";
 import z                                  from "zod";
+import {
+	guildProcedure,
+	router
+}                                         from "@server/trpc/trpc";
 
-export const guild_chatCommands = ( tRPC : tRPC ) => {
-	const p = tRPC.procedure.input( z.object( {
-		guildId: z.string()
-	} ) );
-
-	return tRPC.router( {
-		getcommands: p.query<{
+export const guild_chatCommands =
+	router( {
+		getcommands: guildProcedure.query<{
 			commands : IMO_ChatCommands[]
 		}>( async( { ctx } ) => {
 			const { userClass, guildId } = ctx;
@@ -27,7 +26,7 @@ export const guild_chatCommands = ( tRPC : tRPC ) => {
 		} ),
 
 
-		add: p.input( z.object( {
+		add: guildProcedure.input( z.object( {
 			data: ZChatCommands
 		} ) ).mutation<{
 			message : string,
@@ -63,7 +62,7 @@ export const guild_chatCommands = ( tRPC : tRPC ) => {
 		} ),
 
 
-		modify: p.input( z.object( {
+		modify: guildProcedure.input( z.object( {
 			id: z.string().min( 5, { message: "empty chat command id" } ),
 			data: ZChatCommands
 		} ) ).mutation<{
@@ -104,7 +103,7 @@ export const guild_chatCommands = ( tRPC : tRPC ) => {
 		} ),
 
 
-		rm: p.input( z.object( {
+		rm: guildProcedure.input( z.object( {
 			guildId: z.string(),
 			id: z.string()
 		} ) ).mutation<{
@@ -128,4 +127,3 @@ export const guild_chatCommands = ( tRPC : tRPC ) => {
 			throw new TRPCError( { message: "Something goes wrong!", code: "INTERNAL_SERVER_ERROR" } );
 		} )
 	} );
-};

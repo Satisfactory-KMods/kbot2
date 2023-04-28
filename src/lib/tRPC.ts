@@ -2,13 +2,16 @@ import {
 	createTRPCProxyClient,
 	httpBatchLink,
 	TRPCClientError
-}                          from "@trpc/client";
+} from "@trpc/client";
 import type {
 	AuthRouter,
 	GuildRouter,
 	PublicRouter
-}                          from "@server/trpc/server";
-import { fireSwalFromApi } from "@lib/sweetAlert";
+} from "@server/trpc/server";
+import {
+	fireSwalFromApi,
+	fireToastFromApi
+} from "@lib/sweetAlert";
 
 export const tRPC_token = () => window.localStorage.getItem( "session" ) || "";
 
@@ -46,8 +49,21 @@ export const tRPC_Guild = createTRPCProxyClient<GuildRouter>( {
 	]
 } );
 
-export const tRCP_handleError = ( e : any ) => {
+export const tRCP_handleError = ( e : any, asToast? : boolean ) => {
 	if ( e instanceof TRPCClientError ) {
-		fireSwalFromApi( e.message );
+		let message : string | string[] = e.message;
+		try {
+			const asArray : any[] = JSON.parse( e.message );
+			message = asArray.map( msg => msg.message );
+		}
+		catch ( err ) {
+		}
+
+		if ( !asToast ) {
+			fireSwalFromApi( message );
+		}
+		else {
+			fireToastFromApi( message );
+		}
 	}
 };

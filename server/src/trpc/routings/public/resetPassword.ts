@@ -1,13 +1,13 @@
-import type { tRPC }     from "@server/trpc/server";
-import { z }             from "zod";
-import { TRPCError }     from "@trpc/server";
-import { handleTRCPErr } from "@server/lib/Express.Lib";
-import DB_RegisterToken  from "@server/mongodb/DB_RegisterToken";
-import DB_UserAccount    from "@server/mongodb/DB_UserAccount";
-import { CreateSession } from "@server/lib/Session.Lib";
+import { z }               from "zod";
+import { TRPCError }       from "@trpc/server";
+import { handleTRCPErr }   from "@server/lib/Express.Lib";
+import DB_RegisterToken    from "@server/mongodb/DB_RegisterToken";
+import DB_UserAccount      from "@server/mongodb/DB_UserAccount";
+import { CreateSession }   from "@server/lib/Session.Lib";
+import { publicProcedure } from "@server/trpc/trpc";
 
-export const public_resetPassword = ( tRPC : tRPC ) => {
-	return tRPC.procedure.input( z.object( {
+export const public_resetPassword =
+	publicProcedure.input( z.object( {
 		password: z.string().min( 8, { message: "password or login is to short." } ),
 		token: z.string()
 	} ) ).mutation<{
@@ -54,4 +54,3 @@ export const public_resetPassword = ( tRPC : tRPC ) => {
 		}
 		throw new TRPCError( { message: "Something goes wrong!", code: "INTERNAL_SERVER_ERROR" } );
 	} );
-};

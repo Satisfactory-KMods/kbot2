@@ -1,14 +1,14 @@
-import type { tRPC }     from "@server/trpc/server";
-import { z }             from "zod";
-import { TRPCError }     from "@trpc/server";
-import DB_RegisterToken  from "@server/mongodb/DB_RegisterToken";
-import { handleTRCPErr } from "@server/lib/Express.Lib";
-import DB_UserAccount    from "@server/mongodb/DB_UserAccount";
-import { CreateSession } from "@server/lib/Session.Lib";
-import { ERoles }        from "@shared/Enum/ERoles";
+import { z }               from "zod";
+import { TRPCError }       from "@trpc/server";
+import DB_RegisterToken    from "@server/mongodb/DB_RegisterToken";
+import { handleTRCPErr }   from "@server/lib/Express.Lib";
+import DB_UserAccount      from "@server/mongodb/DB_UserAccount";
+import { CreateSession }   from "@server/lib/Session.Lib";
+import { ERoles }          from "@shared/Enum/ERoles";
+import { publicProcedure } from "@server/trpc/trpc";
 
-export const public_createAccount = ( tRPC : tRPC ) => {
-	return tRPC.procedure.input( z.object( {
+export const public_createAccount =
+	publicProcedure.input( z.object( {
 		username: z.string().min( 6, { message: "Username is to short." } ),
 		password: z.string().min( 8, { message: "Password is to short." } ),
 		token: z.string().min( 20, { message: "Token is to short" } )
@@ -64,4 +64,3 @@ export const public_createAccount = ( tRPC : tRPC ) => {
 		}
 		throw new TRPCError( { message: "Something goes wrong!", code: "INTERNAL_SERVER_ERROR" } );
 	} );
-};

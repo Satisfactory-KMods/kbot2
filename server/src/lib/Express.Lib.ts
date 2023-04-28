@@ -72,7 +72,12 @@ export async function MW_AuthGuild( req : TEResG, res : Response, next : NextFun
 	let Token : string | undefined;
 	try {
 		Token = AuthHeader && AuthHeader.split( " " )[ 1 ].replaceAll( "\"", "" ).clearWs();
-		req.body.guildId = JSON.parse( req.body.input )[ "0" ].guildId;
+		if ( req.method === "GET" ) {
+			req.body.guildId = JSON.parse( req.body.input )[ "0" ].guildId;
+		}
+		else {
+			req.body.guildId = req.body[ "0" ]?.guildId;
+		}
 	}
 	catch ( e ) {
 	}

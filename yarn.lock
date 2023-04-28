@@ -1625,15 +1625,20 @@
   resolved "https://registry.npmjs.org/@tokenizer/token/-/token-0.3.0.tgz"
   integrity sha512-OvjF+z51L3ov0OyAU0duzsYuvO01PH7x4t6DJx+guahgTnBHkhJdG7soQeTSFLWN3efnHyibZ4Z8l2EuWwJN3A==
 
-"@trpc/client@^10.21.1":
-  version "10.21.1"
-  resolved "https://registry.npmjs.org/@trpc/client/-/client-10.21.1.tgz"
-  integrity sha512-oZgPbghs9y2frTCA9mZPSAlVknV9stCTKYO5nsvRr0aX+oaA0URoXJTKZTSpLZxLfuwWgxBj4iTiCWWWmaVelw==
+"@trpc/client@^10.21.3-alpha.3":
+  version "10.21.3-alpha.3"
+  resolved "https://registry.yarnpkg.com/@trpc/client/-/client-10.21.3-alpha.3.tgz#d5010cc5062bba2c0c6df7e61352edf28a11d058"
+  integrity sha512-HHBtJ9AijdC/zzuaL5yd/g/LnRc7K9ECWOpOyRXHcDVmStl1EpwnE+FkuozN28G1ArVEWNSAFRsmOB1eCwxyjA==
 
-"@trpc/server@^10.21.1":
-  version "10.21.1"
-  resolved "https://registry.npmjs.org/@trpc/server/-/server-10.21.1.tgz"
-  integrity sha512-4E4upTD2/Aq0Dm9HW4nbKSoIlqbV/ajRqNl1MCFBd9FjTv47qq2ncmAWMbb0AIVh2UV87PJlTjpPNNecRm6g9Q==
+"@trpc/react-query@^10.21.3-alpha.3":
+  version "10.21.3-alpha.3"
+  resolved "https://registry.yarnpkg.com/@trpc/react-query/-/react-query-10.21.3-alpha.3.tgz#56f36b798de6e582f4ff6697414ae2ad0cdcb4b4"
+  integrity sha512-9PxLixbAJ4+ApHxe1Sw5w2hUG62hI5yFwiE9z2MMjHj62Jt7z3oQdJ+/tzx6C+50bX92klrnFWpvKI6gdHBMbw==
+
+"@trpc/server@^10.21.3-alpha.3":
+  version "10.21.3-alpha.3"
+  resolved "https://registry.yarnpkg.com/@trpc/server/-/server-10.21.3-alpha.3.tgz#d8bd1570cb56264c4395f1dcfe108472cea6075e"
+  integrity sha512-ICZbOLocqd570lHpiOt7XaE5vfLXyalNPl7JPtsP5jQ1WUaORB34R6sgvfvv/boruzM9ArpYTG7KRhBqM0SJoA==
 
 "@tsconfig/node10@^1.0.7":
   version "1.0.9"
