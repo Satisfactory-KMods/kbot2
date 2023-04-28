@@ -1,4 +1,4 @@
-import { IMO_ChatCommands } from "@shared/types/MongoDB";
+import { MO_ChatCommands }  from "@shared/types/MongoDB";
 import * as mongoose        from "mongoose";
 import z                    from "zod";
 import { messageTextLimit } from "@shared/Default/discord";
@@ -15,7 +15,7 @@ const ZChatCommands = z.object( {
 	} ) )
 } );
 
-const ChatCommandsSchema = new mongoose.Schema<IMO_ChatCommands>( {
+const ChatCommandsSchema = new mongoose.Schema<MO_ChatCommands>( {
 	guildId: { type: String, required: true },
 	command: { type: String, required: true },
 	alias: { type: [ String ], required: true, default: [] },
@@ -30,7 +30,7 @@ const ChatCommandsSchema = new mongoose.Schema<IMO_ChatCommands>( {
 	}
 } );
 
-const DB_ChatCommands = mongoose.model<IMO_ChatCommands>( "KBot2_ChatCommands", ChatCommandsSchema );
+const DB_ChatCommands = mongoose.model<MO_ChatCommands>( "KBot2_ChatCommands", ChatCommandsSchema );
 
 const Revalidate = async() => {
 

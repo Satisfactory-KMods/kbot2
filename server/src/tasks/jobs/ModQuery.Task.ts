@@ -1,17 +1,26 @@
 import {
 	gql,
 	GraphQLClient
-}                      from "graphql-request";
-import { IMO_Mod }     from "@shared/types/MongoDB";
-import DB_Mods         from "@server/mongodb/DB_Mods";
-import { IJobOptions } from "@server/tasks/TaskManager";
+}                              from "graphql-request";
+import { MO_Mod }              from "@shared/types/MongoDB";
+import DB_Mods                 from "@server/mongodb/DB_Mods";
+import { JobOptions }          from "@server/tasks/TaskManager";
+import DB_Guilds               from "@server/mongodb/DB_Guilds";
+import DB_ModUpdates           from "@server/mongodb/DB_ModUpdates";
+import { DiscordGuildManager } from "@server/lib/bot/guild.lib";
+import { createEmbed }         from "@server/lib/bot/embed.lib";
+import {
+	BuildStringGroup,
+	GroupToString
+}                              from "@server/lib/bot/stringGrouper.lib";
+import { ThreadChannel }       from "discord.js";
 
 export interface ModGraphQLRequest {
 	getMods : GetMods;
 }
 
 export interface GetMods {
-	mods : Omit<IMO_Mod, "_id" | "__v">[];
+	mods : Omit<MO_Mod, "_id" | "__v">[];
 	count : number;
 }
 
@@ -22,6 +31,7 @@ const GraphQuery = ( Offset : number ) => {
         query {
             getMods( filter: { limit: 100, offset: ${ Offset } } ) {
                 mods {
+                    versions( filter: {order_by: created_at} ) { version, sml_version, id, created_at, updated_at, changelog, hash  },
                     mod_reference,
                     id,
                     name,
@@ -36,7 +46,7 @@ const GraphQuery = ( Offset : number ) => {
                     last_version_date,
                     hidden,
                     authors{user_id, mod_id, role, user{id, username}},
-                    latestVersions {alpha{version, sml_version, id}, beta{version, sml_version, id}, release{version, sml_version, id} }
+                    latestVersions {alpha{version, sml_version, id, created_at, updated_at, changelog, hash}, beta{version, sml_version, id, created_at, updated_at, changelog, hash}, release{version, sml_version, id, created_at, updated_at, changelog, hash} }
                 },
                 count
             }
@@ -44,44 +54,170 @@ const GraphQuery = ( Offset : number ) => {
 	`;
 };
 
-const JobOptions : IJobOptions = {
+const JobOptions : JobOptions = {
 	DisableInitSync: true,
-	Interval: 60000 * 60, // 60 minutes
+	Interval: 60000 * 10, // 60 minutes
 	JobName: "FicsitQuery",
 	Task: async() => {
-		if ( SystemLib.IsDevMode ) {
-			return;
-		}
+		try {
+			SystemLib.Log( "tasks",
+				"Running Task",
+				SystemLib.ToBashColor( "Red" ),
+				"FicsitQuery"
+			);
 
-		SystemLib.Log( "tasks",
-			"Running Task",
-			SystemLib.ToBashColor( "Red" ),
-			"FicsitQuery"
-		);
+			const Mods : Omit<MO_Mod, "_id" | "__v">[] = [];
+			if ( !SystemLib.IsDevMode ) {
+				let MaxReached = false;
+				let Offset = 0;
+				SystemLib.LogWarning( "tasks", "Start Update Mods!" );
+				while ( !MaxReached ) {
+					try {
+						const Data : ModGraphQLRequest = await client.request( GraphQuery( Offset ) );
 
-		let MaxReached = false;
-		let Offset = 0;
-		SystemLib.LogWarning( "tasks", "Start Update Mods!" );
-		while ( !MaxReached ) {
-			try {
-				const Data : ModGraphQLRequest = await client.request( GraphQuery( Offset ) );
+						for ( const Mod of Data.getMods.mods ) {
+							await DB_Mods.findOneAndRemove( { id: Mod.id } );
+							await DB_Mods.create( Mod );
+							Mods.push( Mod );
+						}
 
-				for ( const Mod of Data.getMods.mods ) {
-					await DB_Mods.findOneAndRemove( { id: Mod.id } );
-					await DB_Mods.create( Mod );
+						Offset += 100;
+						MaxReached = Data.getMods.count < Offset;
+					}
+					catch ( e ) {
+						if ( e instanceof Error ) {
+							SystemLib.LogError( "api", e.message );
+						}
+						MaxReached = true;
+					}
 				}
-
-				Offset += 100;
-				MaxReached = Data.getMods.count < Offset;
+				SystemLib.LogWarning( "tasks", "Update Mods Finished!" );
 			}
-			catch ( e ) {
-				if ( e instanceof Error ) {
-					SystemLib.LogError( "api", e.message );
+
+			for await ( const guild of DB_Guilds.find( { "options.modsUpdateAnnouncement": true, isInGuild: true } ) ) {
+				const guildClass = await DiscordGuildManager.GetGuild( guild.guildId );
+				if ( guildClass?.IsValid ) {
+					const threadChannel = await guildClass.forumChannel( guild.options.changelogForumId || "0" );
+					const annoucementChannel = await guildClass.textChannel( guild.options.updateTextChannelId || "0" );
+
+					if ( annoucementChannel || threadChannel ) {
+						for await ( const mod of await DB_Mods.find( {
+							"authors.user_id": guild.options.ficsitUserIds,
+							"authors.role": "creator"
+						} ) ) {
+							if ( !guild.options.blacklistedMods.includes( mod.mod_reference ) ) {
+								const modDocument = await DB_ModUpdates.findOne( {
+									guildId: guild.guildId,
+									modRef: mod.mod_reference
+								} );
+
+								if ( !modDocument ) {
+									await DB_ModUpdates.create( {
+										guildId: guild.guildId,
+										modRef: mod.mod_reference,
+										hash: mod.versions[ 0 ].hash,
+										lastUpdate: new Date(),
+										lastMessageId: "0"
+									} );
+									continue;
+								}
+
+								if ( modDocument.hash !== mod.versions[ 0 ].hash ) {
+									let changelogId : string | undefined = undefined
+									if ( threadChannel ) {
+										const tag = threadChannel.availableTags.find( e => e.name === mod.mod_reference );
+										const appliedTags = tag ? [ tag.id ] : [];
+
+										const grouped = BuildStringGroup( mod.versions[ 0 ].changelog );
+										if ( grouped && grouped.length > 0 ) {
+											const name = `${ mod.name } - v.${ mod.versions[ 0 ].version }`.substring( 0, 99 );
+											const content = GroupToString( grouped.splice( 1, 1 )![ 0 ] );
+											const thread : ThreadChannel | undefined = await threadChannel.threads.create( {
+												name,
+												message: { content },
+												appliedTags,
+												autoArchiveDuration: 60
+											} );
+
+											changelogId = thread?.id;
+
+											if ( thread && grouped.length > 0 ) {
+												for ( const message of grouped ) {
+													if ( message.Data.length > 0 ) {
+														const content = GroupToString( message );
+														thread.send( { content } );
+													}
+												}
+											}
+										}
+									}
+
+
+									const embed = createEmbed( {
+										author: {
+											name: mod.name,
+											iconURL: mod.logo
+										},
+										thumbnail: mod.logo,
+										title: `v.${ mod.versions[ 0 ].version } - ${ mod.name }`,
+										fields: [
+											{
+												name: mod.versions[ 0 ].changelog !== "" ? mod.versions[ 0 ].changelog.split( /\r?\n/ )[ 0 ].substring( 0, 255 ) : "...",
+												value: `Now available on SMM and SMR \n\n For any suggestion please use <#${ guild.options.suggestionChannelId }> \n And for bug reports <#${ guild.options.bugChannelId }>.`
+											},
+											{
+												name: "Changelog",
+												value: changelogId ? `<#${ changelogId }>` : `https://ficsit.app/mod/${ mod.mod_reference }/version/${ mod.versions[ 0 ].id }`,
+												inline: true
+											},
+											{
+												name: "Mod Page",
+												value: `[Click here](https://ficsit.app/mod/${ mod.mod_reference })`,
+												inline: true
+											},
+											{
+												name: "All our Mods",
+												value: `[Click here](https://ficsit.app/user/${ guild.options.ficsitUserIds[ 0 ] })`,
+												inline: true
+											}
+										]
+									} );
+
+									const role = await guildClass.role( guild.options.modToRole?.find( r => r.modRef === mod.mod_reference )?.roleId || "0" );
+									let roleId = "0";
+									if ( role ) {
+										roleId = role.id;
+									}
+
+									let lastMessageId = "0";
+									if ( embed && annoucementChannel ) {
+										const msg = await annoucementChannel.send( {
+											embeds: [ embed ],
+											content: `${ roleId === "0" ? "@everyone" : "<@&" + roleId + ">" } new mod update has been released!\n\n`
+										} );
+
+										if ( msg ) {
+											lastMessageId = msg.id;
+										}
+
+										await DB_ModUpdates.findByIdAndUpdate( modDocument._id, {
+											hash: mod.versions[ 0 ].hash,
+											lastUpdate: new Date(),
+											lastMessageId
+										} );
+									}
+								}
+							}
+						}
+					}
 				}
-				MaxReached = true;
 			}
 		}
-		SystemLib.LogWarning( "tasks", "Update Mods Finished!" );
+		catch ( e ) {
+			if ( e instanceof Error ) {
+				SystemLib.DebugLog( "fetching", e.message );
+			}
+		}
 	}
 };
 

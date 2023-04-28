@@ -1,24 +1,22 @@
-import { Navbar }   from "flowbite-react";
+import { Navbar }  from "flowbite-react";
 import {
 	FC,
 	useContext
-}                   from "react";
+}                  from "react";
 import {
 	Link,
 	useParams
-}                   from "react-router-dom";
-import guildContext from "@context/guildContext";
+}                  from "react-router-dom";
 import {
 	BiDoorOpen,
 	BiServer
-}                   from "react-icons/all";
-import authContext  from "@context/authContext";
+}                  from "react-icons/all";
+import authContext from "@context/authContext";
 
 
 const TopNavbar : FC = () => {
 	const [ , logout ] = useContext( authContext );
 	const { guildId } = useParams();
-	const { guildData } = useContext( guildContext );
 
 	return (
 		<Navbar fluid={ true } rounded={ false }>

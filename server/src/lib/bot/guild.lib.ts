@@ -1,16 +1,15 @@
-import DB_Guilds             from "@server/mongodb/DB_Guilds";
-import { BC }                from "@server/lib/System.Lib";
+import DB_Guilds            from "@server/mongodb/DB_Guilds";
+import { BC }               from "@server/lib/System.Lib";
 import {
-	AllowedThreadTypeForNewsChannel,
+	ChannelType,
 	Guild,
-	GuildTextThreadCreateOptions,
+	GuildForumThreadCreateOptions,
 	MessageCreateOptions,
 	MessagePayload,
-	NewsChannel,
 	PermissionFlagsBits
-}                            from "discord.js";
-import { IDiscordGuildData } from "@shared/types/discord";
-import { IMO_Guild }         from "@shared/types/MongoDB";
+}                           from "discord.js";
+import { DiscordGuildData } from "@shared/types/discord";
+import { MO_Guild }         from "@shared/types/MongoDB";
 
 // update a guild or add a new one
 const UpdateGuild = async( dicordGuild : Guild ) => {
@@ -65,7 +64,7 @@ class DiscordGuild {
 		return GuildClass;
 	}
 
-	public async getGuildData() : Promise<IDiscordGuildData | undefined> {
+	public async getGuildData() : Promise<DiscordGuildData | undefined> {
 		try {
 			const DBData = ( await DB_Guilds.findOne( { guildId: this.guildId } ) )!;
 			return DBData.guildData;
@@ -77,7 +76,7 @@ class DiscordGuild {
 		}
 	}
 
-	public async getGuildDb() : Promise<IMO_Guild | undefined> {
+	public async getGuildDb() : Promise<MO_Guild | undefined> {
 		try {
 			const DBData = await DB_Guilds.findOne( { guildId: this.guildId } )!;
 			return DBData || undefined;
@@ -101,104 +100,112 @@ class DiscordGuild {
 		return false;
 	}
 
-	private getChannel( channelId : string ) {
+	private async getChannel( channelId : string ) {
 		const guild = this.getGuild;
-		if ( guild ) {
-			return guild.channels.cache.find( channel => channel.id === channelId );
+		if ( guild && channelId ) {
+			return guild.channels.fetch( channelId ).catch( () => {
+			} );
 		}
 		return undefined;
 	}
 
-	public chatChannel( channelId : string ) {
-		const channel = this.getChannel( channelId );
+	public async chatChannel( channelId : string ) {
+		const channel = await this.getChannel( channelId );
 		if ( channel && channel.isTextBased() ) {
 			return channel;
 		}
 		return undefined;
 	}
 
-	public voiceChannel( channelId : string ) {
-		const channel = this.getChannel( channelId );
+	public async voiceChannel( channelId : string ) {
+		const channel = await this.getChannel( channelId );
 		if ( channel && channel.isVoiceBased() ) {
 			return channel;
 		}
 		return undefined;
 	}
 
-	public forumChannel( channelId : string ) {
-		const channel = this.getChannel( channelId );
-		if ( channel instanceof NewsChannel ) {
+	public async forumChannel( channelId : string ) {
+		const channel = await this.getChannel( channelId );
+		if ( channel && channel.type === ChannelType.GuildForum ) {
 			return channel;
 		}
 		return undefined;
 	}
 
-	public textChannel( channelId : string ) {
-		const channel = this.getChannel( channelId );
+	public async textChannel( channelId : string ) {
+		const channel = await this.getChannel( channelId );
 		if ( channel && channel.isTextBased() ) {
 			return channel;
 		}
 		return undefined;
 	}
 
-	public user( userId : string ) {
+	public async user( userId : string ) {
 		const guild = this.getGuild;
-		if ( guild ) {
-			return guild.members.cache.find( member => member.id === userId );
+		if ( guild && userId ) {
+			return await guild.members.fetch( userId ).catch( () => {
+			} );
 		}
 		return undefined;
 	}
 
-	public role( userId : string ) {
+	public async role( roleId : string ) {
 		const guild = this.getGuild;
-		if ( guild ) {
-			return guild.roles.cache.find( member => member.id === userId );
+		if ( guild && roleId ) {
+			return await guild.roles.fetch( roleId ).catch( () => {
+			} );
 		}
 		return undefined;
 	}
 
-	public allTextChannels() {
+	public async allTextChannels() {
 		const guild = this.getGuild;
 		if ( guild ) {
-			return guild.channels.cache.filter( R => R.isTextBased );
+			return ( await guild.channels.fetch().catch( () => {
+			} ) )?.filter( R => R?.isTextBased );
 		}
 		return [];
 	}
 
-	public allVoiceChannels() {
+	public async allVoiceChannels() {
 		const guild = this.getGuild;
 		if ( guild ) {
-			return guild.channels.cache.filter( R => R.isVoiceBased );
+			return ( await guild.channels.fetch().catch( () => {
+			} ) )?.filter( R => R?.isVoiceBased );
 		}
 		return [];
 	}
 
-	public allForumChannels() {
+	public async allForumChannels() {
 		const guild = this.getGuild;
 		if ( guild ) {
-			return guild.channels.cache.filter( R => R.isThread );
+			return ( await guild.channels.fetch().catch( () => {
+			} ) )?.filter( R => R?.isThread );
 		}
 		return [];
 	}
 
-	public allRoles() {
+	public async allRoles() {
 		const guild = this.getGuild;
 		if ( guild ) {
-			return guild.roles.cache.filter( () => true );
+			return await guild.roles.fetch().catch( () => {
+			} );
 		}
 		return [];
 	}
 
-	public allMember() {
+	public async allMember() {
 		const guild = this.getGuild;
 		if ( guild ) {
-			return guild.roles.cache.filter( () => true );
+			return await guild.roles.fetch().catch( () => {
+			} );
 		}
 		return [];
 	}
 
 	public async sendMessageInChannel( opt : { channelId : string, message : string | MessagePayload | MessageCreateOptions } ) : Promise<boolean> {
-		const channel = this.textChannel( opt.channelId );
+		const channel = await this.textChannel( opt.channelId );
 		if ( channel ) {
 			return !!( await channel.send( opt.message )
 				.catch( () => {
@@ -207,8 +214,8 @@ class DiscordGuild {
 		return false;
 	}
 
-	public async sendForumThread( opt : { channelId : string, thread : GuildTextThreadCreateOptions<AllowedThreadTypeForNewsChannel> } ) : Promise<boolean> {
-		const channel = this.forumChannel( opt.channelId );
+	public async sendForumThread( opt : { channelId : string, thread : GuildForumThreadCreateOptions } ) : Promise<boolean> {
+		const channel = await this.forumChannel( opt.channelId );
 		if ( channel ) {
 			return !!( await channel.threads.create( opt.thread )
 				.catch( () => {

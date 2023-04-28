@@ -1,11 +1,11 @@
-import { IJobOptions } from "../TaskManager";
+import { JobOptions } from "../TaskManager";
 import {
 	DiscordGuildManager,
 	UpdateGuild
-}                      from "@server/lib/bot/guild.lib";
-import DB_Guilds       from "@server/mongodb/DB_Guilds";
+}                     from "@server/lib/bot/guild.lib";
+import DB_Guilds      from "@server/mongodb/DB_Guilds";
 
-const JobOptions : IJobOptions = {
+const JobOptions : JobOptions = {
 	Interval: 15 * 60000, // 5 minutes
 	JobName: "DiscordGuilds",
 	Task: async() => {
@@ -19,15 +19,24 @@ const JobOptions : IJobOptions = {
 					}
 				}
 				// todo that looks ugly :/
-				await guild.members.fetch();
-				await guild.roles.fetch();
-				await guild.invites.fetch();
-				await guild.channels.fetch();
-				await guild.bans.fetch();
-				await guild.commands.fetch();
-				await guild.autoModerationRules.fetch();
-				await guild.emojis.fetch();
-				await guild.stickers.fetch();
+				await guild.members.fetch().catch( () => {
+				} );
+				await guild.roles.fetch().catch( () => {
+				} );
+				await guild.invites.fetch().catch( () => {
+				} );
+				await guild.channels.fetch().catch( () => {
+				} );
+				await guild.bans.fetch().catch( () => {
+				} );
+				await guild.commands.fetch().catch( () => {
+				} );
+				await guild.autoModerationRules.fetch().catch( () => {
+				} );
+				await guild.emojis.fetch().catch( () => {
+				} );
+				await guild.stickers.fetch().catch( () => {
+				} );
 
 				await UpdateGuild( guild );
 				await DiscordGuildManager.GetGuild( guild.id.toString() );

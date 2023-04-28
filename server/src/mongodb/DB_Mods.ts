@@ -1,7 +1,20 @@
-import mongoose    from "mongoose";
-import { IMO_Mod } from "@shared/types/MongoDB";
+import mongoose   from "mongoose";
+import { MO_Mod } from "@shared/types/MongoDB";
 
-const ModDbSchema = new mongoose.Schema<IMO_Mod>( {
+const ModDbSchema = new mongoose.Schema<MO_Mod>( {
+	versions: {
+		type: [
+			{
+				created_at: { type: Date, required: false },
+				updated_at: { type: Date, required: false },
+				changelog: { type: String, required: false },
+				hash: { type: String, required: false },
+				version: { type: String, required: false },
+				sml_version: { type: String, required: false },
+				id: { type: String, required: false }
+			}
+		], required: false
+	},
 	id: { type: String, required: true, unique: true },
 	mod_reference: { type: String, required: false },
 	name: { type: String, required: false },
@@ -34,6 +47,10 @@ const ModDbSchema = new mongoose.Schema<IMO_Mod>( {
 		type: {
 			alpha: {
 				type: {
+					created_at: { type: Date, required: false },
+					updated_at: { type: Date, required: false },
+					changelog: { type: String, required: false },
+					hash: { type: String, required: false },
 					version: { type: String, required: false },
 					sml_version: { type: String, required: false },
 					id: { type: String, required: false }
@@ -41,6 +58,10 @@ const ModDbSchema = new mongoose.Schema<IMO_Mod>( {
 			},
 			beta: {
 				type: {
+					created_at: { type: Date, required: false },
+					updated_at: { type: Date, required: false },
+					changelog: { type: String, required: false },
+					hash: { type: String, required: false },
 					version: { type: String, required: false },
 					sml_version: { type: String, required: false },
 					id: { type: String, required: false }
@@ -48,6 +69,10 @@ const ModDbSchema = new mongoose.Schema<IMO_Mod>( {
 			},
 			release: {
 				type: {
+					created_at: { type: Date, required: false },
+					updated_at: { type: Date, required: false },
+					changelog: { type: String, required: false },
+					hash: { type: String, required: false },
 					version: { type: String, required: false },
 					sml_version: { type: String, required: false },
 					id: { type: String, required: false }
@@ -59,5 +84,5 @@ const ModDbSchema = new mongoose.Schema<IMO_Mod>( {
 
 const myDB = mongoose.connection.useDb( "ficsit_app" );
 
-export default myDB.model<IMO_Mod>( "Mods", ModDbSchema );
+export default myDB.model<MO_Mod>( "Mods", ModDbSchema );
 export { ModDbSchema };

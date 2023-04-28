@@ -7,7 +7,6 @@ import { Connect }             from "vite";
 import DB_SessionToken         from "@server/mongodb/DB_SessionToken";
 import { User }                from "@shared/class/User.Class";
 import * as jwt                from "jsonwebtoken";
-import { TEResG }              from "@server/types/express";
 import { DiscordGuildManager } from "@server/lib/bot/guild.lib";
 import { TRPCError }           from "@trpc/server";
 import NextFunction = Connect.NextFunction;
@@ -62,7 +61,7 @@ export async function MW_Auth( req : Request, res : Response, next : NextFunctio
 	} );
 }
 
-export async function MW_AuthGuild( req : TEResG, res : Response, next : NextFunction ) {
+export async function MW_AuthGuild( req : Request, res : Response, next : NextFunction ) {
 	req.body = {
 		...req.body,
 		...req.query

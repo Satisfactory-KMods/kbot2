@@ -8,11 +8,11 @@ import {
 import { ERoles }  from "@shared/Enum/ERoles";
 import authContext from "@context/authContext";
 
-export interface IShowConditionProps extends PropsWithChildren, AllHTMLAttributes<HTMLDivElement> {
+export interface ShowConditionProps extends PropsWithChildren, AllHTMLAttributes<HTMLDivElement> {
 	show : boolean;
 }
 
-const ShowCondition : FC<IShowConditionProps> = ( { show, children, ...props } ) => {
+const ShowCondition : FC<ShowConditionProps> = ( { show, children, ...props } ) => {
 	if ( !show ) {
 		return null;
 	}
@@ -31,7 +31,7 @@ export interface IuseAuthCond {
 }
 
 
-const useAuthValidate = ( condition : Partial<IuseAuthCond> ) : Partial<IShowConditionProps> => {
+const useAuthValidate = ( condition : Partial<IuseAuthCond> ) : Partial<ShowConditionProps> => {
 	const [ user ] = useContext( authContext );
 
 	const show = useMemo( () => {

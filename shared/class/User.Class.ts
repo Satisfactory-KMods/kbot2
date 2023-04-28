@@ -1,11 +1,11 @@
 import jwt, { JwtPayload } from "jwt-decode";
 import { ERoles }          from "@shared/Enum/ERoles";
 import { DefaultUser }     from "@shared/Default/Auth.Default";
-import { IMO_UserAccount } from "@shared/types/MongoDB";
+import { MO_UserAccount }  from "@shared/types/MongoDB";
 
 export class User {
 	private JsonWebToken;
-	private UserData : IMO_UserAccount & Partial<JwtPayload>;
+	private UserData : MO_UserAccount & Partial<JwtPayload>;
 
 	constructor( JsonWebToken : string ) {
 		this.JsonWebToken = JsonWebToken;
@@ -27,7 +27,7 @@ export class User {
 		return this.UserData;
 	}
 
-	public setUserData( Data : IMO_UserAccount ) {
+	public setUserData( Data : MO_UserAccount ) {
 		this.UserData = {
 			...this.UserData,
 			...Data

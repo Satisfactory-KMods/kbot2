@@ -1,6 +1,6 @@
 import { createContext } from "react";
-import { IMO_Guild }     from "@shared/types/MongoDB";
+import { MO_Guild }      from "@shared/types/MongoDB";
 
-const guildContext = createContext<IMO_Guild>( {} as IMO_Guild );
+const guildContext = createContext<MO_Guild>( {} as MO_Guild );
 
 export default guildContext;

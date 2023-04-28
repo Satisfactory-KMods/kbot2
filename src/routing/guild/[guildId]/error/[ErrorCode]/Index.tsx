@@ -13,7 +13,7 @@ import { usePageTitle }  from "@kyri123/k-reactutils";
 import { Button }        from "flowbite-react";
 import { validateLogin } from "@hooks/useAuth";
 
-const loader : LoaderFunction = async( { request, params } ) => {
+const loader : LoaderFunction = async() => {
 	return json( {} );
 };
 
@@ -44,7 +44,7 @@ const Component : FC = () => {
 			<span className="text-4xl md:text-8xl text-white">Error { Err.code }</span>
 			<span className="text-2xl md:text-4xl mt-5 text-white">{ Err.message }</span>
 			<Button href={ `/guild/${ guildId }/` } color="gray"
-					className="flex items-center justify-center mt-6">Back to Home</Button>
+			        className="flex items-center justify-center mt-6">Back to Home</Button>
 		</div>
 	);
 };

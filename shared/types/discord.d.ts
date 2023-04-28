@@ -1,4 +1,4 @@
-export interface IDiscordGuildData {
+export interface DiscordGuildData {
 	"id" : string,
 	"name" : string,
 	"icon" : null | string,

@@ -1,6 +1,6 @@
 import {
-	IMO_ChatCommands,
-	IReactionMatchRule
+	MO_ChatCommands,
+	ReactionMatchRule
 }                           from "@shared/types/MongoDB";
 import {
 	FC,
@@ -42,9 +42,9 @@ import {
 import ButtonGroup          from "flowbite-react/lib/esm/components/Button/ButtonGroup";
 
 interface IChatCommandEditorProps {
-	editData? : IMO_ChatCommands;
-	onUpdated? : ( command : IMO_ChatCommands ) => void;
-	onRemoved? : ( command : IMO_ChatCommands ) => void;
+	editData? : MO_ChatCommands;
+	onUpdated? : ( command : MO_ChatCommands ) => void;
+	onRemoved? : ( command : MO_ChatCommands ) => void;
 }
 
 const ChatCommandEditor : FC<IChatCommandEditorProps> = ( { editData, onUpdated, onRemoved } ) => {
@@ -56,11 +56,11 @@ const ChatCommandEditor : FC<IChatCommandEditorProps> = ( { editData, onUpdated,
 	const commandRef = useRef<HTMLInputElement>( null );
 	const reactionTextRef = useRef<HTMLInputElement>( null );
 	const [ aliasCommands, setAliasCommands ] = useState<MultiValue<{ label : string, value : string }>>( [] );
-	const [ autoReactions, setAutoReactions ] = useState<IReactionMatchRule[]>( [] );
+	const [ autoReactions, setAutoReactions ] = useState<ReactionMatchRule[]>( [] );
 	const [ reactionText, setReactionText ] = useState<string>( "" );
 	const [ similarity, setSimilarity ] = useState<boolean>( false );
 
-	const buildData = () : Omit<IMO_ChatCommands, "_id" | "__v" | "createdAt" | "updatedAt"> => {
+	const buildData = () : Omit<MO_ChatCommands, "_id" | "__v" | "createdAt" | "updatedAt"> => {
 		return {
 			guildId: guildId!,
 			command: commandRef.current!.value.toLowerCase(),

@@ -3,7 +3,7 @@ import path from "path";
 
 export type TTasksRunner = "MakeItClean" | "DiscordGuilds" | "FicsitQuery";
 
-export interface IJobOptions {
+export interface JobOptions {
 	Interval : number,
 	JobName : TTasksRunner,
 	Task : ( CallCount : number ) => Promise<void>
@@ -19,14 +19,14 @@ export class JobTask {
 	protected IsRun = false;
 	protected RunNextTask = [ false, false ];
 
-	private constructor( { Interval, Task, JobName } : IJobOptions ) {
+	private constructor( { Interval, Task, JobName } : JobOptions ) {
 		this.JobName = JobName;
 		this.Interval = Interval;
 		this.TaskFunction = Task;
 		this.Task = setInterval( this.Tick.bind( this ), this.Interval );
 	}
 
-	static async ConstructJob( Options : IJobOptions ) : Promise<JobTask> {
+	static async ConstructJob( Options : JobOptions ) : Promise<JobTask> {
 		const Job = new JobTask( Options );
 		if ( Options.DisableInitSync ) {
 			Job.Tick();
@@ -99,7 +99,7 @@ export class TaskManagerClass {
 				path.join( __BaseDir, "/tasks/jobs", File )
 			);
 			if ( Stats.isFile() && File.endsWith( ".Task.ts" ) ) {
-				const JobOptions : IJobOptions = ( await import( path.join( __BaseDir, "/tasks/jobs", File ) ) ).default;
+				const JobOptions : JobOptions = ( await import( path.join( __BaseDir, "/tasks/jobs", File ) ) ).default;
 				const JobClass = await JobTask.ConstructJob( JobOptions );
 				this.Jobs[ JobClass.JobName ] = JobClass;
 			}

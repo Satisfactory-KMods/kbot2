@@ -1,10 +1,10 @@
-import { IMO_Guild }   from "@shared/types/MongoDB";
+import { MO_Guild }    from "@shared/types/MongoDB";
 import { FC }          from "react";
 import { BiUser }      from "react-icons/all";
 import { useNavigate } from "react-router-dom";
 
 interface IGuildSelectRowProps {
-	guild : IMO_Guild;
+	guild : MO_Guild;
 }
 
 const GuildSelectRow : FC<IGuildSelectRowProps> = ( { guild } ) => {
@@ -13,7 +13,7 @@ const GuildSelectRow : FC<IGuildSelectRowProps> = ( { guild } ) => {
 	return (
 		<li className="p-0">
 			<button className="flex items-center space-x-4 w-full py-3 sm:py-4 px-4 hover:bg-gray-700"
-					onClick={ () => navigate( `/guild/${ guild.guildId }/` ) }>
+			        onClick={ () => navigate( `/guild/${ guild.guildId }/` ) }>
 				<div className="shrink-0">
 					<img
 						className="h-12 w-12 rounded-full"

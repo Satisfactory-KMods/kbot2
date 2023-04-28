@@ -1,14 +1,14 @@
-import * as mongoose       from "mongoose";
-import { Model }           from "mongoose";
-import * as crypto         from "crypto";
-import { IMO_UserAccount } from "@shared/types/MongoDB";
+import * as mongoose      from "mongoose";
+import { Model }          from "mongoose";
+import * as crypto        from "crypto";
+import { MO_UserAccount } from "@shared/types/MongoDB";
 
-export interface IUserAccountMethods {
+export interface UserSchemaAccountMethods {
 	setPassword : ( password : string ) => void;
 	validPassword : ( password : string ) => boolean;
 }
 
-const UserAccountSchema = new mongoose.Schema<IMO_UserAccount>( {
+const UserAccountSchema = new mongoose.Schema<MO_UserAccount>( {
 	username: { type: String, required: true, unique: true },
 	discordId: { type: String, required: true, unique: true },
 	role: { type: Number, required: true },
@@ -26,7 +26,7 @@ UserAccountSchema.methods.validPassword = function( password ) {
 	return this.hash === hash;
 };
 
-const DB_UserAccount = mongoose.model<IMO_UserAccount, Model<IMO_UserAccount, any, IUserAccountMethods>>( "KBot2_UserAccount", UserAccountSchema );
+const DB_UserAccount = mongoose.model<MO_UserAccount, Model<MO_UserAccount, any, UserSchemaAccountMethods>>( "KBot2_UserAccount", UserAccountSchema );
 
 const Revalidate = async() => {
 

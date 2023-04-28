@@ -1,27 +1,22 @@
-import { Sidebar }  from "flowbite-react";
-import {
-	FC,
-	useContext
-}                   from "react";
+import { Sidebar } from "flowbite-react";
+import { FC }      from "react";
 import {
 	HiChat,
 	HiHome
-}                   from "react-icons/hi";
+}                  from "react-icons/hi";
 import {
 	Link,
 	useParams
-}                   from "react-router-dom";
-import guildContext from "@context/guildContext";
+}                  from "react-router-dom";
 import {
 	BiBot,
 	SiDiscord,
 	SiGithub,
 	SiPatreon
-}                   from "react-icons/all";
+}                  from "react-icons/all";
 
 const LeftSidebar : FC = () => {
 	const { guildId } = useParams();
-	const { guildData } = useContext( guildContext );
 
 	return (
 		<div className="w-fit h-full dark:bg-gray-800 flex flex-col border-r border-gray-600">

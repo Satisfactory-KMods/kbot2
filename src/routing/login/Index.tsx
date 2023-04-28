@@ -4,35 +4,35 @@ import {
 	useContext,
 	useRef,
 	useState
-}                          from "react";
+}                         from "react";
 import {
 	json,
 	LoaderFunction,
 	useLoaderData,
 	useNavigate
-}                          from "react-router-dom";
-import { validateLogin }   from "@hooks/useAuth";
-import { ILoaderDataBase } from "@app/types/routing";
-import { usePageTitle }    from "@kyri123/k-reactutils";
+}                         from "react-router-dom";
+import { validateLogin }  from "@hooks/useAuth";
+import { LoaderDataBase } from "@app/types/routing";
+import { usePageTitle }   from "@kyri123/k-reactutils";
 import {
 	Checkbox,
 	Label,
 	TextInput
-}                          from "flowbite-react";
-import LoadButton          from "@comp/LoadButton";
-import { SlLogin }         from "react-icons/all";
-import authContext         from "@context/authContext";
+}                         from "flowbite-react";
+import LoadButton         from "@comp/LoadButton";
+import { SlLogin }        from "react-icons/all";
+import authContext        from "@context/authContext";
 import {
 	tRCP_handleError,
 	tRPC_Public
-}                          from "@lib/tRPC";
+}                         from "@lib/tRPC";
 
 const loader : LoaderFunction = async() => {
 	const result = await validateLogin();
 	if ( result.loggedIn ) {
 		window.location.replace( "/" );
 	}
-	return json<ILoaderDataBase>( result );
+	return json<LoaderDataBase>( result );
 };
 
 const Component : FC = () => {
@@ -41,7 +41,7 @@ const Component : FC = () => {
 	const navigate = useNavigate();
 	const [ isLoading, setIsLoading ] = useState( false );
 	const [ inputError, setInputError ] = useState( [ false, false ] );
-	const { loggedIn } = useLoaderData() as ILoaderDataBase;
+	const { loggedIn } = useLoaderData() as LoaderDataBase;
 
 	const loginRef = useRef<HTMLInputElement>( null );
 	const passwordRef = useRef<HTMLInputElement>( null );

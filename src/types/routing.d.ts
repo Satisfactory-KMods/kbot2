@@ -1,9 +1,9 @@
-import { IMO_Guild } from "@shared/types/MongoDB";
+import { MO_Guild } from "@shared/types/MongoDB";
 
-export interface ILoaderDataBase {
+export interface LoaderDataBase {
 	loggedIn : boolean;
 }
 
-export interface ILoaderGuild extends ILoaderDataBase {
-	guildData : IMO_Guild | undefined;
+export interface LoaderGuild extends LoaderDataBase {
+	guildData : MO_Guild | undefined;
 }

@@ -17,7 +17,7 @@ import { usePageTitle }    from "@kyri123/k-reactutils";
 import { TextInput }       from "flowbite-react";
 import { SlLogin }         from "react-icons/all";
 import LoadButton          from "@comp/LoadButton";
-import { ILoaderDataBase } from "@app/types/routing";
+import { LoaderDataBase }  from "@app/types/routing";
 import { fireSwalFromApi } from "@lib/sweetAlert";
 import authContext         from "@context/authContext";
 import {
@@ -26,7 +26,7 @@ import {
 }                          from "@lib/tRPC";
 import { EApiTokenType }   from "@shared/Enum/EApiMethods";
 
-interface ILoaderData extends ILoaderDataBase {
+interface LoaderData extends LoaderDataBase {
 	tokenValid : boolean;
 }
 
@@ -44,7 +44,7 @@ const loader : LoaderFunction = async( { params } ) => {
 		window.location.replace( "/error/401" );
 	}
 
-	return json<ILoaderData>( { tokenValid, ...result } );
+	return json<LoaderData>( { tokenValid, ...result } );
 };
 
 const Component : FC = () => {
@@ -54,7 +54,7 @@ const Component : FC = () => {
 	const { authCode } = useParams();
 	const [ isLoading, setIsLoading ] = useState( false );
 	const [ inputError, setInputError ] = useState( [ false, false, false ] );
-	const { tokenValid } = useLoaderData() as ILoaderData;
+	const { tokenValid } = useLoaderData() as LoaderData;
 
 	const loginRef = useRef<HTMLInputElement>( null );
 	const passwordRef = useRef<HTMLInputElement>( null );

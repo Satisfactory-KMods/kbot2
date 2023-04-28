@@ -7,7 +7,7 @@ import {
 }                                 from "react-router-dom";
 import { validateLoginWithGuild } from "@hooks/useAuth";
 import guildContext               from "@context/guildContext";
-import { ILoaderGuild }           from "@app/types/routing";
+import { LoaderGuild }            from "@app/types/routing";
 import TopSubbar                  from "@comp/dashboard/TopSubbar";
 import TopNavbar                  from "@comp/dashboard/TopNavbar";
 import LeftSidebar                from "@comp/dashboard/LeftSidebar";
@@ -24,7 +24,7 @@ const loader : LoaderFunction = async( { params } ) => {
 };
 
 const Component : FC = () => {
-	const { guildData, loggedIn } = useLoaderData() as ILoaderGuild;
+	const { guildData, loggedIn } = useLoaderData() as LoaderGuild;
 	usePageTitle( `Kbot 2.0 - ${ guildData?.guildData.name || "Unkown" }` );
 
 	if ( !loggedIn || !guildData ) {

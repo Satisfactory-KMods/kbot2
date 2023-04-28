@@ -15,9 +15,9 @@ import {
 	SystemLib_Class
 }                from "@server/lib/System.Lib";
 
-const Options : ISlashCommandConfig[] = [];
+const Options : SlashCommandConfig[] = [];
 
-export interface ISlashCommandConfig {
+export interface SlashCommandConfig {
 	command : SlashCommandBuilder,
 	exec : ( interaction : CommandInteraction ) => Promise<void>,
 }
@@ -70,7 +70,7 @@ export default async function() {
 						for ( const File of fs.readdirSync( path.join( __dirname, Dir ) ) ) {
 							// gather alle slash commands
 							if ( Dir === "slashCommands" ) {
-								const Option : ISlashCommandConfig = ( await import( path.join( __dirname, Dir, File ) ) ).default;
+								const Option : SlashCommandConfig = ( await import( path.join( __dirname, Dir, File ) ) ).default;
 								if ( !Options.find( x => x.command.name === Option.command.name ) ) {
 									Options.push( Option );
 									SystemLib.Log( "bot", `Gather slash command:${ BC( "Cyan" ) }`, `/${ Option.command.name }` );

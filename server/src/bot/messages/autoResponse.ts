@@ -5,10 +5,10 @@ import {
 	Message,
 	MessageType
 }                              from "discord.js";
-import { IMO_ChatCommands }    from "@shared/types/MongoDB";
+import { MO_ChatCommands }     from "@shared/types/MongoDB";
 import similarity              from "similarity";
 
-const responseToMessage = async( message : Message<true>, command : IMO_ChatCommands, followResponse = false ) => {
+const responseToMessage = async( message : Message<true>, command : MO_ChatCommands, followResponse = false ) => {
 	if ( followResponse && message.type === MessageType.Reply ) {
 		if ( message.reference && message.reference.messageId ) {
 			const ReplyMessage = await message.channel.messages.fetch( message.reference.messageId ).catch( () => {

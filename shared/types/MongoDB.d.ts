@@ -1,49 +1,61 @@
-import { ERoles }            from "@shared/Enum/ERoles";
-import { IDiscordGuildData } from "@shared/types/discord";
+import { ERoles }           from "@shared/Enum/ERoles";
+import { DiscordGuildData } from "@shared/types/discord";
 
-export interface IMongoDB {
+export interface MongoDBSchema {
 	_id? : string,
 	__v? : number,
 	createdAt? : Date | string, // string on client side
 	updatedAt? : Date | string // string on client side
 }
 
-export interface IGuildDB extends IMongoDB {
+export interface GuildDB extends MongoDBSchema {
 	guildId : string;
 }
 
-export interface IMO_Guild extends IGuildDB {
+export interface MO_Guild extends GuildDB {
 	isInGuild : boolean,
 	accountIds : string[]
-	options : IMO_GuildOptions,
-	guildData : IDiscordGuildData
+	options : MO_GuildOptions,
+	guildData : DiscordGuildData
 }
 
-export interface IMO_RolePingRule {
+export interface MO_RolePingRule {
 	roleId : string;
 	modRefs : string[];
 }
 
-export interface IMO_GuildOptions extends IMongoDB {
+export interface ModToRole {
+	modRef : string,
+	roleId : string
+}
+
+export interface MO_GuildOptions extends MongoDBSchema {
+	modToRole : ModToRole[];
+	suggestionChannelId : string;
+	bugChannelId : string;
+	modsUpdateAnnouncement : boolean;
+	modsAnnounceHiddenMods : boolean;
+	blacklistedMods : string[],
+	ficsitUserIds : string[],
 	chatCommandPrefix : string,
 	changelogForumId : string,
 	updateTextChannelId : string,
-	RolePingRules : IMO_RolePingRule[],
+	RolePingRules : MO_RolePingRule[],
 }
 
-export interface IReactionMatchRule {
+export interface ReactionMatchRule {
 	matchString : string;
 	similarity : boolean;
 }
 
-export interface IMO_ChatCommands extends IGuildDB {
+export interface MO_ChatCommands extends GuildDB {
 	command : string,
 	alias : string[],
 	reactionText : string,
-	autoReactionMatches : IReactionMatchRule[]
+	autoReactionMatches : ReactionMatchRule[]
 }
 
-export interface IMO_UserAccount extends IMongoDB {
+export interface MO_UserAccount extends MongoDBSchema {
 	username : string,
 	hash? : string,
 	salt? : string,
@@ -51,13 +63,20 @@ export interface IMO_UserAccount extends IMongoDB {
 	discordId : string
 }
 
-export interface IMO_UserAccountToken extends IMongoDB {
+export interface MO_UserAccountToken extends MongoDBSchema {
 	userid : string,
 	token : string,
 	expire : Date
 }
 
-export interface IMO_RegisterToken extends IGuildDB {
+export interface MO_ModUpdate extends GuildDB {
+	modRef : string,
+	hash : string,
+	lastUpdate : Date,
+	lastMessageId : string
+}
+
+export interface MO_RegisterToken extends GuildDB {
 	userId : string,
 	token : string,
 	expire : Date,
@@ -65,7 +84,8 @@ export interface IMO_RegisterToken extends IGuildDB {
 }
 
 
-export interface IMO_Mod extends IMongoDB {
+export interface MO_Mod extends MongoDBSchema {
+	versions : ModVersion[],
 	id : string;
 	mod_reference : string;
 	name : string;
@@ -79,30 +99,34 @@ export interface IMO_Mod extends IMongoDB {
 	created_at : Date;
 	last_version_date : Date;
 	hidden : boolean;
-	authors : IAuthor[];
-	latestVersions : ILatestVersions;
+	authors : Author[];
+	latestVersions : LatestVersions;
 }
 
-export interface IAuthor {
+export interface Author {
 	user_id : string;
 	mod_id : string;
 	role : string;
-	user : IUser;
+	user : UserSchema;
 }
 
-export interface IUser {
+export interface UserSchema {
 	id : string;
 	username : string;
 }
 
-export interface ILatestVersions {
-	alpha : IVersion | undefined;
-	beta : IVersion | undefined;
-	release : IVersion | undefined;
+export interface LatestVersions {
+	alpha : ModVersion | undefined;
+	beta : ModVersion | undefined;
+	release : ModVersion | undefined;
 }
 
-export interface IVersion {
+export interface ModVersion {
 	version : string;
 	sml_version : string;
 	id : string;
+	created_at : Date,
+	updated_at : Date,
+	changelog : string,
+	hash : string
 }

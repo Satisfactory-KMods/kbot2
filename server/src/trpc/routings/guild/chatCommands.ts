@@ -1,4 +1,4 @@
-import { IMO_ChatCommands }               from "@shared/types/MongoDB";
+import { MO_ChatCommands }                from "@shared/types/MongoDB";
 import { handleTRCPErr }                  from "@server/lib/Express.Lib";
 import { TRPCError }                      from "@trpc/server";
 import DB_ChatCommands, { ZChatCommands } from "@server/mongodb/DB_ChatCommands";
@@ -12,7 +12,7 @@ import _                                  from "lodash";
 export const guild_chatCommands =
 	router( {
 		getcommands: guildProcedure.query<{
-			commands : IMO_ChatCommands[]
+			commands : MO_ChatCommands[]
 		}>( async( { ctx } ) => {
 			const { userClass, guildId } = ctx;
 			try {
@@ -31,7 +31,7 @@ export const guild_chatCommands =
 			data: ZChatCommands
 		} ) ).mutation<{
 			message : string,
-			command : IMO_ChatCommands
+			command : MO_ChatCommands
 		}>( async( { input } ) => {
 			const { data } = input;
 			try {
@@ -68,7 +68,7 @@ export const guild_chatCommands =
 			data: ZChatCommands
 		} ) ).mutation<{
 			message : string,
-			command : IMO_ChatCommands
+			command : MO_ChatCommands
 		}>( async( { input } ) => {
 			const { data, id, guildId } = input;
 			try {

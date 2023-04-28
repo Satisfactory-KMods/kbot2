@@ -8,7 +8,7 @@ import {
 	LoaderFunction,
 	useLoaderData
 }                                   from "react-router-dom";
-import { IMO_ChatCommands }         from "@shared/types/MongoDB";
+import { MO_ChatCommands }          from "@shared/types/MongoDB";
 import ChatCommandEditor            from "@comp/chatCommands/ChatCommandEditor";
 import { Accordion }                from "flowbite-react";
 import {
@@ -18,26 +18,26 @@ import {
 import { HiOutlineArrowCircleDown } from "react-icons/all";
 import guildContext                 from "@context/guildContext";
 
-interface ILoaderData {
-	chatReactions : IMO_ChatCommands[];
+interface LoaderData {
+	chatReactions : MO_ChatCommands[];
 }
 
 const loader : LoaderFunction = async( { params } ) => {
 	const { guildId } = params;
 	const chatReactionsResult = await tRPC_Guild.chatcommands.getcommands.query( { guildId: guildId! } ).catch( tRCP_handleError );
-	const chatReactions : IMO_ChatCommands[] = chatReactionsResult?.commands || [];
+	const chatReactions : MO_ChatCommands[] = chatReactionsResult?.commands || [];
 
-	return json<ILoaderData>( {
+	return json<LoaderData>( {
 		chatReactions
 	} );
 };
 
 const Component : FC = () => {
 	const { options } = useContext( guildContext );
-	const { chatReactions } = useLoaderData() as ILoaderData;
-	const [ commands, setCommands ] = useState<IMO_ChatCommands[]>( () => chatReactions );
+	const { chatReactions } = useLoaderData() as LoaderData;
+	const [ commands, setCommands ] = useState<MO_ChatCommands[]>( () => chatReactions );
 
-	const OnUpdateChatCommand = ( command : IMO_ChatCommands ) => {
+	const OnUpdateChatCommand = ( command : MO_ChatCommands ) => {
 		const commandIndex = commands.findIndex( e => e._id === command._id );
 		if ( commandIndex >= 0 ) {
 			const next = [ ...commands ];
@@ -49,7 +49,7 @@ const Component : FC = () => {
 		}
 	};
 
-	const OnRemoveChatCommand = ( command : IMO_ChatCommands ) => {
+	const OnRemoveChatCommand = ( command : MO_ChatCommands ) => {
 		setCommands( c => c.filter( e => e._id !== command._id ) );
 	};
 

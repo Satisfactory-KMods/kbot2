@@ -4,12 +4,12 @@ import {
 }                         from "react";
 import { FlowbiteColors } from "flowbite-react/lib/esm/components/Flowbite/FlowbiteTheme";
 
-interface IRibbonProps extends PropsWithChildren {
+interface RibbonProps extends PropsWithChildren {
 	position? : "tr" | "tl" | "bl" | "br";
 	color? : keyof FlowbiteColors;
 }
 
-const Ribbon : FC<IRibbonProps> = ( { position, color, children } ) => {
+const Ribbon : FC<RibbonProps> = ( { position, color, children } ) => {
 
 	let locationOffset = "left-[-36px] top-[32px] w-[170px] -rotate-45";
 	switch ( position ) {

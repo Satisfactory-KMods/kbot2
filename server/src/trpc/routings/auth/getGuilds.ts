@@ -1,4 +1,4 @@
-import { IMO_Guild }       from "@shared/types/MongoDB";
+import { MO_Guild }        from "@shared/types/MongoDB";
 import { TRPCError }       from "@trpc/server";
 import DB_Guilds           from "@server/mongodb/DB_Guilds";
 import { handleTRCPErr }   from "@server/lib/Express.Lib";
@@ -6,7 +6,7 @@ import { publicProcedure } from "@server/trpc/trpc";
 
 export const auth_getGuilds =
 	publicProcedure.query<{
-		guilds : IMO_Guild[];
+		guilds : MO_Guild[];
 	}>( async( { ctx } ) => {
 		const { userClass } = ctx;
 		try {
