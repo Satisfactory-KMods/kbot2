@@ -30,17 +30,11 @@ export function modsToSelection( mods : MO_Mod[] ) : Selection<string>[] {
 }
 
 export function channelToSelected<T extends DiscordTextChannel | DiscordForumChannel>( channels : T[], selectedIds : string[] ) : MultiValue<Selection<string>> {
-	return channels.map( ( channel ) => ( {
-		label: channel.name,
-		value: channel.id
-	} ) ).filter( e => selectedIds.includes( e.value ) );
+	return channelToSelection( channels ).filter( e => selectedIds.includes( e.value ) );
 }
 
 export function channelToSelectedSingle<T extends DiscordTextChannel | DiscordForumChannel>( channels : T[], selectedId : string ) : SingleValue<Selection<string>> {
-	return channels.map( ( channel ) => ( {
-		label: channel.name,
-		value: channel.id
-	} ) ).find( e => e.value === selectedId ) || null;
+	return channelToSelection( channels ).find( e => e.value === selectedId ) || null;
 }
 
 export function roleToSelectedSingle( roles : DiscordRole[], selectedId : string ) : SingleValue<Selection<string>> {

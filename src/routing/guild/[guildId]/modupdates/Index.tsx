@@ -108,8 +108,8 @@ const Component : FC = () => {
 	const [ modsAnnounceHiddenMods, setModsAnnounceHiddenMods ] = useState( () => guildData.options.modsAnnounceHiddenMods );
 
 	const [ selectedTextChannel, setSelectedTextChannel ] = useState( () => channelToSelectedSingle( textChannels, guildData.options.updateTextChannelId ) );
-	const [ selectedBugChannel, setSelectedBugChannel ] = useState( () => channelToSelectedSingle( textChannels, guildData.options.updateTextChannelId ) || channelToSelectedSingle( forumChannels, guildData.options.updateTextChannelId ) );
-	const [ selectedSuggestionChannel, setSelectedSuggestionChannel ] = useState( () => channelToSelectedSingle( textChannels, guildData.options.updateTextChannelId ) || channelToSelectedSingle( forumChannels, guildData.options.updateTextChannelId ) );
+	const [ selectedBugChannel, setSelectedBugChannel ] = useState( () => channelToSelectedSingle( textChannels, guildData.options.bugChannelId ) || channelToSelectedSingle( forumChannels, guildData.options.bugChannelId ) );
+	const [ selectedSuggestionChannel, setSelectedSuggestionChannel ] = useState( () => channelToSelectedSingle( textChannels, guildData.options.suggestionChannelId ) || channelToSelectedSingle( forumChannels, guildData.options.suggestionChannelId ) );
 	const [ selectedForumChannel, setSelectedForumChannel ] = useState( () => channelToSelectedSingle( forumChannels, guildData.options.changelogForumId ) );
 	const [ blacklistedMods, setblacklistedMods ] = useState( () => modsToSelectionMulti( mods, guildData.options.blacklistedMods ) );
 	const [ RolePingRules, setRolePingRules ] = useState<MO_RolePingRule[]>( () => guildData.options.RolePingRules );
@@ -131,9 +131,9 @@ const Component : FC = () => {
 			data: {
 				modsAnnounceHiddenMods,
 				modsUpdateAnnouncement,
-				suggestionChannelId: selectedTextChannel?.value || "",
-				bugChannelId: selectedTextChannel?.value || "",
-				changelogForumId: selectedTextChannel?.value || "",
+				suggestionChannelId: selectedSuggestionChannel?.value || "",
+				bugChannelId: selectedBugChannel?.value || "",
+				changelogForumId: selectedForumChannel?.value || "",
 				updateTextChannelId: selectedTextChannel?.value || "",
 				RolePingRules: RolePingRules.filter( e => e.roleId !== "" && e.modRefs.length > 0 ),
 				blacklistedMods: blacklistedMods.map( e => e.value ),
