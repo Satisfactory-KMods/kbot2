@@ -1,21 +1,24 @@
-import * as trpcExpress         from "@trpc/server/adapters/express";
-import { BC }                   from "@server/lib/System.Lib";
+import * as trpcExpress              from "@trpc/server/adapters/express";
+import { BC }                        from "@server/lib/System.Lib";
 import {
 	MW_Auth,
 	MW_AuthGuild
-}                               from "@server/lib/Express.Lib";
-import { public_validate }      from "@server/trpc/routings/public/validate";
-import { public_login }         from "@server/trpc/routings/public/login";
-import { guild_validate }       from "@server/trpc/routings/guild/validate";
-import { public_createAccount } from "@server/trpc/routings/public/createAccount";
-import { public_resetPassword } from "@server/trpc/routings/public/resetPassword";
-import { public_checkToken }    from "@server/trpc/routings/public/checkToken";
-import { auth_getGuilds }       from "@server/trpc/routings/auth/getGuilds";
-import { guild_chatCommands }   from "@server/trpc/routings/guild/chatCommands";
+}                                    from "@server/lib/Express.Lib";
+import { public_validate }           from "@server/trpc/routings/public/validate";
+import { public_login }              from "@server/trpc/routings/public/login";
+import { guild_validate }            from "@server/trpc/routings/guild/validate";
+import { public_createAccount }      from "@server/trpc/routings/public/createAccount";
+import { public_resetPassword }      from "@server/trpc/routings/public/resetPassword";
+import { public_checkToken }         from "@server/trpc/routings/public/checkToken";
+import { auth_getGuilds }            from "@server/trpc/routings/auth/getGuilds";
+import { guild_chatCommands }        from "@server/trpc/routings/guild/chatCommands";
 import {
 	createContext,
 	router
-}                               from "@server/trpc/trpc";
+}                                    from "@server/trpc/trpc";
+import { guild_modUpdateAnnoucment } from "@server/trpc/routings/guild/modUpdateAnnoucment";
+import { guild_channels }            from "@server/trpc/routings/guild/channels";
+import { guild_roles }               from "@server/trpc/routings/guild/role";
 
 
 const publicRouter = router( {
@@ -30,7 +33,10 @@ const authRouter = router( {
 } );
 const guildRouter = router( {
 	validate: guild_validate,
-	chatcommands: guild_chatCommands
+	chatcommands: guild_chatCommands,
+	modupdates: guild_modUpdateAnnoucment,
+	channels: guild_channels,
+	roles: guild_roles
 } );
 
 

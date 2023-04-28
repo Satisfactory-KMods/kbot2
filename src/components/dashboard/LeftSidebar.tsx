@@ -1,6 +1,7 @@
 import { Sidebar } from "flowbite-react";
 import { FC }      from "react";
 import {
+	HiAnnotation,
 	HiChat,
 	HiHome
 }                  from "react-icons/hi";
@@ -34,6 +35,9 @@ const LeftSidebar : FC = () => {
 						</Sidebar.Item>
 						<Sidebar.Item as={ Link } to={ `/guild/${ guildId }/chatcommands` } icon={ HiChat }>
 							Chat commands and reactions
+						</Sidebar.Item>
+						<Sidebar.Item as={ Link } to={ `/guild/${ guildId }/modupdates` } icon={ HiAnnotation }>
+							Mod update announcement
 						</Sidebar.Item>
 					</Sidebar.ItemGroup>
 				</Sidebar.Items>

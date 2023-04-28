@@ -1,12 +1,16 @@
-import { FC }                     from "react";
+import {
+	FC,
+	useState
+}                                 from "react";
 import {
 	json,
 	LoaderFunction,
 	Outlet,
-	useLoaderData
+	useLoaderData,
+	useParams
 }                                 from "react-router-dom";
 import { validateLoginWithGuild } from "@hooks/useAuth";
-import guildContext               from "@context/guildContext";
+import GuildContext               from "@context/GuildContext";
 import { LoaderGuild }            from "@app/types/routing";
 import TopSubbar                  from "@comp/dashboard/TopSubbar";
 import TopNavbar                  from "@comp/dashboard/TopNavbar";
@@ -24,15 +28,28 @@ const loader : LoaderFunction = async( { params } ) => {
 };
 
 const Component : FC = () => {
+	const { guildId } = useParams();
 	const { guildData, loggedIn } = useLoaderData() as LoaderGuild;
 	usePageTitle( `Kbot 2.0 - ${ guildData?.guildData.name || "Unkown" }` );
+
+	const [ guild, setGuild ] = useState( () => guildData! );
 
 	if ( !loggedIn || !guildData ) {
 		return <></>;
 	}
 
+	const triggerGuildUpdate = async() => {
+		const query = await validateLoginWithGuild( guildId || "" );
+
+		if ( !query.loggedIn || !query.guildData ) {
+			window.location.replace( "/error/401" );
+		}
+
+		setGuild( query.guildData! );
+	};
+
 	return (
-		<guildContext.Provider value={ guildData }>
+		<GuildContext.Provider value={ { guildData: guild, triggerGuildUpdate } }>
 			<div className={ "flex h-screen overflow-y-hidden" }>
 				<div className={ "flex-1 flex" }>
 					<LeftSidebar/>
@@ -50,7 +67,7 @@ const Component : FC = () => {
 					</div>
 				</div>
 			</div>
-		</guildContext.Provider>
+		</GuildContext.Provider>
 	);
 };
 

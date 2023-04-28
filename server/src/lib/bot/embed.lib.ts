@@ -24,18 +24,19 @@ export function createEmbed( o : EmbedOptions ) : EmbedBuilder | undefined {
 		o = EmbedOptionsSchema.parse( o );
 		const embed = new EmbedBuilder();
 
+		embed.setThumbnail( o.thumbnail || "https://kbot2.kyrium.space/images/logo.png" );
 		o.url && embed.setURL( o.url );
 		embed.setColor( "#0099ff" );
 		embed.setTitle( o.title );
 		embed.setAuthor( {
 			name: o.author?.name || DiscordBot.user.username,
 			iconURL: o.author?.iconURL || "https://kbot2.kyrium.space/images/logo.png"
-		} )
+		} );
 		o.fields?.length && embed.setFields( o.fields );
 		!o.disableTimestamp && embed.setTimestamp();
 		embed.setFooter( {
 			text: "KMods Team"
-		} )
+		} );
 
 		return embed;
 	}

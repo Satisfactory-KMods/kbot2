@@ -8,6 +8,7 @@ import {
 	router
 }                                         from "@server/trpc/trpc";
 import _                                  from "lodash";
+import DB_Guilds                          from "@server/mongodb/DB_Guilds";
 
 export const guild_chatCommands =
 	router( {
@@ -27,16 +28,33 @@ export const guild_chatCommands =
 		} ),
 
 
+		setprefix: guildProcedure.input( z.object( {
+			prefix: z.string().length( 1, "prefix must be 1 character" )
+		} ) ).mutation<{
+			message : string
+		}>( async( { input } ) => {
+			const { prefix, guildId } = input;
+			try {
+				await DB_Guilds.findOneAndUpdate( { guildId }, { "options.chatCommandPrefix": prefix } );
+				return { message: "Prefix set!" };
+			}
+			catch ( e ) {
+				handleTRCPErr( e );
+			}
+			throw new TRPCError( { message: "Something goes wrong!", code: "INTERNAL_SERVER_ERROR" } );
+		} ),
+
+
 		add: guildProcedure.input( z.object( {
 			data: ZChatCommands
 		} ) ).mutation<{
 			message : string,
 			command : MO_ChatCommands
 		}>( async( { input } ) => {
-			const { data } = input;
+			const { data, guildId } = input;
 			try {
 				if ( !await DB_ChatCommands.exists( {
-					$or: [
+					guildId, $or: [
 						{ command: data.command },
 						{ alias: data.command },
 						{ alias: { $in: data.alias } },

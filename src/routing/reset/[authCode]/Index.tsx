@@ -19,7 +19,7 @@ import { SlLogin }         from "react-icons/all";
 import LoadButton          from "@comp/LoadButton";
 import { LoaderDataBase }  from "@app/types/routing";
 import { fireSwalFromApi } from "@lib/sweetAlert";
-import authContext         from "@context/authContext";
+import AuthContext         from "@context/AuthContext";
 import {
 	tRCP_handleError,
 	tRPC_Public
@@ -49,7 +49,7 @@ const loader : LoaderFunction = async( { params } ) => {
 
 const Component : FC = () => {
 	usePageTitle( `Kbot 2.0 - Reset Password` );
-	const [ , , setToken ] = useContext( authContext );
+	const [ , , setToken ] = useContext( AuthContext );
 	const navigate = useNavigate();
 	const { authCode } = useParams();
 	const [ isLoading, setIsLoading ] = useState( false );

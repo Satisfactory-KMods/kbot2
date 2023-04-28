@@ -11,11 +11,11 @@ import {
 	BiDoorOpen,
 	BiServer
 }                  from "react-icons/all";
-import authContext from "@context/authContext";
+import AuthContext from "@context/AuthContext";
 
 
 const TopNavbar : FC = () => {
-	const [ , logout ] = useContext( authContext );
+	const [ , logout ] = useContext( AuthContext );
 	const { guildId } = useParams();
 
 	return (

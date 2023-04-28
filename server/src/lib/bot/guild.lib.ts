@@ -2,10 +2,12 @@ import DB_Guilds            from "@server/mongodb/DB_Guilds";
 import { BC }               from "@server/lib/System.Lib";
 import {
 	ChannelType,
+	Collection,
 	Guild,
 	GuildForumThreadCreateOptions,
 	MessageCreateOptions,
 	MessagePayload,
+	NonThreadGuildBasedChannel,
 	PermissionFlagsBits
 }                           from "discord.js";
 import { DiscordGuildData } from "@shared/types/discord";
@@ -168,13 +170,13 @@ class DiscordGuild {
 		return [];
 	}
 
-	public async allVoiceChannels() {
+	public async allVoiceChannels() : Promise<Collection<string, NonThreadGuildBasedChannel | null> | undefined> {
 		const guild = this.getGuild;
 		if ( guild ) {
 			return ( await guild.channels.fetch().catch( () => {
 			} ) )?.filter( R => R?.isVoiceBased );
 		}
-		return [];
+		return undefined;
 	}
 
 	public async allForumChannels() {

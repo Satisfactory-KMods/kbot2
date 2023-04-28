@@ -21,7 +21,7 @@ import {
 }                         from "flowbite-react";
 import LoadButton         from "@comp/LoadButton";
 import { SlLogin }        from "react-icons/all";
-import authContext        from "@context/authContext";
+import AuthContext        from "@context/AuthContext";
 import {
 	tRCP_handleError,
 	tRPC_Public
@@ -37,7 +37,7 @@ const loader : LoaderFunction = async() => {
 
 const Component : FC = () => {
 	usePageTitle( `Kbot 2.0 - Login` );
-	const [ , , setToken ] = useContext( authContext );
+	const [ , , setToken ] = useContext( AuthContext );
 	const navigate = useNavigate();
 	const [ isLoading, setIsLoading ] = useState( false );
 	const [ inputError, setInputError ] = useState( [ false, false ] );

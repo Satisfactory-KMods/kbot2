@@ -56,3 +56,68 @@ export interface DiscordGuildData {
 	"discoverySplashURL" : null | string,
 	"bannerURL" : null | string
 }
+
+export interface DiscordRole {
+	guild : string;
+	icon : any;
+	unicodeEmoji : any;
+	id : string;
+	name : string;
+	color : number;
+	hoist : boolean;
+	rawPosition : number;
+	permissions : string;
+	managed : boolean;
+	mentionable : boolean;
+	tags : any;
+	createdTimestamp : number;
+}
+
+
+export interface DiscordTextChannel {
+	type : number;
+	guild : string;
+	guildId : string;
+	parentId : string;
+	permissionOverwrites : string[];
+	messages : any[];
+	threads : any[];
+	nsfw : boolean;
+	flags : number;
+	id : string;
+	name : string;
+	rawPosition : number;
+	topic : any;
+	lastMessageId : string;
+	rateLimitPerUser : number;
+	createdTimestamp : number;
+}
+
+export interface DiscordVoiceChannel extends DiscordTextChannel {
+	todo : true;
+}
+
+export interface DiscordForumChannel extends Omit<DiscordTextChannel, "messages" | "rateLimitPerUser" | "lastMessageId"> {
+	threads : string[];
+	flags : number;
+	availableTags : AvailableTag[];
+	defaultReactionEmoji : any;
+	defaultThreadRateLimitPerUser : number;
+	rateLimitPerUser : number;
+	defaultAutoArchiveDuration : number;
+	defaultSortOrder : any;
+	defaultForumLayout : number;
+	createdTimestamp : number;
+}
+
+export interface AvailableTag {
+	id : string;
+	name : string;
+	moderated : boolean;
+	emoji? : Emoji;
+}
+
+export interface Emoji {
+	id : any;
+	name : string;
+}

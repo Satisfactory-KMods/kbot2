@@ -105,7 +105,8 @@ const JobOptions : JobOptions = {
 							"authors.user_id": guild.options.ficsitUserIds,
 							"authors.role": "creator"
 						} ) ) {
-							if ( !guild.options.blacklistedMods.includes( mod.mod_reference ) ) {
+
+							if ( !guild.options.blacklistedMods?.includes( mod.mod_reference ) ) {
 								const modDocument = await DB_ModUpdates.findOne( {
 									guildId: guild.guildId,
 									modRef: mod.mod_reference
@@ -115,15 +116,19 @@ const JobOptions : JobOptions = {
 									await DB_ModUpdates.create( {
 										guildId: guild.guildId,
 										modRef: mod.mod_reference,
-										hash: mod.versions[ 0 ].hash,
+										hash: mod.versions[ 0 ]?.hash || "0",
 										lastUpdate: new Date(),
 										lastMessageId: "0"
 									} );
 									continue;
 								}
 
+								if ( mod.versions.length <= 0 ) {
+									continue;
+								}
+
 								if ( modDocument.hash !== mod.versions[ 0 ].hash ) {
-									let changelogId : string | undefined = undefined
+									let changelogId : string | undefined = undefined;
 									if ( threadChannel ) {
 										const tag = threadChannel.availableTags.find( e => e.name === mod.mod_reference );
 										const appliedTags = tag ? [ tag.id ] : [];
@@ -167,7 +172,7 @@ const JobOptions : JobOptions = {
 											},
 											{
 												name: "Changelog",
-												value: changelogId ? `<#${ changelogId }>` : `https://ficsit.app/mod/${ mod.mod_reference }/version/${ mod.versions[ 0 ].id }`,
+												value: changelogId ? `<#${ changelogId }>` : `[Click here](https://ficsit.app/mod/${ mod.mod_reference }/version/${ mod.versions[ 0 ].id })`,
 												inline: true
 											},
 											{
@@ -215,7 +220,7 @@ const JobOptions : JobOptions = {
 		}
 		catch ( e ) {
 			if ( e instanceof Error ) {
-				SystemLib.DebugLog( "fetching", e.message );
+				SystemLib.DebugLog( "fetching", e.message, e );
 			}
 		}
 	}

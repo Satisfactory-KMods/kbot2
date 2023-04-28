@@ -7,16 +7,16 @@ import "@kyri123/k-javascript-utils/lib/useAddons";
 import { rootRouter }       from "@routing/Router";
 import { initFlowbite }     from "flowbite";
 import useAuth              from "@hooks/useAuth";
-import authContext          from "@context/authContext";
+import AuthContext          from "@context/AuthContext";
 
 function App() {
 	useEffect( initFlowbite, [] );
 	const Auth = useAuth();
 
 	return (
-		<authContext.Provider value={ Auth }>
+		<AuthContext.Provider value={ Auth }>
 			<RouterProvider router={ rootRouter } fallbackElement={ <Navigate to={ "/error/404" }/> }/>
-		</authContext.Provider>
+		</AuthContext.Provider>
 	);
 }
 
