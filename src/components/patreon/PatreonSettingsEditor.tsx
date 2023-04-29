@@ -51,12 +51,12 @@ const PatreonSettingsEditor : FC = () => {
 			changelogForum: changelogForum?.value || "0",
 			pingRoles: pingRoles.map( e => e.value )
 		} ).catch( tRCP_handleError );
+		setIsLoading( false );
 
 		if ( response ) {
 			fireToastFromApi( response.message, true );
 			await triggerGuildUpdate();
 		}
-		setIsLoading( false );
 	};
 
 	return (

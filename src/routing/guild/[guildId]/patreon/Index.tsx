@@ -40,7 +40,8 @@ const Component : FC = () => {
 								<PatreonSettingsEditor/>
 							</Tabs.Item>
 							<Tabs.Item title="Upload Release" icon={ BiUpload }>
-								<PatreonReleaseInput/>
+								<PatreonReleaseInput onReleaseAdded={ () => {
+								} }/>
 							</Tabs.Item>
 						</Tabs.Group>
 					</div>
