@@ -69,7 +69,7 @@ const Component : FC = () => {
 	const modOptions = useMemo( () => modsToSelection( mods.filter( e => ficsitUserIds.map( e => e.value ).includes( e.creator_id ) ) ), [ mods, ficsitUserIds ] );
 
 	const [ announcementChannel, setAnnouncementChannel ] = useState( () => channelToSelectedSingle( textChannels, patreonOptions?.announcementChannel || "" ) );
-	const [ changelogForum, setChangelogForum ] = useState( () => channelToSelectedSingle( textChannels, patreonOptions?.changelogForum || "" ) );
+	const [ changelogForum, setChangelogForum ] = useState( () => channelToSelectedSingle( forumChannels, patreonOptions?.changelogForum || "" ) );
 	const [ pingRoles, setPingRoles ] = useState( () => roleToSelectedMulti( roles, patreonOptions?.pingRoles || [] ) );
 	const [ patreonReleaseText, setPatreonReleaseText ] = useState( () => patreonOptions?.patreonReleaseText || "" );
 
