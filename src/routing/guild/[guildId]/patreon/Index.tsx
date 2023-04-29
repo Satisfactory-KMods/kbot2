@@ -32,6 +32,11 @@ import LoadButton             from "@comp/LoadButton";
 import Select, { MultiValue } from "react-select";
 import useGuild               from "@hooks/useGuild";
 import { messageTextLimit }   from "@shared/Default/discord";
+import {
+	tRCP_handleError,
+	tRPC_Guild
+}                             from "@lib/tRPC";
+import { fireToastFromApi }   from "@lib/sweetAlert";
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface LoaderData {
@@ -50,7 +55,7 @@ const Component : FC = () => {
 	const Id = useId();
 	const [ isLoading, setIsLoading ] = useState( false );
 
-	const { textChannels, forumChannels, mods, roles, guildData } = useGuild();
+	const { textChannels, forumChannels, mods, roles, guildData, triggerGuildUpdate } = useGuild();
 	const { patreonOptions } = guildData;
 
 	const [ ficsitUserIds, setFicsitUserIds ] = useState<MultiValue<Selection>>( () => guildData.options.ficsitUserIds.map( id => ( {
@@ -68,9 +73,22 @@ const Component : FC = () => {
 	const [ pingRoles, setPingRoles ] = useState( () => roleToSelectedMulti( roles, patreonOptions?.pingRoles || [] ) );
 	const [ patreonReleaseText, setPatreonReleaseText ] = useState( () => patreonOptions?.patreonReleaseText || "" );
 
-	//patreonOptions.patreonReleaseText
-	//patreonOptions.announcementChannel
-	//patreonOptions.changelogForum
+	const saveSettings = async() => {
+		setIsLoading( true );
+		const response = await tRPC_Guild.patreon.updateSettings.mutate( {
+			guildId: guildId!,
+			patreonReleaseText,
+			announcementChannel: announcementChannel?.value || "0",
+			changelogForum: changelogForum?.value || "0",
+			pingRoles: pingRoles.map( e => e.value )
+		} ).catch( tRCP_handleError );
+
+		if ( response ) {
+			fireToastFromApi( response.message, true );
+			await triggerGuildUpdate();
+		}
+		setIsLoading( false );
+	};
 
 	return (
 		<>
@@ -79,7 +97,8 @@ const Component : FC = () => {
 				<div className="flex h-full flex-col justify-center gap-4 p-0">
 					<div className="flex flex-col gap-2">
 						<Tabs.Group style="underline">
-							<Tabs.Item active={ true } title="Settings" icon={ BiCog }>
+							<Tabs.Item active={ true } title="Settings"
+							           icon={ BiCog }>
 								<div className="mb-3 block">
 									<Label value="Patreon Roles"/>
 								</div>
@@ -115,18 +134,19 @@ const Component : FC = () => {
 								          helperText={ `Symbols left: ${ messageTextLimit - patreonReleaseText.length }` }
 								          onChange={ e => setPatreonReleaseText( e.target.value ) }/>
 
+								<hr className="border-gray-600 mt-3"/>
+								<div className="p-3 rounded-b-lg">
+									<LoadButton isLoading={ isLoading } color="green" type="button"
+									            onClick={ saveSettings }
+									            icon={ <BiSave size={ 20 }
+									                           className="me-2"/> }>Save</LoadButton>
+								</div>
 							</Tabs.Item>
-							<Tabs.Item active={ true } title="Channels" icon={ BiMessage }>
+							<Tabs.Item title="Channels" icon={ BiMessage }>
 
 
 							</Tabs.Item>
 						</Tabs.Group>
-						<hr className="border-gray-600"/>
-						<div className="p-3 rounded-b-lg">
-							<LoadButton isLoading={ isLoading } color="green" type="button" onClick={ () => {
-							} }
-							            icon={ <BiSave size={ 20 } className="me-2"/> }>Save</LoadButton>
-						</div>
 					</div>
 				</div>
 			</div>

@@ -27,6 +27,7 @@ import DB_PatreonReleases            from "@server/mongodb/DB_PatreonReleases";
 import path                          from "path";
 import fs                            from "fs";
 import { public_patreon }            from "@server/trpc/routings/public/patreonDownload";
+import { guild_patreon }             from "@server/trpc/routings/guild/patreonSettings";
 
 
 const publicRouter = router( {
@@ -45,7 +46,8 @@ const guildRouter = router( {
 	chatcommands: guild_chatCommands,
 	modupdates: guild_modUpdateAnnoucment,
 	channels: guild_channels,
-	roles: guild_roles
+	roles: guild_roles,
+	patreon: guild_patreon
 } );
 
 

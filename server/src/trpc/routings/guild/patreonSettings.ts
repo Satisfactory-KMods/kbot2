@@ -28,10 +28,12 @@ export const guild_patreon =
 						"patreonOptions.changelogForum": changelogForum,
 						"patreonOptions.patreonReleaseText": patreonReleaseText
 					} );
+					console.log( "Settings saved." );
 					return { message: "Settings saved." };
 				}
 			}
 			catch ( e ) {
+				console.log( e );
 				handleTRCPErr( e );
 			}
 			throw new TRPCError( { message: "Something goes wrong!", code: "INTERNAL_SERVER_ERROR" } );

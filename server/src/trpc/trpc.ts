@@ -4,7 +4,6 @@ import { User }         from "@shared/class/User.Class";
 import { DiscordGuild } from "@server/lib/bot/guild.lib";
 import z                from "zod";
 import { rGuildId }     from "@server/zod/refineGuildId";
-import superjson        from "superjson";
 
 export interface Context {
 	guildId? : string,
@@ -27,7 +26,6 @@ export const createContext = async( {
 };
 
 const t = trpc.initTRPC.context<Context>().create( {
-	transformer: superjson,
 	isServer: true,
 	isDev: SystemLib.IsDevMode
 } );
