@@ -50,9 +50,9 @@ DiscordBot.on( "messageCreate", async( message ) => {
 							let i = 0;
 							while ( i < message.content.length ) {
 								const letter = message.content.charAt( i );
-								if ( letter === firstLetter ) {
+								if ( letter.toLowerCase() === firstLetter.toLowerCase() ) {
 									const sentence = message.content.substring( i, i + reaction.matchString.length );
-									if ( similarity( sentence, reaction.matchString ) >= 0.75 ) {
+									if ( similarity( sentence.toLowerCase(), reaction.matchString.toLowerCase() ) >= 0.75 ) {
 										await responseToMessage( message, command, false );
 										return;
 									}

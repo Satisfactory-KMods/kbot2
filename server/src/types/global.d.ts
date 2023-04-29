@@ -6,6 +6,7 @@ import { Client }                   from "discord.js";
 import { DiscordGuildManagerClass } from "@server/lib/bot/guild.lib";
 
 export declare global {
+	var validDownloadUrls : { downloadId : string, file : string, expiresAt : Date }[];
 	var Cached_DiscordGuildManager : DiscordGuildManagerClass;
 	var SystemLib : SystemLib_Class;
 	var Api : core.Express;

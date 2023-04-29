@@ -39,6 +39,9 @@ const LeftSidebar : FC = () => {
 						<Sidebar.Item as={ Link } to={ `/guild/${ guildId }/modupdates` } icon={ HiAnnotation }>
 							Mod update announcement
 						</Sidebar.Item>
+						<Sidebar.Item as={ Link } to={ `/guild/${ guildId }/patreon` } icon={ SiPatreon }>
+							Patreon exclusive content
+						</Sidebar.Item>
 					</Sidebar.ItemGroup>
 				</Sidebar.Items>
 			</Sidebar>

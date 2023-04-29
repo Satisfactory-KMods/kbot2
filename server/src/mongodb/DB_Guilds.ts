@@ -1,7 +1,8 @@
 import * as mongoose from "mongoose";
 import {
 	MO_Guild,
-	MO_GuildOptions
+	MO_GuildOptions,
+	MO_PatreonOptions
 }                    from "@shared/types/MongoDB";
 
 const GuildOptionSchema = new mongoose.Schema<MO_GuildOptions>( {
@@ -33,11 +34,19 @@ const GuildOptionSchema = new mongoose.Schema<MO_GuildOptions>( {
 	}
 } );
 
+const PatreonOptionSchema = new mongoose.Schema<MO_PatreonOptions>( {
+	pingRoles: { type: [ String ], default: [] },
+	announcementChannel: { type: String, default: "0" },
+	changelogForum: { type: String, default: "0" },
+	patreonReleaseText: { type: String, default: "" }
+} );
+
 const GuildSchema = new mongoose.Schema<MO_Guild>( {
 	guildId: { type: String, required: true, unique: true },
 	isInGuild: { type: Boolean, default: false },
 	accountIds: { type: [ String ], default: [] },
 	guildData: { type: {}, default: {} },
+	patreonOptions: { type: PatreonOptionSchema },
 	options: {
 		type: GuildOptionSchema, default: {
 			suggestionChannelId: "",

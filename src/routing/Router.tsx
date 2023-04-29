@@ -21,6 +21,7 @@ const rootRouter = createBrowserRouter( createRoutesFromElements(
 			<Route path="error/:ErrorCode" lazy={ () => import("@guild/error/[ErrorCode]/Index") }/>
 			<Route path="chatcommands" lazy={ () => import("@guild/chatcommands/Index") }/>
 			<Route path="modupdates" lazy={ () => import("@guild/modupdates/Index") }/>
+			<Route path="patreon" lazy={ () => import("@guild/patreon/Index") }/>
 			<Route path="home" lazy={ () => import("@guild/Index") }/>
 			<Route index lazy={ () => import("@guild/Index") }/>
 			<Route path="*" element={ <Navigate to={ "error/404" }/> }/>

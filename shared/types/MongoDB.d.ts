@@ -16,7 +16,8 @@ export interface MO_Guild extends GuildDB {
 	isInGuild : boolean,
 	accountIds : string[]
 	options : MO_GuildOptions,
-	guildData : DiscordGuildData
+	guildData : DiscordGuildData,
+	patreonOptions : MO_PatreonOptions
 }
 
 export interface MO_RolePingRule {
@@ -42,6 +43,14 @@ export interface MO_GuildOptions extends MongoDBSchema {
 	changelogForumId : string,
 	updateTextChannelId : string,
 	RolePingRules : MO_RolePingRule[],
+}
+
+
+export interface MO_PatreonOptions extends MongoDBSchema {
+	pingRoles : string[];
+	announcementChannel : string;
+	changelogForum : string;
+	patreonReleaseText : string;
 }
 
 export interface ReactionMatchRule {
@@ -82,6 +91,17 @@ export interface MO_RegisterToken extends GuildDB {
 	token : string,
 	expire : Date,
 	isPasswordResetToken : boolean
+}
+
+export interface MO_Patreon extends GuildDB {
+	discordId : string,
+	token : string
+}
+
+export interface MO_PatreonReleases extends GuildDB {
+	changelogContent : string,
+	modRef : string,
+	version : string
 }
 
 

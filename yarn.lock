@@ -2596,6 +2596,13 @@ cookie@0.5.0:
   resolved "https://registry.npmjs.org/cookie/-/cookie-0.5.0.tgz"
   integrity sha512-YZ3GUyn/o8gfKJlnlX7g7xq4gyO6OSuhGPKaaGssGB2qgDUS0gPgtTvoyZLTt9Ab6dC4hfc9dV5arkvc/OCmrw==
 
+copy-anything@^3.0.2:
+  version "3.0.3"
+  resolved "https://registry.yarnpkg.com/copy-anything/-/copy-anything-3.0.3.tgz#206767156f08da0e02efd392f71abcdf79643559"
+  integrity sha512-fpW2W/BqEzqPp29QS+MwwfisHCQZtiduTe/m8idFo0xbti9fIZ2WVhAsCv4ggFVH3AgCkVdpoOCtQC6gBrdhjw==
+  dependencies:
+    is-what "^4.1.8"
+
 copy-to-clipboard@^3.3.3:
   version "3.3.3"
   resolved "https://registry.npmjs.org/copy-to-clipboard/-/copy-to-clipboard-3.3.3.tgz"
@@ -2760,6 +2767,11 @@ destroy@1.2.0:
   version "1.2.0"
   resolved "https://registry.npmjs.org/destroy/-/destroy-1.2.0.tgz"
   integrity sha512-2sJGJTaXIIaR1w4iJSNoN0hnMY7Gpc/n8D4qSCJw8QqFWXf7cuAgnEHxBpweaVcPevC2l3KpjYCx3NypQQgaJg==
+
+devalue@^4.3.0:
+  version "4.3.0"
+  resolved "https://registry.yarnpkg.com/devalue/-/devalue-4.3.0.tgz#d86db8fee63a70317c2355be0d3d1b4d8f89a44e"
+  integrity sha512-n94yQo4LI3w7erwf84mhRUkUJfhLoCZiLyoOZ/QFsDbcWNZePrLwbQpvZBUG2TNxwV3VjCKPxkiiQA6pe3TrTA==
 
 didyoumean@^1.2.2:
   version "1.2.2"
@@ -4022,6 +4034,11 @@ is-weakset@^2.0.1:
   dependencies:
     call-bind "^1.0.2"
     get-intrinsic "^1.1.1"
+
+is-what@^4.1.8:
+  version "4.1.8"
+  resolved "https://registry.yarnpkg.com/is-what/-/is-what-4.1.8.tgz#0e2a8807fda30980ddb2571c79db3d209b14cbe4"
+  integrity sha512-yq8gMao5upkPoGEU9LsB2P+K3Kt8Q3fQFCGyNCWOAnJAMzEXVV9drYb0TXr42TTliLLhKIBvulgAXgtLLnwzGA==
 
 isarray@^2.0.5:
   version "2.0.5"
@@ -5846,6 +5863,13 @@ sucrase@^3.29.0:
     mz "^2.7.0"
     pirates "^4.0.1"
     ts-interface-checker "^0.1.9"
+
+superjson@^1.12.3:
+  version "1.12.3"
+  resolved "https://registry.yarnpkg.com/superjson/-/superjson-1.12.3.tgz#383aacfd795c6eef24c383c70154c6cbbcbfb31a"
+  integrity sha512-0j+U70KUtP8+roVPbwfqkyQI7lBt7ETnuA7KXbTDX3mCKiD/4fXs2ldKSMdt0MCfpTwiMxo20yFU3vu6ewETpQ==
+  dependencies:
+    copy-anything "^3.0.2"
 
 supports-color@^5.3.0, supports-color@^5.5.0:
   version "5.5.0"
