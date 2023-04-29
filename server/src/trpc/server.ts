@@ -93,7 +93,7 @@ Api.get( "/api/v2/download/:downloadId", async( req : Request, res : Response ) 
 			}
 		}
 	}
-	res.status( 401 );
+	return res.status( 401 ).json( { success: false, message: "This download url is invalid or has he already used" } );
 } );
 
 

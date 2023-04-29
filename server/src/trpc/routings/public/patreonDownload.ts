@@ -38,7 +38,7 @@ export const public_patreon = router( {
 		downloadId : string
 	}>( async( { input } ) => {
 		if ( !global.validDownloadUrls ) {
-			validDownloadUrls = [];
+			global.validDownloadUrls = [];
 		}
 		const { token, file } = input;
 		try {

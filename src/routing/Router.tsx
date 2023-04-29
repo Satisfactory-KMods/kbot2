@@ -15,6 +15,7 @@ const rootRouter = createBrowserRouter( createRoutesFromElements(
 			<Route path="/login" lazy={ () => import("@routing/login/Index") }/>
 			<Route path="/register/:authCode" lazy={ () => import("@routing/register/[authCode]/Index") }/>
 			<Route path="/reset/:authCode" lazy={ () => import("@routing/reset/[authCode]/Index") }/>
+			<Route path="/download/:downloadId" lazy={ () => import("@routing/download/[downloadId]/Index") }/>
 		</Route>
 
 		<Route path="/guild/:guildId" lazy={ () => import("@guild/Layout") }>
