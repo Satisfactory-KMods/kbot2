@@ -1,42 +1,17 @@
-import {
-	FC,
-	useId,
-	useMemo,
-	useState
-}                             from "react";
+import { FC }                from "react";
 import {
 	json,
 	LoaderFunction,
 	useLoaderData,
 	useParams
-}                             from "react-router-dom";
-import {
-	channelToSelectedSingle,
-	channelToSelection,
-	modsToSelection,
-	rolesToSelection,
-	roleToSelectedMulti,
-	Selection
-}                             from "@lib/selectConversion";
-import {
-	Label,
-	Tabs,
-	Textarea
-}                             from "flowbite-react";
+}                            from "react-router-dom";
+import { Tabs }              from "flowbite-react";
 import {
 	BiCog,
-	BiMessage,
-	BiSave
-}                             from "react-icons/all";
-import LoadButton             from "@comp/LoadButton";
-import Select, { MultiValue } from "react-select";
-import useGuild               from "@hooks/useGuild";
-import { messageTextLimit }   from "@shared/Default/discord";
-import {
-	tRCP_handleError,
-	tRPC_Guild
-}                             from "@lib/tRPC";
-import { fireToastFromApi }   from "@lib/sweetAlert";
+	BiUpload
+}                            from "react-icons/all";
+import PatreonSettingsEditor from "@comp/patreon/PatreonSettingsEditor";
+import PatreonReleaseInput   from "@comp/patreon/PatreonReleaseInput";
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface LoaderData {
@@ -52,43 +27,6 @@ const Component : FC = () => {
 	const { guildId } = useParams();
 	// eslint-disable-next-line no-empty-pattern
 	const {} = useLoaderData() as LoaderData;
-	const Id = useId();
-	const [ isLoading, setIsLoading ] = useState( false );
-
-	const { textChannels, forumChannels, mods, roles, guildData, triggerGuildUpdate } = useGuild();
-	const { patreonOptions } = guildData;
-
-	const [ ficsitUserIds, setFicsitUserIds ] = useState<MultiValue<Selection>>( () => guildData.options.ficsitUserIds.map( id => ( {
-		value: id,
-		label: id
-	} ) ) );
-
-	const roleOptions = useMemo( () => rolesToSelection( roles ), [ roles ] );
-	const textChannelOptions = useMemo( () => channelToSelection( textChannels ), [ textChannels ] );
-	const forumChannelOptions = useMemo( () => channelToSelection( forumChannels ), [ forumChannels ] );
-	const modOptions = useMemo( () => modsToSelection( mods.filter( e => ficsitUserIds.map( e => e.value ).includes( e.creator_id ) ) ), [ mods, ficsitUserIds ] );
-
-	const [ announcementChannel, setAnnouncementChannel ] = useState( () => channelToSelectedSingle( textChannels, patreonOptions?.announcementChannel || "" ) );
-	const [ changelogForum, setChangelogForum ] = useState( () => channelToSelectedSingle( forumChannels, patreonOptions?.changelogForum || "" ) );
-	const [ pingRoles, setPingRoles ] = useState( () => roleToSelectedMulti( roles, patreonOptions?.pingRoles || [] ) );
-	const [ patreonReleaseText, setPatreonReleaseText ] = useState( () => patreonOptions?.patreonReleaseText || "" );
-
-	const saveSettings = async() => {
-		setIsLoading( true );
-		const response = await tRPC_Guild.patreon.updateSettings.mutate( {
-			guildId: guildId!,
-			patreonReleaseText,
-			announcementChannel: announcementChannel?.value || "0",
-			changelogForum: changelogForum?.value || "0",
-			pingRoles: pingRoles.map( e => e.value )
-		} ).catch( tRCP_handleError );
-
-		if ( response ) {
-			fireToastFromApi( response.message, true );
-			await triggerGuildUpdate();
-		}
-		setIsLoading( false );
-	};
 
 	return (
 		<>
@@ -99,52 +37,10 @@ const Component : FC = () => {
 						<Tabs.Group style="underline">
 							<Tabs.Item active={ true } title="Settings"
 							           icon={ BiCog }>
-								<div className="mb-3 block">
-									<Label value="Patreon Roles"/>
-								</div>
-								<Select options={ roleOptions }
-								        className="mt-2 mb-3 my-react-select-container w-full"
-								        isClearable={ true }
-								        classNamePrefix="my-react-select" isMulti={ true } value={ pingRoles }
-								        onChange={ setPingRoles }/>
-
-								<div className="mb-3 block">
-									<Label value="Announcement channel"/>
-								</div>
-								<Select options={ textChannelOptions }
-								        className="mt-2 mb-3 my-react-select-container w-full"
-								        isClearable={ true }
-								        classNamePrefix="my-react-select" isMulti={ false }
-								        value={ announcementChannel }
-								        onChange={ setAnnouncementChannel }/>
-
-								<div className="mb-3 block">
-									<Label value="Changelog forum"/>
-								</div>
-								<Select options={ forumChannelOptions }
-								        className="mt-2 mb-3 my-react-select-container w-full"
-								        isClearable={ true }
-								        classNamePrefix="my-react-select" isMulti={ false } value={ changelogForum }
-								        onChange={ setChangelogForum }/>
-
-								<div className="mb-3 block">
-									<Label value="Release Text"/>
-								</div>
-								<Textarea className="mt-2 mb-3" rows={ 6 } value={ patreonReleaseText }
-								          helperText={ `Symbols left: ${ messageTextLimit - patreonReleaseText.length }` }
-								          onChange={ e => setPatreonReleaseText( e.target.value ) }/>
-
-								<hr className="border-gray-600 mt-3"/>
-								<div className="p-3 rounded-b-lg">
-									<LoadButton isLoading={ isLoading } color="green" type="button"
-									            onClick={ saveSettings }
-									            icon={ <BiSave size={ 20 }
-									                           className="me-2"/> }>Save</LoadButton>
-								</div>
+								<PatreonSettingsEditor/>
 							</Tabs.Item>
-							<Tabs.Item title="Channels" icon={ BiMessage }>
-
-
+							<Tabs.Item title="Upload Release" icon={ BiUpload }>
+								<PatreonReleaseInput/>
 							</Tabs.Item>
 						</Tabs.Group>
 					</div>
