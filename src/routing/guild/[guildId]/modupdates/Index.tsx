@@ -16,14 +16,7 @@ import {
 	tRPC_Guild
 }                             from "@lib/tRPC";
 import GuildContext           from "@context/GuildContext";
-import { EChannelType }       from "@shared/Enum/EDiscord";
 import {
-	DiscordForumChannel,
-	DiscordRole,
-	DiscordTextChannel
-}                             from "@shared/types/discord";
-import {
-	MO_Mod,
 	MO_ModUpdate,
 	MO_RolePingRule
 }                             from "@shared/types/MongoDB";
@@ -54,55 +47,39 @@ import CreatableSelect        from "react-select/creatable";
 import _                      from "lodash";
 import ModWatchRow            from "@comp/modsUpdate/ModWatchRow";
 import { fireToastFromApi }   from "@lib/sweetAlert";
+import {
+	ForumChannelContext,
+	TextChannelContext
+}                             from "@context/ChannelContext";
+import { RoleContext }        from "@context/RoleContext";
+import { ModContext }         from "@context/ModContext";
 
 interface LoaderData {
-	textChannels : DiscordTextChannel[];
-	forumChannels : DiscordForumChannel[];
 	watchedMods : MO_ModUpdate[];
-	mods : MO_Mod[];
-	roles : DiscordRole[];
 }
 
 const loader : LoaderFunction = async( { params } ) => {
 	const { guildId } = params;
 
-	const [ textChannelsResult, forumChannelsResult, watchedModsResult, modsResult, rolesResult ] = await Promise.all( [
-		tRPC_Guild.channels.oftype.query( {
-			guildId: guildId!,
-			type: EChannelType.text
-		} ),
-		tRPC_Guild.channels.oftype.query( {
-			guildId: guildId!,
-			type: EChannelType.forum
-		} ),
-		tRPC_Guild.modupdates.watchedmods.query( {
-			guildId: guildId!
-		} ),
-		tRPC_Guild.modupdates.mods.query( {
-			guildId: guildId!
-		} ),
-		tRPC_Guild.roles.getrole.query( {
-			guildId: guildId!
-		} )
-	] );
-
-	const textChannels : any[] = textChannelsResult?.channels || [];
-	const forumChannels : any[] = forumChannelsResult?.channels || [];
-	const roles : any[] = rolesResult?.roles || [];
+	const watchedModsResult = await tRPC_Guild.modupdates.watchedmods.query( {
+		guildId: guildId!
+	} )
 	const watchedMods : any[] = watchedModsResult?.mods || [];
-	const mods : any[] = modsResult?.mods || [];
 
-	return json<LoaderData>( {
-		textChannels, forumChannels, watchedMods, mods, roles
-	} );
+	return json<LoaderData>( { watchedMods } );
 };
 
 const Component : FC = () => {
 	const { guildId } = useParams();
 	const Id = useId();
 	const { guildData, triggerGuildUpdate } = useContext( GuildContext );
-	const { textChannels, forumChannels, watchedMods, mods, roles } = useLoaderData() as LoaderData;
+	const { watchedMods } = useLoaderData() as LoaderData;
 	const [ isLoading, setIsLoading ] = useState( false );
+
+	const textChannels = useContext( TextChannelContext );
+	const mods = useContext( ModContext );
+	const roles = useContext( RoleContext );
+	const forumChannels = useContext( ForumChannelContext );
 
 	const [ modsUpdateAnnouncement, setModsUpdateAnnouncement ] = useState( () => guildData.options.modsUpdateAnnouncement );
 	const [ modsAnnounceHiddenMods, setModsAnnounceHiddenMods ] = useState( () => guildData.options.modsAnnounceHiddenMods );

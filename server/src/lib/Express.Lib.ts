@@ -67,8 +67,6 @@ export async function MW_AuthGuild( req : Request, res : Response, next : NextFu
 		...req.query
 	};
 
-	console.log( req.body );
-
 	const AuthHeader = req.headers.authorization;
 	let Token : string | undefined;
 	try {
