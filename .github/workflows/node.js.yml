@@ -1,8 +1,9 @@
 name: Build and Deploy
 
 on:
-  master:
-    - push
+  push:
+    branches:
+      - master
 
 jobs:
   test-docker:

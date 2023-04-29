@@ -1,8 +1,9 @@
 name: Build and Deploy
 
 on:
-  dev:
-    - push
+  push:
+    branches-ignore:
+      - master
 
 jobs:
   test-docker:
@@ -34,17 +35,3 @@ jobs:
           cache: 'npm'
       - run: yarn install
       - run: yarn build
-
-  deploy:
-    needs: [ test-app, test-docker ]
-    name: "Deploy to Server"
-    runs-on: ubuntu-latest
-    steps:
-      - name: executing remote ssh commands using password
-        uses: appleboy/ssh-action@v0.1.8
-        with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          password: ${{ secrets.PASSWORD }}
-          port: 22
-          script: ~/docker/github.sh "${{ github.event.repository.name }}" "${{ github.head_ref || github.ref_name }}"
