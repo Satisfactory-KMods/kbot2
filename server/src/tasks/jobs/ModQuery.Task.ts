@@ -150,7 +150,7 @@ const JobOptions : JobOptions = {
 												for ( const message of grouped ) {
 													if ( message.Data.length > 0 ) {
 														const content = GroupToString( message );
-														thread.send( { content } );
+														await thread.send( { content } );
 													}
 												}
 											}

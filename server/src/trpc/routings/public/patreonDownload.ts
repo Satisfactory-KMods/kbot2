@@ -45,20 +45,26 @@ export const public_patreon = router( {
 			const patreonDocument = await DB_Patreon.findOne( { token } );
 			if ( patreonDocument ) {
 				const guild = await DiscordGuildManager.GetGuild( patreonDocument.guildId );
-				if ( guild?.IsValid ) {
+				const fileDocument = await DB_PatreonReleases.findById( file );
+				if ( guild?.IsValid && fileDocument ) {
 					const member = await guild.getGuild?.members.fetch( patreonDocument.discordId );
 					const patreonOptions = await guild.getGuildDb();
-					if ( patreonOptions && member && member.roles.cache.find( r => patreonOptions.patreonOptions?.pingRoles.includes( r.id ) ) ) {
-						const downloadId = MakeRandomString( 50, "" );
-						validDownloadUrls.push( {
-							downloadId,
-							file,
-							expiresAt: new Date( Date.now() + 60 * 60 * 1000 )
-						} );
-						return { downloadId };
+					if ( fileDocument.guildId === patreonDocument.guildId ) {
+						if ( patreonOptions && member && member.roles.cache.find( r => patreonOptions.patreonOptions?.pingRoles.includes( r.id ) ) ) {
+							const downloadId = MakeRandomString( 50, "" );
+							validDownloadUrls.push( {
+								downloadId,
+								file,
+								expiresAt: new Date( Date.now() + 60 * 60 * 1000 )
+							} );
+							return { downloadId };
+						}
 					}
 				}
-				throw new TRPCError( { code: "BAD_REQUEST", message: "token is valid but user has no patreon!" } );
+				throw new TRPCError( {
+					code: "BAD_REQUEST",
+					message: "token is valid but user has no patreon on this server!"
+				} );
 			}
 			throw new TRPCError( { code: "BAD_REQUEST", message: "token is invalid!" } );
 		}

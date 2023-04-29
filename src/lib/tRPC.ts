@@ -66,4 +66,7 @@ export const tRCP_handleError = ( e : any, asToast? : boolean ) => {
 			fireToastFromApi( message );
 		}
 	}
+	else {
+		fireToastFromApi( "Something goes wrong!" );
+	}
 };

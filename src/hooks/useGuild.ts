@@ -7,8 +7,10 @@ import {
 import { ModContext }  from "@context/ModContext";
 import { RoleContext } from "@context/RoleContext";
 import GuildContext    from "@context/GuildContext";
+import { useParams }   from "react-router-dom";
 
 export default function useGuild() {
+	const { guildId } = useParams();
 	const textChannels = useContext( TextChannelContext );
 	const mods = useContext( ModContext );
 	const roles = useContext( RoleContext );
@@ -17,6 +19,7 @@ export default function useGuild() {
 	const { guildData, triggerGuildUpdate } = useContext( GuildContext );
 
 	return {
+		guildId: guildId!,
 		guildData,
 		triggerGuildUpdate,
 		voiceChannels,

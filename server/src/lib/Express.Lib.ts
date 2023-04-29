@@ -61,6 +61,53 @@ export async function MW_Auth( req : Request, res : Response, next : NextFunctio
 	} );
 }
 
+
+export async function MW_AuthGuild_Leg( req : Request, res : Response, next : NextFunction ) {
+	req.body = {
+		...req.body,
+		...req.query
+	};
+
+
+	const AuthHeader = req.headers.authorization;
+	let Token : string | undefined;
+	try {
+		Token = AuthHeader && AuthHeader.split( " " )[ 1 ].replaceAll( "\"", "" ).clearWs();
+	}
+	catch ( e ) {
+	}
+
+	if ( Token ) {
+		try {
+			const Result = jwt.verify( Token, process.env.JWTToken! );
+			if ( typeof Result === "object" ) {
+				const UserData = new User( Token );
+				const Session = await DB_SessionToken.findOne( { token: Token, userid: UserData.Get._id } );
+				if ( Session ) {
+					req.body.UserClass = UserData;
+					req.body.JsonWebToken = Token;
+					if ( req.body.guildId ) {
+						const guild = await DiscordGuildManager.GetGuild( req.body.guildId );
+						if ( guild ) {
+							const Data = await guild.getGuildDb();
+							if ( Data?.isInGuild && await guild.userHasPermission( req.body.UserClass.Get.discordId ) ) {
+								req.body.guild = guild;
+								return next();
+							}
+						}
+					}
+				}
+			}
+		}
+		catch ( e ) {
+			// @ts-ignore
+			console.log( e.message );
+		}
+	}
+
+	res.sendStatus( 401 );
+}
+
 export async function MW_AuthGuild( req : Request, res : Response, next : NextFunction ) {
 	req.body = {
 		...req.body,
