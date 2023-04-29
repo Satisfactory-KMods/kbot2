@@ -47,12 +47,7 @@ import CreatableSelect        from "react-select/creatable";
 import _                      from "lodash";
 import ModWatchRow            from "@comp/modsUpdate/ModWatchRow";
 import { fireToastFromApi }   from "@lib/sweetAlert";
-import {
-	ForumChannelContext,
-	TextChannelContext
-}                             from "@context/ChannelContext";
-import { RoleContext }        from "@context/RoleContext";
-import { ModContext }         from "@context/ModContext";
+import useGuild               from "@hooks/useGuild";
 
 interface LoaderData {
 	watchedMods : MO_ModUpdate[];
@@ -76,10 +71,7 @@ const Component : FC = () => {
 	const { watchedMods } = useLoaderData() as LoaderData;
 	const [ isLoading, setIsLoading ] = useState( false );
 
-	const textChannels = useContext( TextChannelContext );
-	const mods = useContext( ModContext );
-	const roles = useContext( RoleContext );
-	const forumChannels = useContext( ForumChannelContext );
+	const { textChannels, forumChannels, mods, roles } = useGuild();
 
 	const [ modsUpdateAnnouncement, setModsUpdateAnnouncement ] = useState( () => guildData.options.modsUpdateAnnouncement );
 	const [ modsAnnounceHiddenMods, setModsAnnounceHiddenMods ] = useState( () => guildData.options.modsAnnounceHiddenMods );

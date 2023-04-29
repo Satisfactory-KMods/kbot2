@@ -45,6 +45,8 @@ class DiscordGuild {
 	private Valid = false;
 	private guild : Guild | undefined;
 	private DbId = "";
+	private lastFetch : Date = new Date( 0 );
+	private fetchInterval : number = 5 * 60 * 1000;
 
 
 	private constructor( guildId : string ) {
@@ -55,8 +57,34 @@ class DiscordGuild {
 		const Guild = await DB_Guilds.findOne( { guildId: this.guildId, isInGuild: true } );
 		this.guild = DiscordBot.guilds.cache.find( guild => guild.id === this.guildId );
 		if ( Guild && this.guild ) {
+			await this.doFetch();
 			this.DbId = Guild._id.toString();
 			this.Valid = this.DbId !== "";
+		}
+	}
+
+	public async doFetch() {
+		if ( this.lastFetch.valueOf() + this.fetchInterval <= Date.now() && this.guild ) {
+			await Promise.all( [
+				this.guild.members.fetch().catch( () => {
+				} ),
+				this.guild.roles.fetch().catch( () => {
+				} ),
+				this.guild.invites.fetch().catch( () => {
+				} ),
+				this.guild.channels.fetch().catch( () => {
+				} ),
+				this.guild.bans.fetch().catch( () => {
+				} ),
+				this.guild.commands.fetch().catch( () => {
+				} ),
+				this.guild.autoModerationRules.fetch().catch( () => {
+				} ),
+				this.guild.emojis.fetch().catch( () => {
+				} ),
+				this.guild.stickers.fetch().catch( () => {
+				} )
+			] );
 		}
 	}
 
@@ -188,6 +216,15 @@ class DiscordGuild {
 		return [];
 	}
 
+	public async allChannels() {
+		const guild = this.getGuild;
+		if ( guild ) {
+			return ( await guild.channels.fetch().catch( () => {
+			} ) )?.filter( R => R?.isThread );
+		}
+		return [];
+	}
+
 	public async allRoles() {
 		const guild = this.getGuild;
 		if ( guild ) {
@@ -242,7 +279,9 @@ class DiscordGuildManagerClass {
 
 	public async GetGuild( guildId : string ) : Promise<DiscordGuild | null> {
 		if ( this.Guilds.has( guildId ) ) {
-			return this.Guilds.get( guildId )!;
+			const guild = this.Guilds.get( guildId );
+			await guild!.doFetch();
+			return guild!;
 		}
 		else {
 			const GuildClass = await DiscordGuild.ConstructGuild( guildId );

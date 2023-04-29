@@ -18,25 +18,6 @@ const JobOptions : JobOptions = {
 						guild = GuildClass.getGuild!;
 					}
 				}
-				// todo that looks ugly :/
-				await guild.members.fetch().catch( () => {
-				} );
-				await guild.roles.fetch().catch( () => {
-				} );
-				await guild.invites.fetch().catch( () => {
-				} );
-				await guild.channels.fetch().catch( () => {
-				} );
-				await guild.bans.fetch().catch( () => {
-				} );
-				await guild.commands.fetch().catch( () => {
-				} );
-				await guild.autoModerationRules.fetch().catch( () => {
-				} );
-				await guild.emojis.fetch().catch( () => {
-				} );
-				await guild.stickers.fetch().catch( () => {
-				} );
 
 				await UpdateGuild( guild );
 				await DiscordGuildManager.GetGuild( guild.id.toString() );

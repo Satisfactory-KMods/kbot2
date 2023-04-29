@@ -25,7 +25,10 @@ export const guild_modUpdateAnnoucment =
 		mods: guildProcedure.query<{
 			mods : MO_Mod[]
 		}>( async() => {
-			const mods = await DB_Mods.find<MO_Mod>( {} );
+			if ( !global.modCache ) {
+				global.modCache = await DB_Mods.find();
+			}
+			const mods = modCache;
 			return { mods };
 		} ),
 

@@ -41,6 +41,10 @@ export function roleToSelectedSingle( roles : DiscordRole[], selectedId : string
 	return rolesToSelection( roles ).find( e => e.value === selectedId ) || null;
 }
 
+export function roleToSelectedMulti( roles : DiscordRole[], selectedIds : string[] ) : MultiValue<Selection<string>> {
+	return rolesToSelection( roles ).filter( e => selectedIds.includes( e.value ) ) || [];
+}
+
 export function modsToSelectionMulti( mods : MO_Mod[], ids : string[] ) : MultiValue<Selection<string>> {
 	return modsToSelection( mods ).filter( e => ids.includes( e.value ) );
 }

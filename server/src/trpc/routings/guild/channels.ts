@@ -22,22 +22,13 @@ export const guild_channels =
 					let channels : any[] = [];
 					switch ( type ) {
 						case EChannelType.voice:
-							channels = ( await guild.getGuild?.channels.fetch()
-								.then( r => r.filter( e => e?.type === ChannelType.GuildVoice ) )
-								.then( r => r.map( e => e?.toJSON() as any ) )
-								.catch( e => [] as any[] ) ) || [];
+							channels = guild.getGuild!.channels.cache.filter( e => e?.type === ChannelType.GuildVoice ).map( e => e?.toJSON() as any );
 							break;
 						case EChannelType.text:
-							channels = ( await guild.getGuild?.channels.fetch()
-								.then( r => r.filter( e => e?.type === ChannelType.GuildText || e?.type === ChannelType.GuildAnnouncement ) )
-								.then( r => r.map( e => e?.toJSON() as any ) )
-								.catch( e => [] as any[] ) ) || [];
+							channels = guild.getGuild!.channels.cache.filter( e => e?.type === ChannelType.GuildText || e?.type === ChannelType.GuildAnnouncement ).map( e => e?.toJSON() as any );
 							break;
 						case EChannelType.forum:
-							channels = ( await guild.getGuild?.channels.fetch()
-								.then( r => r.filter( e => e?.type === ChannelType.GuildForum ) )
-								.then( r => r.map( e => e?.toJSON() as any ) )
-								.catch( e => [] as any[] ) ) || [];
+							channels = guild.getGuild!.channels.cache.filter( e => e?.type === ChannelType.GuildForum ).map( e => e?.toJSON() as any );
 							break;
 					}
 					return { channels };

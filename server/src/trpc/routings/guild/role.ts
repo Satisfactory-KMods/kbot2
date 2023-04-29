@@ -15,7 +15,7 @@ export const guild_roles =
 			const { guild } = ctx;
 			try {
 				if ( guild ) {
-					const roles : any[] = ( await guild.getGuild?.roles.fetch() )?.map( e => e?.toJSON() ) || [];
+					const roles : any[] = guild.getGuild?.roles.cache.map( e => e ) || [];
 					return { roles };
 				}
 			}

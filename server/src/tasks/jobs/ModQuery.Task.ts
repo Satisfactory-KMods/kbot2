@@ -93,6 +93,7 @@ const JobOptions : JobOptions = {
 				}
 				SystemLib.LogWarning( "tasks", "Update Mods Finished!" );
 			}
+			global.modCache = await DB_Mods.find();
 
 			for await ( const guild of DB_Guilds.find( { "options.modsUpdateAnnouncement": true, isInGuild: true } ) ) {
 				const guildClass = await DiscordGuildManager.GetGuild( guild.guildId );
