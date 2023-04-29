@@ -1,9 +1,7 @@
 import { FC }                from "react";
 import {
 	json,
-	LoaderFunction,
-	useLoaderData,
-	useParams
+	LoaderFunction
 }                            from "react-router-dom";
 import { Tabs }              from "flowbite-react";
 import {
@@ -18,16 +16,10 @@ interface LoaderData {
 }
 
 const loader : LoaderFunction = async( { params } ) => {
-	const { guildId } = params;
-
 	return json<LoaderData>( {} );
 };
 
 const Component : FC = () => {
-	const { guildId } = useParams();
-	// eslint-disable-next-line no-empty-pattern
-	const {} = useLoaderData() as LoaderData;
-
 	return (
 		<>
 			<div

@@ -2,40 +2,11 @@ import {
 	FC,
 	useMemo,
 	useState
-}                         from "react";
-import {
-	json,
-	LoaderFunction,
-	useLoaderData
-}                         from "react-router-dom";
-import { validateLogin }  from "@hooks/useAuth";
-import { LoaderDataBase } from "@app/types/routing";
-import { MO_Guild }       from "@shared/types/MongoDB";
-import { usePageTitle }   from "@kyri123/k-reactutils";
-import GuildSelectRow     from "@comp/pageComponents/GuildSelectRow";
-import { Pagination }     from "flowbite-react";
-import {
-	tRCP_handleError,
-	tRPC_Auth
-}                         from "@lib/tRPC";
-
-interface LoaderData extends LoaderDataBase {
-	guilds : MO_Guild[];
-}
-
-const loader : LoaderFunction = async() => {
-	const result = await validateLogin();
-	if ( !result.loggedIn ) {
-		window.location.replace( "/login" );
-	}
-
-	const guilds = ( await tRPC_Auth.getguilds.query().catch( tRCP_handleError ) )?.guilds || [] as MO_Guild[];
-
-	return json<LoaderData>( {
-		...result,
-		guilds
-	} );
-};
+}                        from "react";
+import { useLoaderData } from "react-router-dom";
+import { usePageTitle }  from "@kyri123/k-reactutils";
+import GuildSelectRow    from "@comp/pageComponents/GuildSelectRow";
+import { Pagination }    from "flowbite-react";
 
 const Component : FC = () => {
 	usePageTitle( `Kbot 2.0 - Select a Server` );

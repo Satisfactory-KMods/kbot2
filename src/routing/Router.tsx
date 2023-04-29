@@ -11,7 +11,7 @@ const rootRouter = createBrowserRouter( createRoutesFromElements(
 		<Route path="error/:ErrorCode" lazy={ () => import("@routing/error/[ErrorCode]/Index") }/>
 
 		<Route lazy={ () => import("@routing/Layout") }>
-			<Route index lazy={ () => import("@routing/Index") }/>
+			<Route index loader={ () => await import( "@routing/Loader" )} lazy={ () => import("@routing/Index") }/>
 			<Route path="/login" lazy={ () => import("@routing/login/Index") }/>
 			<Route path="/register/:authCode" lazy={ () => import("@routing/register/[authCode]/Index") }/>
 			<Route path="/reset/:authCode" lazy={ () => import("@routing/reset/[authCode]/Index") }/>
@@ -32,6 +32,12 @@ const rootRouter = createBrowserRouter( createRoutesFromElements(
 	</>
 ) );
 
+const routes = [
+	{
+		path: "error/:ErrorCode",,
+		lazy: () => import("./projects-component")
+	}
+];
 
 export {
 	rootRouter
