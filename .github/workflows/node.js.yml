@@ -86,10 +86,12 @@ jobs:
         if: ${{ steps.checkTag.outputs.exists == 'false' }}
         id: create_release
         uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: "${{ needs.read-for-release.outputs.version }}"
-          release_name: "Release ${{ needs.read-for-release.outputs.version }}-build.${{ github.run_number }}"
-          body_path: "${{ needs.read-for-release.outputs.changelogfile }}"
+          release_name: "✨ Release ${{ needs.read-for-release.outputs.version }}-build.${{ github.run_number }} ✨"
+          body: "✨ Release ${{ needs.read-for-release.outputs.version }}-build.${{ github.run_number }} ✨"
           draft: false
           prerelease: false
 
