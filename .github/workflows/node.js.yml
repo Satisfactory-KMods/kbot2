@@ -53,22 +53,22 @@ jobs:
           port: 22
           script: ~/docker/github.sh "${{ github.event.repository.name }}" "${{ github.head_ref || github.ref_name }}"
 
-read-for-release:
-  name: 🔍 Read and cache version
-  needs: deploy
-  runs-on: ubuntu-latest
-  if: github.ref == 'refs/heads/main'
-  outputs:
-    version: ${{ steps.version.outputs.out }}
-    changelogfile: ${{ steps.changelogfile.outputs.out }}
-  steps:
-    - name: 🚚 Get latest code
-      uses: actions/checkout@v3
-    - name: 🚚 Get current version from package
-      id: version
-      run: echo "out=$(npx -c 'node -p "process.env.npm_package_version"')" >> $GITHUB_OUTPUT; echo "$(npx -c 'node -p "process.env.npm_package_version"')"
-    #- id: 🚚 Try to get changelog
-    #  run: echo "out=./public/changelogs/$(npx -c 'node -p "process.env.npm_package_version"').md" >> $GITHUB_OUTPUT; echo "$(npx -c 'node -p "process.env.npm_package_version"')"
+  read-for-release:
+    name: 🔍 Read and cache version
+    needs: deploy
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    outputs:
+      version: ${{ steps.version.outputs.out }}
+      changelogfile: ${{ steps.changelogfile.outputs.out }}
+    steps:
+      - name: 🚚 Get latest code
+        uses: actions/checkout@v3
+      - name: 🚚 Get current version from package
+        id: version
+        run: echo "out=$(npx -c 'node -p "process.env.npm_package_version"')" >> $GITHUB_OUTPUT; echo "$(npx -c 'node -p "process.env.npm_package_version"')"
+      #- id: 🚚 Try to get changelog
+      #  run: echo "out=./public/changelogs/$(npx -c 'node -p "process.env.npm_package_version"').md" >> $GITHUB_OUTPUT; echo "$(npx -c 'node -p "process.env.npm_package_version"')"
 
   release:
     name: ✨ Try to create release
