@@ -85,6 +85,7 @@ class DiscordGuild {
 				this.guild.stickers.fetch().catch( () => {
 				} )
 			] );
+			this.lastFetch = new Date();
 		}
 	}
 

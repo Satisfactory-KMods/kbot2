@@ -3,9 +3,7 @@ import {
 	useContext
 }                  from "react";
 import {
-	json,
 	Link,
-	LoaderFunction,
 	Outlet
 }                  from "react-router-dom";
 import Ribbon      from "@comp/elements/Ribbon";
@@ -18,12 +16,6 @@ import {
 	SiPatreon
 }                  from "react-icons/all";
 import AuthContext from "@context/AuthContext";
-
-
-const loader : LoaderFunction = async() => {
-	return json( {} );
-};
-
 
 const Component : FC = () => {
 	const [ user, logout ] = useContext( AuthContext );
@@ -81,6 +73,5 @@ const Component : FC = () => {
 
 
 export {
-	Component,
-	loader
+	Component
 };

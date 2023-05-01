@@ -4,18 +4,12 @@ import {
 	useState
 }                        from "react";
 import {
-	json,
-	LoaderFunction,
 	useLocation,
 	useParams
 }                        from "react-router-dom";
 import { usePageTitle }  from "@kyri123/k-reactutils";
 import { Button }        from "flowbite-react";
 import { validateLogin } from "@hooks/useAuth";
-
-const loader : LoaderFunction = async() => {
-	return json( {} );
-};
 
 const Component : FC = () => {
 	const [ loggedIn, setLoggedIn ] = useState( false );
@@ -50,6 +44,5 @@ const Component : FC = () => {
 };
 
 export {
-	Component,
-	loader
+	Component
 };

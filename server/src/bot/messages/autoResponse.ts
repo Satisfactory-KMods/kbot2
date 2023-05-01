@@ -52,7 +52,7 @@ DiscordBot.on( "messageCreate", async( message ) => {
 								const letter = message.content.charAt( i );
 								if ( letter.toLowerCase() === firstLetter.toLowerCase() ) {
 									const sentence = message.content.substring( i, i + reaction.matchString.length );
-									if ( similarity( sentence.toLowerCase(), reaction.matchString.toLowerCase() ) >= 0.75 ) {
+									if ( similarity( sentence.toLowerCase(), reaction.matchString.toLowerCase() ) >= 0.8 ) {
 										await responseToMessage( message, command, false );
 										return;
 									}

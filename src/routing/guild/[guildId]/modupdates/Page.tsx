@@ -4,22 +4,17 @@ import {
 	useId,
 	useMemo,
 	useState
-}                             from "react";
+}                                   from "react";
 import {
-	json,
-	LoaderFunction,
 	useLoaderData,
 	useParams
-}                             from "react-router-dom";
+}                                   from "react-router-dom";
 import {
 	tRCP_handleError,
 	tRPC_Guild
-}                             from "@lib/tRPC";
-import GuildContext           from "@context/GuildContext";
-import {
-	MO_ModUpdate,
-	MO_RolePingRule
-}                             from "@shared/types/MongoDB";
+}                                   from "@lib/tRPC";
+import GuildContext                 from "@context/GuildContext";
+import { MO_RolePingRule }          from "@shared/types/MongoDB";
 import {
 	channelToSelectedSingle,
 	channelToSelection,
@@ -28,47 +23,33 @@ import {
 	rolesToSelection,
 	roleToSelectedSingle,
 	Selection
-}                             from "@lib/selectConversion";
+}                                   from "@lib/selectConversion";
 import {
 	Button,
 	Label,
 	Tabs,
 	ToggleSwitch
-}                             from "flowbite-react";
+}                                   from "flowbite-react";
 import {
 	BiCog,
 	BiMessage,
 	BiSave,
 	BiTrash
-}                             from "react-icons/all";
-import LoadButton             from "@comp/LoadButton";
-import Select, { MultiValue } from "react-select";
-import CreatableSelect        from "react-select/creatable";
-import _                      from "lodash";
-import ModWatchRow            from "@comp/modsUpdate/ModWatchRow";
-import { fireToastFromApi }   from "@lib/sweetAlert";
-import useGuild               from "@hooks/useGuild";
-
-interface LoaderData {
-	watchedMods : MO_ModUpdate[];
-}
-
-const loader : LoaderFunction = async( { params } ) => {
-	const { guildId } = params;
-
-	const watchedModsResult = await tRPC_Guild.modupdates.watchedmods.query( {
-		guildId: guildId!
-	} )
-	const watchedMods : any[] = watchedModsResult?.mods || [];
-
-	return json<LoaderData>( { watchedMods } );
-};
+}                                   from "react-icons/all";
+import LoadButton                   from "@comp/LoadButton";
+import Select, { MultiValue }       from "react-select";
+import CreatableSelect              from "react-select/creatable";
+import _                            from "lodash";
+import ModWatchRow                  from "@comp/modsUpdate/ModWatchRow";
+import { fireToastFromApi }         from "@lib/sweetAlert";
+import useGuild                     from "@hooks/useGuild";
+import { GuildModUpdateLoaderData } from "@guild/modupdates/Loader";
 
 const Component : FC = () => {
 	const { guildId } = useParams();
 	const Id = useId();
 	const { guildData, triggerGuildUpdate } = useContext( GuildContext );
-	const { watchedMods } = useLoaderData() as LoaderData;
+	const { watchedMods } = useLoaderData() as GuildModUpdateLoaderData;
 	const [ isLoading, setIsLoading ] = useState( false );
 
 	const { textChannels, forumChannels, mods, roles } = useGuild();
@@ -284,7 +265,7 @@ const Component : FC = () => {
 		</>
 	);
 };
+
 export {
-	Component,
-	loader
+	Component
 };
