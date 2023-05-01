@@ -1,7 +1,7 @@
 import { LoaderDataBase } from "@app/types/routing";
 import { validateLogin }  from "@hooks/useAuth";
 import {
-	tRCP_handleError,
+	tRPC_handleError,
 	tRPC_Public
 }                         from "@lib/tRPC";
 import {
@@ -23,7 +23,7 @@ export const loader : LoaderFunction = async( { params } ) => {
 	const Response = await tRPC_Public.checktoken.mutate( {
 		token: authCode!,
 		type: EApiTokenType.reset
-	} ).catch( tRCP_handleError );
+	} ).catch( tRPC_handleError );
 
 	const tokenValid = !!Response?.valid;
 	if ( !tokenValid ) {

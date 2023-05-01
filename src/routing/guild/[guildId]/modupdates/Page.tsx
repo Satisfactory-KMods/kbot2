@@ -2,7 +2,6 @@ import {
 	FC,
 	useContext,
 	useId,
-	useMemo,
 	useState
 }                                   from "react";
 import {
@@ -10,19 +9,16 @@ import {
 	useParams
 }                                   from "react-router-dom";
 import {
-	tRCP_handleError,
-	tRPC_Guild
+	tRPC_Guild,
+	tRPC_handleError
 }                                   from "@lib/tRPC";
 import GuildContext                 from "@context/GuildContext";
 import { MO_RolePingRule }          from "@shared/types/MongoDB";
 import {
 	channelToSelectedSingle,
-	channelToSelection,
-	modsToSelection,
 	modsToSelectionMulti,
-	rolesToSelection,
-	roleToSelectedSingle,
-	Selection
+	OptionSelection,
+	roleToSelectedSingle
 }                                   from "@lib/selectConversion";
 import {
 	Button,
@@ -44,8 +40,10 @@ import ModWatchRow                  from "@comp/modsUpdate/ModWatchRow";
 import { fireToastFromApi }         from "@lib/sweetAlert";
 import useGuild                     from "@hooks/useGuild";
 import { GuildModUpdateLoaderData } from "@guild/modupdates/Loader";
+import useSelection                 from "@hooks/useSelection";
 
 const Component : FC = () => {
+	const { modOptions, bothChannelOptions, forumChannelOptions, textChannelOptions, roleOptions } = useSelection();
 	const { guildId } = useParams();
 	const Id = useId();
 	const { guildData, triggerGuildUpdate } = useContext( GuildContext );
@@ -64,16 +62,10 @@ const Component : FC = () => {
 	const [ defaultPingRole, setDefaultPingRole ] = useState( () => roleToSelectedSingle( roles, guildData.options.defaultPingRole || "0" ) );
 	const [ blacklistedMods, setblacklistedMods ] = useState( () => modsToSelectionMulti( mods, guildData.options.blacklistedMods ) );
 	const [ RolePingRules, setRolePingRules ] = useState<MO_RolePingRule[]>( () => guildData.options.RolePingRules );
-	const [ ficsitUserIds, setFicsitUserIds ] = useState<MultiValue<Selection>>( () => guildData.options.ficsitUserIds.map( id => ( {
+	const [ ficsitUserIds, setFicsitUserIds ] = useState<MultiValue<OptionSelection>>( () => guildData.options.ficsitUserIds.map( id => ( {
 		value: id,
 		label: id
 	} ) ) );
-
-	const roleOptions = useMemo( () => rolesToSelection( roles ), [ roles ] );
-	const textChannelOptions = useMemo( () => channelToSelection( textChannels ), [ textChannels ] );
-	const forumChannelOptions = useMemo( () => channelToSelection( forumChannels ), [ forumChannels ] );
-	const bothChannelOptions = useMemo( () => channelToSelection( forumChannels ).concat( channelToSelection( textChannels ) ), [ forumChannels, textChannels ] );
-	const modOptions = useMemo( () => modsToSelection( mods.filter( e => ficsitUserIds.map( e => e.value ).includes( e.creator_id ) ) ), [ mods, ficsitUserIds ] );
 
 	const onSubmit = async() => {
 		setIsLoading( true );
@@ -91,7 +83,7 @@ const Component : FC = () => {
 				blacklistedMods: blacklistedMods.map( e => e.value ),
 				ficsitUserIds: ficsitUserIds.map( e => e.value )
 			}
-		} ).catch( tRCP_handleError );
+		} ).catch( tRPC_handleError );
 
 		if ( response ) {
 			setRolePingRules( curr => curr.filter( e => e.roleId !== "" && e.modRefs.length > 0 ) );

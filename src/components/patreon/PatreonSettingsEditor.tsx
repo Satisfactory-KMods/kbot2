@@ -1,14 +1,11 @@
 import {
 	FC,
-	useMemo,
 	useState
 }                           from "react";
 import { useParams }        from "react-router-dom";
 import useGuild             from "@hooks/useGuild";
 import {
 	channelToSelectedSingle,
-	channelToSelection,
-	rolesToSelection,
 	roleToSelectedMulti
 }                           from "@lib/selectConversion";
 import {
@@ -20,22 +17,20 @@ import { messageTextLimit } from "@shared/Default/discord";
 import LoadButton           from "@comp/LoadButton";
 import { BiSave }           from "react-icons/all";
 import {
-	tRCP_handleError,
-	tRPC_Guild
+	tRPC_Guild,
+	tRPC_handleError
 }                           from "@lib/tRPC";
 import { fireToastFromApi } from "@lib/sweetAlert";
+import useSelection         from "@hooks/useSelection";
 
 
 const PatreonSettingsEditor : FC = () => {
+	const { forumChannelOptions, textChannelOptions, roleOptions } = useSelection();
 	const { guildId } = useParams();
 	const [ isLoading, setIsLoading ] = useState( false );
 
 	const { textChannels, forumChannels, roles, guildData, triggerGuildUpdate } = useGuild();
 	const { patreonOptions } = guildData;
-
-	const roleOptions = useMemo( () => rolesToSelection( roles ), [ roles ] );
-	const textChannelOptions = useMemo( () => channelToSelection( textChannels ), [ textChannels ] );
-	const forumChannelOptions = useMemo( () => channelToSelection( forumChannels ), [ forumChannels ] );
 
 	const [ announcementChannel, setAnnouncementChannel ] = useState( () => channelToSelectedSingle( textChannels, patreonOptions?.announcementChannel || "" ) );
 	const [ changelogForum, setChangelogForum ] = useState( () => channelToSelectedSingle( forumChannels, patreonOptions?.changelogForum || "" ) );
@@ -50,7 +45,7 @@ const PatreonSettingsEditor : FC = () => {
 			announcementChannel: announcementChannel?.value || "0",
 			changelogForum: changelogForum?.value || "0",
 			pingRoles: pingRoles.map( e => e.value )
-		} ).catch( tRCP_handleError );
+		} ).catch( tRPC_handleError );
 		setIsLoading( false );
 
 		if ( response ) {

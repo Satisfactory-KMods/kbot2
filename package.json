@@ -1,6 +1,6 @@
 {
   "name": "kbot2",
-  "version": "2.1.1",
+  "version": "2.2.0",
   "private": true,
   "scripts": {
     "production": "NODE_ENV=production ts-node --project ./server/tsconfig.json -r tsconfig-paths/register ./server/src/index.ts",
@@ -26,6 +26,7 @@
     "devalue": "^4.3.0",
     "discord.js": "^14.9.0",
     "dotenv": "^16.0.3",
+    "emoji-picker-react": "^4.4.9",
     "express": "^4.18.2",
     "express-fileupload": "^1.4.0",
     "flowbite": "^1.6.5",

@@ -6,7 +6,7 @@ import {
 import { validateLogin }  from "@hooks/useAuth";
 import { LoaderDataBase } from "@app/types/routing";
 import {
-	tRCP_handleError,
+	tRPC_handleError,
 	tRPC_Public
 }                         from "@lib/tRPC";
 import { EApiTokenType }  from "@shared/Enum/EApiMethods";
@@ -22,7 +22,7 @@ const loader : LoaderFunction = async( { params } ) => {
 	const Response = await tRPC_Public.checktoken.mutate( {
 		token: authCode!,
 		type: EApiTokenType.reg
-	} ).catch( tRCP_handleError );
+	} ).catch( tRPC_handleError );
 
 	const tokenValid = !!Response?.valid;
 	if ( !tokenValid ) {

@@ -3,6 +3,7 @@ import {
 	Client,
 	CommandInteraction,
 	GatewayIntentBits,
+	Partials,
 	REST,
 	Routes,
 	SlashCommandBuilder
@@ -24,7 +25,10 @@ export interface SlashCommandConfig {
 
 // use all Intents
 // Todo: is that a good idea? Maybe needs to be a bit more specific?
-global.DiscordBot = new Client( { intents: Object.entries( GatewayIntentBits ).map( R => parseInt( R[ 0 ] ) ).filter( R => !isNaN( R ) ) } );
+global.DiscordBot = new Client( {
+	intents: Object.entries( GatewayIntentBits ).map( R => parseInt( R[ 0 ] ) ).filter( R => !isNaN( R ) ),
+	partials: [ Partials.Message, Partials.Channel, Partials.Reaction, Partials.GuildMember, Partials.User ]
+} );
 
 // set Bot name and activity type
 DiscordBot.on( "ready", async() => {
@@ -81,7 +85,11 @@ export default async function() {
 							}
 							// import all other listeners
 							else {
-								await import( path.join( __dirname, Dir, File ) );
+								const { startUp } = await import( path.join( __dirname, Dir, File ) );
+								if ( startUp && typeof startUp === "function" ) {
+									SystemLib.Log( "bot", `Loading startUp Script:${ BC( "Cyan" ) }`, path.join( Dir, File ) );
+									await startUp();
+								}
 								SystemLib.Log( "bot", `Loading Script:${ BC( "Cyan" ) }`, path.join( Dir, File ) );
 							}
 						}

@@ -30,8 +30,8 @@ import CreatableSelect      from "react-select/creatable";
 import { MultiValue }       from "react-select";
 import { useToggle }        from "@kyri123/k-reactutils";
 import {
-	tRCP_handleError,
-	tRPC_Guild
+	tRPC_Guild,
+	tRPC_handleError
 }                           from "@lib/tRPC";
 import { useParams }        from "react-router-dom";
 import { messageTextLimit } from "@shared/Default/discord";
@@ -77,7 +77,7 @@ const ChatCommandEditor : FC<IChatCommandEditorProps> = ( { editData, onUpdated,
 				guildId: guildId!,
 				data: buildData(),
 				id: editData._id!
-			} ).catch( tRCP_handleError );
+			} ).catch( tRPC_handleError );
 
 			if ( response && response.command ) {
 				fireToastFromApi( response.message, true );
@@ -92,7 +92,7 @@ const ChatCommandEditor : FC<IChatCommandEditorProps> = ( { editData, onUpdated,
 			const response = await tRPC_Guild.chatcommands.add.mutate( {
 				guildId: guildId!,
 				data: buildData()
-			} ).catch( tRCP_handleError );
+			} ).catch( tRPC_handleError );
 
 			if ( response && response.command ) {
 				fireToastFromApi( response.message, true );
@@ -137,7 +137,7 @@ const ChatCommandEditor : FC<IChatCommandEditorProps> = ( { editData, onUpdated,
 				const response = await tRPC_Guild.chatcommands.rm.mutate( {
 					guildId: guildId!,
 					id: editData._id!
-				} ).catch( tRCP_handleError );
+				} ).catch( tRPC_handleError );
 
 				if ( response && response.message ) {
 					fireToastFromApi( response.message, true );

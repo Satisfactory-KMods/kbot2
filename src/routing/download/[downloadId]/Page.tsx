@@ -13,7 +13,7 @@ import {
 }                       from "react-icons/all";
 import LoadButton       from "@comp/LoadButton";
 import {
-	tRCP_handleError,
+	tRPC_handleError,
 	tRPC_Public
 }                       from "@lib/tRPC";
 
@@ -33,7 +33,7 @@ const Component : FC = () => {
 			const Response = await tRPC_Public.patreon.checkToken.mutate( {
 				token: token.clearWs(),
 				file: downloadId!
-			} ).catch( tRCP_handleError );
+			} ).catch( tRPC_handleError );
 
 			if ( Response ) {
 				const url = `/api/v2/download/${ Response.downloadId }`;

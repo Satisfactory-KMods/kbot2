@@ -20,7 +20,7 @@ import LoadButton         from "@comp/LoadButton";
 import { SlLogin }        from "react-icons/all";
 import AuthContext        from "@context/AuthContext";
 import {
-	tRCP_handleError,
+	tRPC_handleError,
 	tRPC_Public
 }                         from "@lib/tRPC";
 
@@ -58,7 +58,7 @@ const Component : FC = () => {
 				login,
 				password,
 				stayLoggedIn
-			} ).catch( tRCP_handleError );
+			} ).catch( tRPC_handleError );
 
 			if ( Response ) {
 				setToken( Response.token );

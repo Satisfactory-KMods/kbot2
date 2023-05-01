@@ -6,7 +6,7 @@ import React, {
 }                              from "react";
 import {
 	modsToSelection,
-	Selection
+	OptionSelection
 }                              from "@lib/selectConversion";
 import useGuild                from "@hooks/useGuild";
 import {
@@ -19,7 +19,7 @@ import Select, { SingleValue } from "react-select";
 import LoadButton              from "@comp/LoadButton";
 import { BiUpload }            from "react-icons/all";
 import {
-	tRCP_handleError,
+	tRPC_handleError,
 	tRPC_token
 }                              from "@lib/tRPC";
 import { fireToastFromApi }    from "@lib/sweetAlert";
@@ -34,7 +34,7 @@ const PatreonReleaseInput : FC<PatreonReleaseInputProps> = ( { onReleaseAdded } 
 	const modOptions = useMemo( () => modsToSelection( mods.filter( e => guildData.options.ficsitUserIds?.includes( e.creator_id ) ) ), [ mods, guildData ] );
 	const [ isLoading, setIsLoading ] = useState( false );
 
-	const [ selectedMod, setSelectedMod ] = useState<SingleValue<Selection<string>>>( null );
+	const [ selectedMod, setSelectedMod ] = useState<SingleValue<OptionSelection<string>>>( null );
 	const [ changelogContent, setChangelogContent ] = useState( "" );
 	const [ version, setVersion ] = useState( "" );
 	const [ selectedFile, setSelectedFile ] = useState<File | null>( null );
@@ -67,7 +67,7 @@ const PatreonReleaseInput : FC<PatreonReleaseInputProps> = ( { onReleaseAdded } 
 					Authorization: `Bearer ${ tRPC_token() }`
 				},
 				body
-			} ).then( r => r.json() ).catch( tRCP_handleError );
+			} ).then( r => r.json() ).catch( tRPC_handleError );
 
 			if ( !response ) {
 				fireToastFromApi( "Something goes wrong!" );

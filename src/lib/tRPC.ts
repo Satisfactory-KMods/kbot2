@@ -49,7 +49,7 @@ export const tRPC_Guild = createTRPCProxyClient<GuildRouter>( {
 	]
 } );
 
-export const tRCP_handleError = ( e : any, asToast? : boolean ) => {
+export const tRPC_handleError = ( e : any, asToast? : boolean ) => {
 	if ( e instanceof TRPCClientError ) {
 		let message : string | string[] = e.message;
 		try {

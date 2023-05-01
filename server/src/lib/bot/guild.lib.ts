@@ -5,13 +5,36 @@ import {
 	Collection,
 	Guild,
 	GuildForumThreadCreateOptions,
+	Message,
 	MessageCreateOptions,
 	MessagePayload,
 	NonThreadGuildBasedChannel,
 	PermissionFlagsBits
 }                           from "discord.js";
 import { DiscordGuildData } from "@shared/types/discord";
-import { MO_Guild }         from "@shared/types/MongoDB";
+import {
+	MO_Guild,
+	MO_ReactionRoles
+}                           from "@shared/types/MongoDB";
+import _                    from "lodash";
+
+const reapplyReactionRoles = async( message : Message<true>, reactionDocument : MO_ReactionRoles ) => {
+	// remove and readd reaction
+	for ( const reaction of message.reactions.cache.values() ) {
+		if ( reactionDocument.reactions.find( r => _.isEqual( r.emoji, reaction.emoji.name ) ) === undefined ) {
+			await reaction.remove();
+		}
+	}
+
+	for ( const reaction of reactionDocument.reactions ) {
+		try {
+			await message.react( reaction.emoji );
+		}
+		catch ( e ) {
+
+		}
+	}
+};
 
 // update a guild or add a new one
 const UpdateGuild = async( dicordGuild : Guild ) => {
@@ -46,7 +69,7 @@ class DiscordGuild {
 	private guild : Guild | undefined;
 	private DbId = "";
 	private lastFetch : Date = new Date( 0 );
-	private fetchInterval : number = 5 * 60 * 1000;
+	private fetchInterval : number = 60 * 60 * 1000;
 
 
 	private constructor( guildId : string ) {
@@ -134,7 +157,29 @@ class DiscordGuild {
 	private async getChannel( channelId : string ) {
 		const guild = this.getGuild;
 		if ( guild && channelId ) {
+			if ( guild.channels.cache.has( channelId ) ) {
+				return guild.channels.cache.get( channelId );
+			}
 			return guild.channels.fetch( channelId ).catch( () => {
+			} );
+		}
+		return undefined;
+	}
+
+	public async message( messageId : string, channelId : string ) {
+		const channel = await this.getChannel( channelId );
+		if ( channel && channel.isTextBased() ) {
+			if ( channel.messages.cache.has( messageId ) ) {
+				return channel.messages.cache.get( messageId );
+			}
+			return channel.messages.fetch( messageId );
+		}
+		return undefined;
+	}
+
+	public async guildMember( memberId : string ) {
+		if ( this.guild ) {
+			return this.guild.members.fetch( memberId ).catch( () => {
 			} );
 		}
 		return undefined;
@@ -304,5 +349,6 @@ export {
 	DiscordGuildManager,
 	DiscordGuildManagerClass,
 	DiscordGuild,
-	UpdateGuild
+	UpdateGuild,
+	reapplyReactionRoles
 };

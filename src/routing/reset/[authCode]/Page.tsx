@@ -17,7 +17,7 @@ import LoadButton          from "@comp/LoadButton";
 import { fireSwalFromApi } from "@lib/sweetAlert";
 import AuthContext         from "@context/AuthContext";
 import {
-	tRCP_handleError,
+	tRPC_handleError,
 	tRPC_Public
 }                          from "@lib/tRPC";
 import { ResetLoaderData } from "@routing/reset/[authCode]/Loader";
@@ -49,7 +49,7 @@ const Component : FC = () => {
 			const Response = await tRPC_Public.resetpassword.mutate( {
 				password,
 				token: authCode!
-			} ).catch( tRCP_handleError );
+			} ).catch( tRPC_handleError );
 
 			if ( Response ) {
 				fireSwalFromApi( Response.message, true );

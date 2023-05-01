@@ -4,7 +4,7 @@ import {
 	redirect
 } from "react-router-dom";
 import {
-	tRCP_handleError,
+	tRPC_handleError,
 	tRPC_Public
 } from "@lib/tRPC";
 
@@ -17,7 +17,7 @@ const loader : LoaderFunction = async( { params } ) => {
 
 	const Response = await tRPC_Public.patreon.checkDownload.query( {
 		downloadId: downloadId!
-	} ).catch( tRCP_handleError );
+	} ).catch( tRPC_handleError );
 
 	const tokenValid = !!Response?.valid;
 	if ( !tokenValid ) {

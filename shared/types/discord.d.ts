@@ -74,6 +74,10 @@ export interface DiscordRole {
 }
 
 
+export interface DiscordMessage {
+	content : string;
+}
+
 export interface DiscordTextChannel {
 	type : number;
 	guild : string;

@@ -1,27 +1,16 @@
-import {
-	FC,
-	useMemo,
-	useState
-}                          from "react";
+import { FC }              from "react";
 import { useLoaderData }   from "react-router-dom";
 import { usePageTitle }    from "@kyri123/k-reactutils";
 import GuildSelectRow      from "@comp/pageComponents/GuildSelectRow";
 import { Pagination }      from "flowbite-react";
 import { IndexLoaderData } from "@routing/Loader";
+import usePages            from "@hooks/usePages";
 
 const Component : FC = () => {
 	usePageTitle( `Kbot 2.0 - Select a Server` );
 	const { loggedIn, guilds } = useLoaderData() as IndexLoaderData;
-	const [ page, setPage ] = useState( 1 );
 
-	const TotalPage = useMemo( () => {
-		return Math.ceil( guilds.length / 5 );
-	}, [ guilds ] );
-
-	const ShowElements = useMemo( () => {
-		return [ ...guilds ].splice( ( page - 1 ) * 5, 5 );
-	}, [ guilds, page ] );
-
+	const [ ShowElements, TotalPage, page, setPage ] = usePages( guilds );
 
 	if ( !loggedIn ) {
 		return ( <></> );

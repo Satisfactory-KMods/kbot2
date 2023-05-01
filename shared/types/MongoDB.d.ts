@@ -93,6 +93,17 @@ export interface MO_RegisterToken extends GuildDB {
 	isPasswordResetToken : boolean
 }
 
+export interface MO_ReactionRoleMap {
+	emoji : string,
+	roleIds : string[]
+}
+
+export interface MO_ReactionRoles extends GuildDB {
+	channelId : string,
+	messageId : string,
+	reactions : MO_ReactionRoleMap[]
+}
+
 export interface MO_Patreon extends GuildDB {
 	discordId : string,
 	token : string
