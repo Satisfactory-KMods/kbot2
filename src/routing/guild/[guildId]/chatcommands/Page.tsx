@@ -9,6 +9,7 @@ import { MO_ChatCommands }         from "@shared/types/MongoDB";
 import ChatCommandEditor           from "@comp/chatCommands/ChatCommandEditor";
 import {
 	Accordion,
+	Pagination,
 	TextInput
 }                                  from "flowbite-react";
 import {
@@ -23,13 +24,15 @@ import GuildContext                from "@context/GuildContext";
 import LoadButton                  from "@comp/LoadButton";
 import { fireToastFromApi }        from "@lib/sweetAlert";
 import { GuildCommandsLoaderData } from "@guild/chatcommands/Loader";
+import usePages                    from "@hooks/usePages";
 
 const Component : FC = () => {
 	const { guildData, triggerGuildUpdate } = useContext( GuildContext );
 	const { chatReactions } = useLoaderData() as GuildCommandsLoaderData;
-	const [ commands, setCommands ] = useState<MO_ChatCommands[]>( () => chatReactions );
 	const prefixInputRef = useRef<HTMLInputElement>( null );
 	const [ isEditing, setIsEditing ] = useState<boolean>( false );
+
+	const [ ShowElements, TotalPage, page, setPage, setCommands, commands ] = usePages( () => chatReactions, 20 );
 
 	const OnUpdateChatCommand = ( command : MO_ChatCommands ) => {
 		const commandIndex = commands.findIndex( e => e._id === command._id );
@@ -84,8 +87,11 @@ const Component : FC = () => {
 				</div>
 			</div>
 		</div>
-		{ commands.length > 0 && <Accordion collapseAll={ true } arrowIcon={ HiOutlineArrowCircleDown }>
-			{ commands.map( ( reaction ) => (
+		{ TotalPage > 1 &&
+			<Pagination currentPage={ page } totalPages={ TotalPage } onPageChange={ setPage }
+			            className="mb-5 text-center"/> }
+		{ ShowElements.length > 0 && <Accordion collapseAll={ true } arrowIcon={ HiOutlineArrowCircleDown }>
+			{ ShowElements.map( ( reaction ) => (
 				<Accordion.Panel key={ reaction._id }>
 					<Accordion.Title>
 						{ guildData.options.chatCommandPrefix }{ reaction.command }

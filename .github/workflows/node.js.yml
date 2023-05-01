@@ -5,7 +5,7 @@ on: [ push, pull_request ]
 env:
   CI: true
   GITHUB_TOKEN: ${{ secrets.TOKEN }}
- 
+
 jobs:
   test-docker:
     name: 🔨 Build as Docker
@@ -93,7 +93,7 @@ jobs:
         with:
           tag_name: "${{ needs.read-for-release.outputs.version }}"
           release_name: "✨ Release ${{ needs.read-for-release.outputs.version }}-build.${{ github.run_number }} ✨"
-          body: "✨ Release ${{ needs.read-for-release.outputs.version }}-build.${{ github.run_number }} ✨"
+          body_path: "./changelogs/${{ needs.read-for-release.outputs.version }}.md"
           draft: false
           prerelease: false
 

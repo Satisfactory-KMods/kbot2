@@ -17,19 +17,19 @@ import { reapplyReactionRoles } from "@server/lib/bot/guild.lib";
 export const guild_reactionRoles =
 	router( {
 		getReactionRoles: guildProcedure.query<{
-			commands : MO_ReactionRoles[],
+			reactionRoles : MO_ReactionRoles[],
 			messages : Record<string, DiscordMessage>,
 			channels : Record<string, DiscordTextChannel>,
 		}>( async( { ctx } ) => {
 			const { userClass, guildId, guild } = ctx;
 			try {
 				if ( userClass?.IsValid && guildId && guild ) {
-					const commands : MO_ReactionRoles[] = [];
+					const reactionRoles : MO_ReactionRoles[] = [];
 					const messages : Record<string, DiscordMessage> = {};
 					const channels : Record<string, DiscordTextChannel> = {};
 
 					for await ( const command of await DB_ReactionRoles.find( { guildId } ) ) {
-						commands.push( command );
+						reactionRoles.push( command.toJSON() );
 						const channel = await guild.textChannel( command.channelId );
 						const message = await guild.message( command.messageId, command.channelId );
 						if ( channel && message ) {
@@ -38,7 +38,7 @@ export const guild_reactionRoles =
 						}
 					}
 
-					return { commands, messages, channels };
+					return { reactionRoles, messages, channels };
 				}
 			}
 			catch ( e ) {

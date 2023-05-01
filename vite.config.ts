@@ -3,17 +3,20 @@
 import {
 	Alias,
 	defineConfig
-}             from "vite";
-import react  from "@vitejs/plugin-react";
-import eslint from "vite-plugin-eslint";
+}              from "vite";
+import react   from "@vitejs/plugin-react";
+import eslint  from "vite-plugin-eslint";
 import {
 	join,
 	resolve
-}             from "path";
-import fs     from "fs";
+}              from "path";
+import * as fs from "fs";
 
-const vendor = [ "react-icons", "react", "react-markdown", "react-select", "react-router-dom", "react-dom" ];
-const flowbite = [ "flowbite-react" ];
+const vendor = [ "react", "react-router-dom", "react-dom" ];
+const flowbite = [ "flowbite", "flowbite-react" ];
+const addons = [ "react-markdown", "emoji-picker-react", "react-select" ];
+const icons = [ "react-icons" ];
+const sweetalert = [ "sweetalert2", "sweetalert2-react-content" ];
 
 function renderChunks( deps : Record<string, string> ) {
 	const chunks : any = {};
@@ -59,11 +62,8 @@ export default defineConfig( ( { command, mode, ssrBuild } ) => {
 			outDir: "dist",
 			rollupOptions: {
 				output: {
-					entryFileNames: `entry/[name].js`,
-					chunkFileNames: `chunk/[name].js`,
-					assetFileNames: `asset/[name].[ext]`,
 					manualChunks: {
-						vendor, flowbite
+						vendor, flowbite, addons, icons, sweetalert
 					}
 				}
 			}
