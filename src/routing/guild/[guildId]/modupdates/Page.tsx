@@ -10,8 +10,8 @@ import {
 	useParams
 }                                   from "react-router-dom";
 import {
-	tRCP_handleError,
-	tRPC_Guild
+	tRPC_Guild,
+	tRPC_handleError
 }                                   from "@lib/tRPC";
 import GuildContext                 from "@context/GuildContext";
 import { MO_RolePingRule }          from "@shared/types/MongoDB";
@@ -91,7 +91,7 @@ const Component : FC = () => {
 				blacklistedMods: blacklistedMods.map( e => e.value ),
 				ficsitUserIds: ficsitUserIds.map( e => e.value )
 			}
-		} ).catch( tRCP_handleError );
+		} ).catch( tRPC_handleError );
 
 		if ( response ) {
 			setRolePingRules( curr => curr.filter( e => e.roleId !== "" && e.modRefs.length > 0 ) );

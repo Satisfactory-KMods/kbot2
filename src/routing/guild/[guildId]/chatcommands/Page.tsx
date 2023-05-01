@@ -12,8 +12,8 @@ import {
 	TextInput
 }                                  from "flowbite-react";
 import {
-	tRCP_handleError,
-	tRPC_Guild
+	tRPC_Guild,
+	tRPC_handleError
 }                                  from "@lib/tRPC";
 import {
 	BiSave,
@@ -52,7 +52,7 @@ const Component : FC = () => {
 		const response = await tRPC_Guild.chatcommands.setprefix.mutate( {
 			guildId: guildData.guildId,
 			prefix: prefixInputRef.current?.value || "."
-		} ).catch( tRCP_handleError );
+		} ).catch( tRPC_handleError );
 
 		if ( response && response.message ) {
 			fireToastFromApi( response.message, true );

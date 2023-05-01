@@ -19,7 +19,7 @@ import Select, { SingleValue } from "react-select";
 import LoadButton              from "@comp/LoadButton";
 import { BiUpload }            from "react-icons/all";
 import {
-	tRCP_handleError,
+	tRPC_handleError,
 	tRPC_token
 }                              from "@lib/tRPC";
 import { fireToastFromApi }    from "@lib/sweetAlert";
@@ -67,7 +67,7 @@ const PatreonReleaseInput : FC<PatreonReleaseInputProps> = ( { onReleaseAdded } 
 					Authorization: `Bearer ${ tRPC_token() }`
 				},
 				body
-			} ).then( r => r.json() ).catch( tRCP_handleError );
+			} ).then( r => r.json() ).catch( tRPC_handleError );
 
 			if ( !response ) {
 				fireToastFromApi( "Something goes wrong!" );

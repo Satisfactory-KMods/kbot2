@@ -51,6 +51,11 @@ const rootRouter = createBrowserRouter( createRoutesFromElements(
 				return loader( { request, params } );
 			} } lazy={ () => import("@guild/modupdates/Page") }/>
 
+			<Route path="reactionroles" loader={ async( { request, params } ) => {
+				const { loader } = await import( "@guild/reactionroles/Loader" );
+				return loader( { request, params } );
+			} } lazy={ () => import("@guild/reactionroles/Page") }/>
+
 			<Route path="patreon" lazy={ () => import("@guild/patreon/Page") }/>
 
 			<Route path="error/:ErrorCode" lazy={ () => import("@guild/error/[ErrorCode]/Page") }/>

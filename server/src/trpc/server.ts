@@ -40,6 +40,7 @@ import {
 }                                    from "@server/lib/bot/stringGrouper.lib";
 import { ThreadChannel }             from "discord.js";
 import { messageTextLimit }          from "@shared/Default/discord";
+import { guild_reactionRoles }       from "@server/trpc/routings/guild/reactionRoles";
 
 
 const publicRouter = router( {
@@ -54,6 +55,7 @@ const authRouter = router( {
 	getguilds: auth_getGuilds
 } );
 const guildRouter = router( {
+	reactionroles: guild_reactionRoles,
 	validate: guild_validate,
 	chatcommands: guild_chatCommands,
 	modupdates: guild_modUpdateAnnoucment,

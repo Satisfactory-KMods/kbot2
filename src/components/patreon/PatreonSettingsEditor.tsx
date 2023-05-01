@@ -20,8 +20,8 @@ import { messageTextLimit } from "@shared/Default/discord";
 import LoadButton           from "@comp/LoadButton";
 import { BiSave }           from "react-icons/all";
 import {
-	tRCP_handleError,
-	tRPC_Guild
+	tRPC_Guild,
+	tRPC_handleError
 }                           from "@lib/tRPC";
 import { fireToastFromApi } from "@lib/sweetAlert";
 
@@ -50,7 +50,7 @@ const PatreonSettingsEditor : FC = () => {
 			announcementChannel: announcementChannel?.value || "0",
 			changelogForum: changelogForum?.value || "0",
 			pingRoles: pingRoles.map( e => e.value )
-		} ).catch( tRCP_handleError );
+		} ).catch( tRPC_handleError );
 		setIsLoading( false );
 
 		if ( response ) {

@@ -11,6 +11,7 @@ import {
 }                  from "react-router-dom";
 import {
 	BiBot,
+	BsEmojiNeutral,
 	SiDiscord,
 	SiGithub,
 	SiPatreon
@@ -41,6 +42,9 @@ const LeftSidebar : FC = () => {
 						</Sidebar.Item>
 						<Sidebar.Item as={ Link } to={ `/guild/${ guildId }/patreon` } icon={ SiPatreon }>
 							Patreon exclusive content
+						</Sidebar.Item>
+						<Sidebar.Item as={ Link } to={ `/guild/${ guildId }/reactionroles` } icon={ BsEmojiNeutral }>
+							Reaction roles
 						</Sidebar.Item>
 					</Sidebar.ItemGroup>
 				</Sidebar.Items>
