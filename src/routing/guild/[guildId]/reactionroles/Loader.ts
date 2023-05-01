@@ -8,15 +8,11 @@ import {
 	tRPC_handleError
 }                           from "@lib/tRPC";
 import { MO_ReactionRoles } from "@shared/types/MongoDB";
-import {
-	DiscordMessage,
-	DiscordTextChannel
-}                           from "@shared/types/discord";
+import { DiscordMessage }   from "@shared/types/discord";
 
 export interface GuildReactionRolesLoader {
 	reactionRoles : MO_ReactionRoles[],
 	messages : Record<string, DiscordMessage>,
-	channels : Record<string, DiscordTextChannel>,
 }
 
 const queryReactionRoles = async( guildId : string ) : Promise<GuildReactionRolesLoader | undefined> => {
@@ -25,8 +21,7 @@ const queryReactionRoles = async( guildId : string ) : Promise<GuildReactionRole
 	if ( result ) {
 		return {
 			reactionRoles: result.reactionRoles as any,
-			messages: result.messages as any,
-			channels: result.channels as any
+			messages: result.messages as any
 		};
 	}
 

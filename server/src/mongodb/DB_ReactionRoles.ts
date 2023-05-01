@@ -9,7 +9,7 @@ const ReactionRoleSchema = new mongoose.Schema<MO_ReactionRoles>( {
 		type: [
 			{
 				emoji: { type: String, required: true },
-				roleId: { type: String, required: true }
+				roleIds: { type: [ String ], required: true }
 			}
 		], default: []
 	}

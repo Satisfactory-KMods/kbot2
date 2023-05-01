@@ -6,10 +6,7 @@ import {
 	router
 }                               from "@server/trpc/trpc";
 import DB_ReactionRoles         from "@server/mongodb/DB_ReactionRoles";
-import {
-	DiscordMessage,
-	DiscordTextChannel
-}                               from "@shared/types/discord";
+import { DiscordMessage }       from "@shared/types/discord";
 import z                        from "zod";
 import _                        from "lodash";
 import { reapplyReactionRoles } from "@server/lib/bot/guild.lib";
@@ -19,26 +16,23 @@ export const guild_reactionRoles =
 		getReactionRoles: guildProcedure.query<{
 			reactionRoles : MO_ReactionRoles[],
 			messages : Record<string, DiscordMessage>,
-			channels : Record<string, DiscordTextChannel>,
 		}>( async( { ctx } ) => {
 			const { userClass, guildId, guild } = ctx;
 			try {
 				if ( userClass?.IsValid && guildId && guild ) {
 					const reactionRoles : MO_ReactionRoles[] = [];
 					const messages : Record<string, DiscordMessage> = {};
-					const channels : Record<string, DiscordTextChannel> = {};
 
 					for await ( const command of await DB_ReactionRoles.find( { guildId } ) ) {
 						reactionRoles.push( command.toJSON() );
 						const channel = await guild.textChannel( command.channelId );
 						const message = await guild.message( command.messageId, command.channelId );
 						if ( channel && message ) {
-							channels[ channel.id ] = channel.toJSON() as DiscordTextChannel;
 							messages[ message.id ] = message.toJSON() as DiscordMessage;
 						}
 					}
 
-					return { reactionRoles, messages, channels };
+					return { reactionRoles, messages };
 				}
 			}
 			catch ( e ) {
@@ -52,12 +46,11 @@ export const guild_reactionRoles =
 			id: z.string().min( 10, "Id is to short" ).optional(),
 			remove: z.boolean().optional(),
 			data: z.object( {
-				guildId: z.string().min( 10, "Guild id is to short" ),
 				channelId: z.string().min( 10, "Channel id is to short" ),
 				messageId: z.string().min( 10, "Message id is to short" ),
 				reactions: z.array( z.object( {
 					emoji: z.string().min( 1, "Emoji is empty" ),
-					roleId: z.string().min( 10, "Channel id is to short" )
+					roleIds: z.array( z.string().min( 10, "Channel id is to short" ) ).min( 1, "Reactions need min 1 role" )
 				} ) ).min( 1, "At least one reaction is required" )
 			} )
 		} ) ).mutation<{
@@ -65,8 +58,18 @@ export const guild_reactionRoles =
 			data? : MO_ReactionRoles
 		}>( async( { ctx, input } ) => {
 			const { guild } = ctx;
-			const { id, remove, data } = input;
+			const { id, remove, data, guildId } = input;
+			const { messageId, reactions, channelId } = data;
 			try {
+				if ( !id ) {
+					if ( await DB_ReactionRoles.exists( { guildId, messageId } ) ) {
+						throw new TRPCError( {
+							message: "This messagee has already reaction roles",
+							code: "BAD_REQUEST"
+						} );
+					}
+				}
+
 				let reactionRoleDocument = new DB_ReactionRoles();
 				if ( id ) {
 					reactionRoleDocument = ( await DB_ReactionRoles.findByIdAndUpdate( id, { data }, { new: true } ) )!;
@@ -74,12 +77,12 @@ export const guild_reactionRoles =
 				else if ( !!remove && !!id ) {
 					reactionRoleDocument = ( await DB_ReactionRoles.findByIdAndRemove( id ) )!;
 				}
-				else {
-					reactionRoleDocument.guildId = data.guildId;
-					reactionRoleDocument.channelId = data.channelId;
-					reactionRoleDocument.messageId = data.messageId;
-					reactionRoleDocument.reactions = data.reactions;
-				}
+				
+				reactionRoleDocument.guildId = guildId;
+				reactionRoleDocument.channelId = channelId;
+				reactionRoleDocument.messageId = messageId;
+				reactionRoleDocument.reactions = reactions;
+
 
 				if ( reactionRoleDocument && guild ) {
 					const message = await guild.message( reactionRoleDocument.messageId, reactionRoleDocument.channelId );

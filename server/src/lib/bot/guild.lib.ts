@@ -16,12 +16,23 @@ import {
 	MO_Guild,
 	MO_ReactionRoles
 }                           from "@shared/types/MongoDB";
+import _                    from "lodash";
 
 const reapplyReactionRoles = async( message : Message<true>, reactionDocument : MO_ReactionRoles ) => {
 	// remove and readd reaction
-	await message.reactions.removeAll();
-	for ( const rule of reactionDocument.reactions ) {
-		await message.react( rule.emoji );
+	for ( const reaction of message.reactions.cache.values() ) {
+		if ( reactionDocument.reactions.find( r => _.isEqual( r.emoji, reaction.emoji.name ) ) === undefined ) {
+			await reaction.remove();
+		}
+	}
+
+	for ( const reaction of reactionDocument.reactions ) {
+		try {
+			await message.react( reaction.emoji );
+		}
+		catch ( e ) {
+
+		}
 	}
 };
 

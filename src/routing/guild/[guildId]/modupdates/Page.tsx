@@ -17,8 +17,8 @@ import { MO_RolePingRule }          from "@shared/types/MongoDB";
 import {
 	channelToSelectedSingle,
 	modsToSelectionMulti,
-	roleToSelectedSingle,
-	Selection
+	OptionSelection,
+	roleToSelectedSingle
 }                                   from "@lib/selectConversion";
 import {
 	Button,
@@ -62,7 +62,7 @@ const Component : FC = () => {
 	const [ defaultPingRole, setDefaultPingRole ] = useState( () => roleToSelectedSingle( roles, guildData.options.defaultPingRole || "0" ) );
 	const [ blacklistedMods, setblacklistedMods ] = useState( () => modsToSelectionMulti( mods, guildData.options.blacklistedMods ) );
 	const [ RolePingRules, setRolePingRules ] = useState<MO_RolePingRule[]>( () => guildData.options.RolePingRules );
-	const [ ficsitUserIds, setFicsitUserIds ] = useState<MultiValue<Selection>>( () => guildData.options.ficsitUserIds.map( id => ( {
+	const [ ficsitUserIds, setFicsitUserIds ] = useState<MultiValue<OptionSelection>>( () => guildData.options.ficsitUserIds.map( id => ( {
 		value: id,
 		label: id
 	} ) ) );

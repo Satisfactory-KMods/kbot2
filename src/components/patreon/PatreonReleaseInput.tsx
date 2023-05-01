@@ -6,7 +6,7 @@ import React, {
 }                              from "react";
 import {
 	modsToSelection,
-	Selection
+	OptionSelection
 }                              from "@lib/selectConversion";
 import useGuild                from "@hooks/useGuild";
 import {
@@ -34,7 +34,7 @@ const PatreonReleaseInput : FC<PatreonReleaseInputProps> = ( { onReleaseAdded } 
 	const modOptions = useMemo( () => modsToSelection( mods.filter( e => guildData.options.ficsitUserIds?.includes( e.creator_id ) ) ), [ mods, guildData ] );
 	const [ isLoading, setIsLoading ] = useState( false );
 
-	const [ selectedMod, setSelectedMod ] = useState<SingleValue<Selection<string>>>( null );
+	const [ selectedMod, setSelectedMod ] = useState<SingleValue<OptionSelection<string>>>( null );
 	const [ changelogContent, setChangelogContent ] = useState( "" );
 	const [ version, setVersion ] = useState( "" );
 	const [ selectedFile, setSelectedFile ] = useState<File | null>( null );

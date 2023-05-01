@@ -95,7 +95,7 @@ export interface MO_RegisterToken extends GuildDB {
 
 export interface MO_ReactionRoleMap {
 	emoji : string,
-	roleId : string
+	roleIds : string[]
 }
 
 export interface MO_ReactionRoles extends GuildDB {
