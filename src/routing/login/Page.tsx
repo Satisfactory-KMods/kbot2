@@ -6,12 +6,9 @@ import {
 	useState
 }                         from "react";
 import {
-	json,
-	LoaderFunction,
 	useLoaderData,
 	useNavigate
 }                         from "react-router-dom";
-import { validateLogin }  from "@hooks/useAuth";
 import { LoaderDataBase } from "@app/types/routing";
 import { usePageTitle }   from "@kyri123/k-reactutils";
 import {
@@ -26,14 +23,6 @@ import {
 	tRCP_handleError,
 	tRPC_Public
 }                         from "@lib/tRPC";
-
-const loader : LoaderFunction = async() => {
-	const result = await validateLogin();
-	if ( result.loggedIn ) {
-		window.location.replace( "/" );
-	}
-	return json<LoaderDataBase>( result );
-};
 
 const Component : FC = () => {
 	usePageTitle( `Kbot 2.0 - Login` );
@@ -113,6 +102,5 @@ const Component : FC = () => {
 };
 
 export {
-	Component,
-	loader
+	Component
 };

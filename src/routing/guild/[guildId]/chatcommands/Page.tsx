@@ -3,47 +3,30 @@ import {
 	useContext,
 	useRef,
 	useState
-}                           from "react";
-import {
-	json,
-	LoaderFunction,
-	useLoaderData
-}                           from "react-router-dom";
-import { MO_ChatCommands }  from "@shared/types/MongoDB";
-import ChatCommandEditor    from "@comp/chatCommands/ChatCommandEditor";
+}                                  from "react";
+import { useLoaderData }           from "react-router-dom";
+import { MO_ChatCommands }         from "@shared/types/MongoDB";
+import ChatCommandEditor           from "@comp/chatCommands/ChatCommandEditor";
 import {
 	Accordion,
 	TextInput
-}                           from "flowbite-react";
+}                                  from "flowbite-react";
 import {
 	tRCP_handleError,
 	tRPC_Guild
-}                           from "@lib/tRPC";
+}                                  from "@lib/tRPC";
 import {
 	BiSave,
 	HiOutlineArrowCircleDown
-}                           from "react-icons/all";
-import GuildContext         from "@context/GuildContext";
-import LoadButton           from "@comp/LoadButton";
-import { fireToastFromApi } from "@lib/sweetAlert";
-
-interface LoaderData {
-	chatReactions : MO_ChatCommands[];
-}
-
-const loader : LoaderFunction = async( { params } ) => {
-	const { guildId } = params;
-	const chatReactionsResult = await tRPC_Guild.chatcommands.getcommands.query( { guildId: guildId! } ).catch( tRCP_handleError );
-	const chatReactions : MO_ChatCommands[] = chatReactionsResult?.commands || [];
-
-	return json<LoaderData>( {
-		chatReactions
-	} );
-};
+}                                  from "react-icons/all";
+import GuildContext                from "@context/GuildContext";
+import LoadButton                  from "@comp/LoadButton";
+import { fireToastFromApi }        from "@lib/sweetAlert";
+import { GuildCommandsLoaderData } from "@guild/chatcommands/Loader";
 
 const Component : FC = () => {
 	const { guildData, triggerGuildUpdate } = useContext( GuildContext );
-	const { chatReactions } = useLoaderData() as LoaderData;
+	const { chatReactions } = useLoaderData() as GuildCommandsLoaderData;
 	const [ commands, setCommands ] = useState<MO_ChatCommands[]>( () => chatReactions );
 	const prefixInputRef = useRef<HTMLInputElement>( null );
 	const [ isEditing, setIsEditing ] = useState<boolean>( false );
@@ -119,6 +102,5 @@ const Component : FC = () => {
 
 
 export {
-	Component,
-	loader
+	Component
 };

@@ -6,46 +6,21 @@ import {
 	useState
 }                          from "react";
 import {
-	json,
-	LoaderFunction,
 	useLoaderData,
 	useNavigate,
 	useParams
 }                          from "react-router-dom";
-import { validateLogin }   from "@hooks/useAuth";
 import { usePageTitle }    from "@kyri123/k-reactutils";
 import { TextInput }       from "flowbite-react";
 import { SlLogin }         from "react-icons/all";
 import LoadButton          from "@comp/LoadButton";
-import { LoaderDataBase }  from "@app/types/routing";
 import { fireSwalFromApi } from "@lib/sweetAlert";
 import AuthContext         from "@context/AuthContext";
 import {
 	tRCP_handleError,
 	tRPC_Public
 }                          from "@lib/tRPC";
-import { EApiTokenType }   from "@shared/Enum/EApiMethods";
-
-interface LoaderData extends LoaderDataBase {
-	tokenValid : boolean;
-}
-
-const loader : LoaderFunction = async( { params } ) => {
-	const { authCode } = params;
-	const result = await validateLogin();
-
-	const Response = await tRPC_Public.checktoken.mutate( {
-		token: authCode!,
-		type: EApiTokenType.reset
-	} ).catch( tRCP_handleError );
-
-	const tokenValid = !!Response?.valid;
-	if ( !tokenValid ) {
-		window.location.replace( "/error/401" );
-	}
-
-	return json<LoaderData>( { tokenValid, ...result } );
-};
+import { ResetLoaderData } from "@routing/reset/[authCode]/Loader";
 
 const Component : FC = () => {
 	usePageTitle( `Kbot 2.0 - Reset Password` );
@@ -54,7 +29,7 @@ const Component : FC = () => {
 	const { authCode } = useParams();
 	const [ isLoading, setIsLoading ] = useState( false );
 	const [ inputError, setInputError ] = useState( [ false, false ] );
-	const { tokenValid } = useLoaderData() as LoaderData;
+	const { tokenValid } = useLoaderData() as ResetLoaderData;
 
 	const passwordRef = useRef<HTMLInputElement>( null );
 	const passwordAgainRef = useRef<HTMLInputElement>( null );
@@ -117,6 +92,5 @@ const Component : FC = () => {
 };
 
 export {
-	Component,
-	loader
+	Component
 };

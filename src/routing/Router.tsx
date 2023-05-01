@@ -8,30 +8,59 @@ import React from "react";
 
 const rootRouter = createBrowserRouter( createRoutesFromElements(
 	<>
-		<Route path="error/:ErrorCode" lazy={ () => import("@routing/error/[ErrorCode]/Index") }/>
+		<Route path="error/:ErrorCode" lazy={ () => import("@routing/error/[ErrorCode]/Page") }/>
 
 		<Route lazy={ () => import("@routing/Layout") }>
-			<Route index lazy={ () => import("@routing/Index") }/>
-			<Route path="/login" lazy={ () => import("@routing/login/Index") }/>
-			<Route path="/register/:authCode" lazy={ () => import("@routing/register/[authCode]/Index") }/>
-			<Route path="/reset/:authCode" lazy={ () => import("@routing/reset/[authCode]/Index") }/>
-			<Route path="/download/:downloadId" lazy={ () => import("@routing/download/[downloadId]/Index") }/>
+			<Route index loader={ async( { request, params } ) => {
+				const { loader } = await import( "@routing/Loader" );
+				return loader( { request, params } );
+			} } lazy={ () => import("@routing/Page") }/>
+
+			<Route path="/login" loader={ async( { request, params } ) => {
+				const { loader } = await import( "@routing/login/Loader" );
+				return loader( { request, params } );
+			} } lazy={ () => import("@routing/login/Page") }/>
+
+			<Route path="/register/:authCode" loader={ async( { request, params } ) => {
+				const { loader } = await import( "@routing/register/[authCode]/Loader" );
+				return loader( { request, params } );
+			} } lazy={ () => import("@routing/register/[authCode]/Page") }/>
+
+			<Route path="/reset/:authCode" loader={ async( { request, params } ) => {
+				const { loader } = await import( "@routing/reset/[authCode]/Loader" );
+				return loader( { request, params } );
+			} } lazy={ () => import("@routing/reset/[authCode]/Page") }/>
+
+			<Route path="/download/:downloadId" loader={ async( { request, params } ) => {
+				const { loader } = await import( "@routing/download/[downloadId]/Loader" );
+				return loader( { request, params } );
+			} } lazy={ () => import("@routing/download/[downloadId]/Page") }/>
 		</Route>
 
-		<Route path="/guild/:guildId" lazy={ () => import("@guild/Layout") }>
-			<Route path="error/:ErrorCode" lazy={ () => import("@guild/error/[ErrorCode]/Index") }/>
-			<Route path="chatcommands" lazy={ () => import("@guild/chatcommands/Index") }/>
-			<Route path="modupdates" lazy={ () => import("@guild/modupdates/Index") }/>
-			<Route path="patreon" lazy={ () => import("@guild/patreon/Index") }/>
-			<Route path="home" lazy={ () => import("@guild/Index") }/>
-			<Route index lazy={ () => import("@guild/Index") }/>
+		<Route path="/guild/:guildId" loader={ async( { request, params } ) => {
+			const { loader } = await import( "@guild/LayoutLoader" );
+			return loader( { request, params } );
+		} } lazy={ () => import("@guild/Layout") }>
+			<Route path="chatcommands" loader={ async( { request, params } ) => {
+				const { loader } = await import( "@guild/chatcommands/Loader" );
+				return loader( { request, params } );
+			} } lazy={ () => import("@guild/chatcommands/Page") }/>
+
+			<Route path="modupdates" loader={ async( { request, params } ) => {
+				const { loader } = await import( "@guild/modupdates/Loader" );
+				return loader( { request, params } );
+			} } lazy={ () => import("@guild/modupdates/Page") }/>
+
+			<Route path="patreon" lazy={ () => import("@guild/patreon/Page") }/>
+
+			<Route path="error/:ErrorCode" lazy={ () => import("@guild/error/[ErrorCode]/Page") }/>
+			<Route index lazy={ () => import("@guild/Page") }/>
 			<Route path="*" element={ <Navigate to={ "error/404" }/> }/>
 		</Route>
 
 		<Route path="*" element={ <Navigate to={ "error/404" }/> }/>
 	</>
 ) );
-
 
 export {
 	rootRouter

@@ -4,11 +4,7 @@ import {
 	useRef,
 	useState
 }                       from "react";
-import {
-	json,
-	LoaderFunction,
-	useParams
-}                       from "react-router-dom";
+import { useParams }    from "react-router-dom";
 import { usePageTitle } from "@kyri123/k-reactutils";
 import { TextInput }    from "flowbite-react";
 import {
@@ -20,25 +16,6 @@ import {
 	tRCP_handleError,
 	tRPC_Public
 }                       from "@lib/tRPC";
-
-interface LoaderData {
-	tokenValid : boolean;
-}
-
-const loader : LoaderFunction = async( { params } ) => {
-	const { downloadId } = params;
-
-	const Response = await tRPC_Public.patreon.checkDownload.query( {
-		downloadId: downloadId!
-	} ).catch( tRCP_handleError );
-
-	const tokenValid = !!Response?.valid;
-	if ( !tokenValid ) {
-		window.location.replace( "/error/404" );
-	}
-
-	return json<LoaderData>( { tokenValid } );
-};
 
 const Component : FC = () => {
 	usePageTitle( `Kbot 2.0 - Download Dev-Build` );
@@ -97,6 +74,5 @@ const Component : FC = () => {
 };
 
 export {
-	Component,
-	loader
+	Component
 };
