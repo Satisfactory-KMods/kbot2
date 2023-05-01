@@ -2,7 +2,6 @@ import {
 	FC,
 	useContext,
 	useId,
-	useMemo,
 	useState
 }                                   from "react";
 import {
@@ -17,10 +16,7 @@ import GuildContext                 from "@context/GuildContext";
 import { MO_RolePingRule }          from "@shared/types/MongoDB";
 import {
 	channelToSelectedSingle,
-	channelToSelection,
-	modsToSelection,
 	modsToSelectionMulti,
-	rolesToSelection,
 	roleToSelectedSingle,
 	Selection
 }                                   from "@lib/selectConversion";
@@ -44,8 +40,10 @@ import ModWatchRow                  from "@comp/modsUpdate/ModWatchRow";
 import { fireToastFromApi }         from "@lib/sweetAlert";
 import useGuild                     from "@hooks/useGuild";
 import { GuildModUpdateLoaderData } from "@guild/modupdates/Loader";
+import useSelection                 from "@hooks/useSelection";
 
 const Component : FC = () => {
+	const { modOptions, bothChannelOptions, forumChannelOptions, textChannelOptions, roleOptions } = useSelection();
 	const { guildId } = useParams();
 	const Id = useId();
 	const { guildData, triggerGuildUpdate } = useContext( GuildContext );
@@ -68,12 +66,6 @@ const Component : FC = () => {
 		value: id,
 		label: id
 	} ) ) );
-
-	const roleOptions = useMemo( () => rolesToSelection( roles ), [ roles ] );
-	const textChannelOptions = useMemo( () => channelToSelection( textChannels ), [ textChannels ] );
-	const forumChannelOptions = useMemo( () => channelToSelection( forumChannels ), [ forumChannels ] );
-	const bothChannelOptions = useMemo( () => channelToSelection( forumChannels ).concat( channelToSelection( textChannels ) ), [ forumChannels, textChannels ] );
-	const modOptions = useMemo( () => modsToSelection( mods.filter( e => ficsitUserIds.map( e => e.value ).includes( e.creator_id ) ) ), [ mods, ficsitUserIds ] );
 
 	const onSubmit = async() => {
 		setIsLoading( true );

@@ -12,7 +12,7 @@ export const auth_getGuilds =
 		try {
 			if ( userClass?.IsValid ) {
 				const guilds = await DB_Guilds.find( {
-					accountIds: { $in: userClass.Get.discordId }
+					accountIds: { $in: userClass.Get.discordId }, isInGuild: true
 				} );
 				return { guilds };
 			}
