@@ -52,3 +52,48 @@ jobs:
           password: ${{ secrets.PASSWORD }}
           port: 22
           script: ~/docker/github.sh "${{ github.event.repository.name }}" "${{ github.head_ref || github.ref_name }}"
+
+read-for-release:
+  name: 🔍 Read and cache version
+  needs: deploy
+  runs-on: ubuntu-latest
+  if: github.ref == 'refs/heads/main'
+  outputs:
+    version: ${{ steps.version.outputs.out }}
+    changelogfile: ${{ steps.changelogfile.outputs.out }}
+  steps:
+    - name: 🚚 Get latest code
+      uses: actions/checkout@v3
+    - name: 🚚 Get current version from package
+      id: version
+      run: echo "out=$(npx -c 'node -p "process.env.npm_package_version"')" >> $GITHUB_OUTPUT; echo "$(npx -c 'node -p "process.env.npm_package_version"')"
+    #- id: 🚚 Try to get changelog
+    #  run: echo "out=./public/changelogs/$(npx -c 'node -p "process.env.npm_package_version"').md" >> $GITHUB_OUTPUT; echo "$(npx -c 'node -p "process.env.npm_package_version"')"
+
+  release:
+    name: ✨ Try to create release
+    needs: read-for-release
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🚚 Get latest code
+        uses: actions/checkout@v3
+      - name: 🏷️ Check if tag exists
+        uses: mukunku/tag-exists-action@v1.2.0
+        id: checkTag
+        with:
+          tag: '${{ needs.read-for-release.outputs.version }}'
+
+      - name: ✨ Release!
+        if: ${{ steps.checkTag.outputs.exists == 'false' }}
+        id: create_release
+        uses: actions/create-release@v1
+        with:
+          tag_name: "${{ needs.read-for-release.outputs.version }}"
+          release_name: "Release ${{ needs.read-for-release.outputs.version }}-build.${{ github.run_number }}"
+          body_path: "${{ needs.read-for-release.outputs.changelogfile }}"
+          draft: false
+          prerelease: false
+
+      - name: ❌ No Release
+        if: ${{ steps.checkTag.outputs.exists == 'true' }}
+        run: echo "❌ No Release needed. Release for this version already exists."
