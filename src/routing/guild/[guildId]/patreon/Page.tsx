@@ -1,8 +1,4 @@
 import { FC }                from "react";
-import {
-	json,
-	LoaderFunction
-}                            from "react-router-dom";
 import { Tabs }              from "flowbite-react";
 import {
 	BiCog,
@@ -10,14 +6,6 @@ import {
 }                            from "react-icons/all";
 import PatreonSettingsEditor from "@comp/patreon/PatreonSettingsEditor";
 import PatreonReleaseInput   from "@comp/patreon/PatreonReleaseInput";
-
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-interface LoaderData {
-}
-
-const loader : LoaderFunction = async( { params } ) => {
-	return json<LoaderData>( {} );
-};
 
 const Component : FC = () => {
 	return (
@@ -47,6 +35,5 @@ const Component : FC = () => {
 	);
 };
 export {
-	Component,
-	loader
+	Component
 };

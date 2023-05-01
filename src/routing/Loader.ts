@@ -7,18 +7,19 @@ import {
 import { MO_Guild }       from "@shared/types/MongoDB";
 import {
 	json,
-	LoaderFunction
+	LoaderFunction,
+	redirect
 }                         from "react-router-dom";
 
 
-interface IndexLoaderData extends LoaderDataBase {
+export interface IndexLoaderData extends LoaderDataBase {
 	guilds : MO_Guild[];
 }
-
+ 
 export const loader : LoaderFunction = async() => {
 	const result = await validateLogin();
 	if ( !result.loggedIn ) {
-		window.location.replace( "/login" );
+		return redirect( "/login" );
 	}
 
 	const guilds = ( await tRPC_Auth.getguilds.query().catch( tRCP_handleError ) )?.guilds || [] as MO_Guild[];
