@@ -71,12 +71,14 @@ const Component : FC = () => {
 				Reset your password
 			</h1>
 			<form className="space-y-4" action="#" onSubmit={ onSubmit }>
-				<TextInput color={ inputError[ 0 ] ? "failure" : "gray" } className="w-full mt-6" placeholder="Password"
+				<TextInput color={ inputError[ 0 ] ? "failure" : "gray" } className="w-full mt-6"
+				           placeholder="Password"
 				           type="password"
 				           ref={ passwordRef }
 				           helperText={ inputError[ 0 ] ? <><span className="font-medium">Oops!</span> Password is too
 					           short... must be 8 character long.</> : undefined }/>
-				<TextInput color={ inputError[ 1 ] ? "failure" : "gray" } className="w-full mt-6" placeholder="Password"
+				<TextInput color={ inputError[ 1 ] ? "failure" : "gray" } className="w-full mt-6"
+				           placeholder="Password"
 				           type="password"
 				           ref={ passwordAgainRef }
 				           helperText={ inputError[ 1 ] ? <><span className="font-medium">Oops!</span> Password must

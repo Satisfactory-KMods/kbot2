@@ -78,12 +78,14 @@ const Component : FC = () => {
 				           placeholder="Login name" ref={ loginRef }
 				           helperText={ inputError[ 0 ] ? <><span className="font-medium">Oops!</span> Username is too
 					           short... must be 6 character long.</> : undefined }/>
-				<TextInput color={ inputError[ 1 ] ? "failure" : "gray" } className="w-full mt-6" placeholder="Password"
+				<TextInput color={ inputError[ 1 ] ? "failure" : "gray" } className="w-full mt-6"
+				           placeholder="Password"
 				           type="password"
 				           ref={ passwordRef }
 				           helperText={ inputError[ 1 ] ? <><span className="font-medium">Oops!</span> Password is too
 					           short... must be 8 character long.</> : undefined }/>
-				<TextInput color={ inputError[ 2 ] ? "failure" : "gray" } className="w-full mt-6" placeholder="Password"
+				<TextInput color={ inputError[ 2 ] ? "failure" : "gray" } className="w-full mt-6"
+				           placeholder="Password"
 				           type="password"
 				           ref={ passwordAgainRef }
 				           helperText={ inputError[ 2 ] ? <><span className="font-medium">Oops!</span> Password must

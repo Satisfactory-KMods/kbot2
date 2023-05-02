@@ -58,7 +58,7 @@ export default defineConfig( ( { command, mode, ssrBuild } ) => {
 		},
 		build: {
 			manifest: true,
-			sourcemap: false,
+			sourcemap: true,
 			outDir: "dist",
 			rollupOptions: {
 				output: {

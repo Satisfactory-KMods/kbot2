@@ -123,7 +123,7 @@ const ReactionRoleEditor : FC<ReactionRoleEditorProps> = ( { modifyData, onUpdat
 			{ !!reactions.length && <hr className="border-gray-600"/> }
 			{ reactions.map( ( reaction, idx ) => {
 				return (
-					<ReactionRoleEditorRuleRow key={ Id + idx } map={ reaction }
+					<ReactionRoleEditorRuleRow key={ Id + idx } map={ reaction } isEditing={ modifyData !== undefined }
 					                           onRuleChange={ value => updateReaction( idx, value ) }
 					                           onRuleDelete={ () => removeReaction( idx ) }/>
 				);
