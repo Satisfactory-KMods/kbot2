@@ -26,13 +26,15 @@ const TopNavbar : FC = () => {
 			<Navbar.Collapse>
 				<Navbar.Link as={ Link } to="/" className="flex items-center">
 					<div className="flex py-3">
-						<BiServer size={ 20 } className="text-sm me-3 font-medium text-gray-500 dark:text-gray-400"/>
+						<BiServer size={ 20 }
+						          className="text-sm me-3 font-medium text-gray-500 dark:text-gray-400"/>
 						Back to serverlist
 					</div>
 				</Navbar.Link>
 				<Navbar.Link as={ "button" } className="flex items-center" onClick={ logout }>
 					<div className="flex py-3">
-						<BiDoorOpen size={ 20 } className="text-sm me-3 font-medium text-gray-500 dark:text-gray-400"/>
+						<BiDoorOpen size={ 20 }
+						            className="text-sm me-3 font-medium text-gray-500 dark:text-gray-400"/>
 						Logout
 					</div>
 				</Navbar.Link>
