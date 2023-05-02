@@ -31,6 +31,7 @@ const Component : FC = () => {
 	const [ cachedMessages, setCachedMessages ] = useState( () => messages );
 	const [ ShowElements, TotalPage, page, setPage, setCommands ] = usePages( () => reactionRoles, 10 );
 
+
 	const onUpdatePage = async() => {
 		await queryReactionRoles( guildId! ).then( result => {
 			if ( result ) {
@@ -65,6 +66,7 @@ const Component : FC = () => {
 					<Accordion.Panel key={ reaction._id }>
 						<Accordion.Title>
 							{ cachedMessages[ reaction.messageId ]?.content?.substring( 0, 25 ) + "..." }
+
 						</Accordion.Title>
 						<Accordion.Content>
 							<ReactionRoleEditor modifyData={ reaction } onUpdate={ onUpdatePage }/>

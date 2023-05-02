@@ -37,6 +37,7 @@ const ReactionRoleEditorRuleRow : FC<ReactionRoleEditorRuleRowProps> = ( {
 	const { roleOptions } = useSelection();
 	const [ selectEmoji, toggleSelectEmoji ] = useToggle( !isEditing );
 
+
 	const [ selectedRole, setSelectedRole ] = useState<MultiValue<OptionSelection<string>>>( () => roleToSelectedMulti( roles, map.roleIds ) || [ roleOptions[ 1 ] ] || null );
 	const [ emoji, setEmoji ] = useState( () => map.emoji );
 
