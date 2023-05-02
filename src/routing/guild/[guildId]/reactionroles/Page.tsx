@@ -29,9 +29,7 @@ const Component : FC = () => {
 	const { messages, reactionRoles } = useLoaderData() as GuildReactionRolesLoader;
 
 	const [ cachedMessages, setCachedMessages ] = useState( () => messages );
-	const [ ShowElements, TotalPage, page, setPage, setCommands, reactions ] = usePages( () => reactionRoles, 10 );
-
-	console.log( messages );
+	const [ ShowElements, TotalPage, page, setPage, setCommands ] = usePages( () => reactionRoles, 10 );
 
 	const onUpdatePage = async() => {
 		await queryReactionRoles( guildId! ).then( result => {
@@ -66,7 +64,7 @@ const Component : FC = () => {
 				{ ShowElements.map( ( reaction ) => (
 					<Accordion.Panel key={ reaction._id }>
 						<Accordion.Title>
-							{ cachedMessages[ reaction.messageId ]?.content.substring( 0, 25 ) + "..." }
+							{ cachedMessages[ reaction.messageId ]?.content?.substring( 0, 25 ) + "..." }
 						</Accordion.Title>
 						<Accordion.Content>
 							<ReactionRoleEditor modifyData={ reaction } onUpdate={ onUpdatePage }/>
