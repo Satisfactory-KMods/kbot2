@@ -64,7 +64,7 @@ const JobOptions : JobOptions = {
 			if ( !SystemLib.IsDevMode ) {
 				let MaxReached = false;
 				let Offset = 0;
-				SystemLib.LogWarning( "tasks", "Start Update Mods!" );
+				SystemLib.DebugLog( "tasks", "Start Update Mods!" );
 				while ( !MaxReached ) {
 					try {
 						const Data : ModGraphQLRequest = await client.request( GraphQuery( Offset ) );
@@ -85,7 +85,7 @@ const JobOptions : JobOptions = {
 						MaxReached = true;
 					}
 				}
-				SystemLib.LogWarning( "tasks", "Update Mods Finished!" );
+				SystemLib.DebugLog( "tasks", "Update Mods Finished!" );
 			}
 			global.modCache = await DB_Mods.find();
 
@@ -94,24 +94,19 @@ const JobOptions : JobOptions = {
 				if ( guildClass?.IsValid ) {
 					const threadChannel = await guildClass.forumChannel( guild.options.changelogForumId || "0" );
 					const annoucementChannel = await guildClass.textChannel( guild.options.updateTextChannelId || "0" );
-					SystemLib.LogWarning( "mod update task", guildClass.getGuild?.name, !!threadChannel, !!annoucementChannel );
 
 					if ( annoucementChannel || threadChannel ) {
-						SystemLib.LogWarning( "tasks", guild.options );
 						for await ( const mod of await DB_Mods.find( {
 							creator_id: guild.options.ficsitUserIds
 						} ) ) {
-							SystemLib.LogWarning( "tasks", mod.name );
 
 							if ( !guild.options.blacklistedMods?.includes( mod.mod_reference ) ) {
-								SystemLib.LogWarning( "tasks", mod.mod_reference );
 								const modDocument = await DB_ModUpdates.findOne( {
 									guildId: guild.guildId,
 									modRef: mod.mod_reference
 								} );
 
 								if ( !modDocument ) {
-									SystemLib.LogWarning( "tasks", "create" + mod.mod_reference );
 									await DB_ModUpdates.create( {
 										guildId: guild.guildId,
 										modRef: mod.mod_reference,
@@ -123,11 +118,9 @@ const JobOptions : JobOptions = {
 								}
 
 								if ( mod.versions.length <= 0 ) {
-									SystemLib.LogWarning( "tasks", mod.versions );
 									continue;
 								}
 
-								SystemLib.LogWarning( "tasks", modDocument.hash, mod.versions[ 0 ].hash );
 								if ( modDocument.hash !== mod.versions[ 0 ].hash ) {
 									let changelogId : string | undefined = undefined;
 									if ( threadChannel ) {
@@ -135,20 +128,19 @@ const JobOptions : JobOptions = {
 										const appliedTags = tag ? [ tag.id ] : [];
 
 										const grouped = BuildStringGroup( mod.versions[ 0 ].changelog );
-										SystemLib.LogWarning( "tasks", "send", grouped );
 										if ( grouped && grouped.length > 0 ) {
 											const name = `${ mod.name } - v.${ mod.versions[ 0 ].version }`.substring( 0, 99 );
-											const content = GroupToString( grouped.splice( 1, 1 )![ 0 ] );
+											const content = GroupToString( grouped.splice( 0, 1 )![ 0 ] );
 											const thread : ThreadChannel | undefined = await threadChannel.threads.create( {
 												name,
 												message: { content },
-												appliedTags,
-												autoArchiveDuration: 60
+												appliedTags: appliedTags.length > 0 ? appliedTags : undefined,
+												autoArchiveDuration: 60,
+												reason: "mod update"
 											} );
 
 											changelogId = thread?.id;
 
-											SystemLib.LogWarning( "tasks", !!thread, grouped.length );
 											if ( thread && grouped.length > 0 ) {
 												for ( const message of grouped ) {
 													if ( message.Data.length > 0 ) {
@@ -197,7 +189,6 @@ const JobOptions : JobOptions = {
 									}
 
 									let lastMessageId = "0";
-									SystemLib.LogWarning( "tasks", "send", !!embed, !!annoucementChannel );
 									if ( embed && annoucementChannel ) {
 										const msg = await annoucementChannel.send( {
 											embeds: [ embed ],
@@ -223,7 +214,7 @@ const JobOptions : JobOptions = {
 		}
 		catch ( e ) {
 			if ( e instanceof Error ) {
-				SystemLib.DebugLog( "fetching", e.message, e );
+				SystemLib.LogError( "fetching", e.message, e );
 			}
 		}
 	}
