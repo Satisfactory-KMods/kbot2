@@ -56,16 +56,10 @@ const GraphQuery = ( Offset : number ) => {
 
 const JobOptions : JobOptions = {
 	DisableInitSync: true,
-	Interval: 60000 * 10, // 60 minutes
+	Interval: 60000 * 5, // 5 minutes
 	JobName: "FicsitQuery",
 	Task: async() => {
 		try {
-			SystemLib.Log( "tasks",
-				"Running Task",
-				SystemLib.ToBashColor( "Red" ),
-				"FicsitQuery"
-			);
-
 			const Mods : Omit<MO_Mod, "_id" | "__v">[] = [];
 			if ( !SystemLib.IsDevMode ) {
 				let MaxReached = false;
@@ -100,6 +94,7 @@ const JobOptions : JobOptions = {
 				if ( guildClass?.IsValid ) {
 					const threadChannel = await guildClass.forumChannel( guild.options.changelogForumId || "0" );
 					const annoucementChannel = await guildClass.textChannel( guild.options.updateTextChannelId || "0" );
+					SystemLib.LogWarning( "mod update task", guildClass.getGuild?.name, !!threadChannel, !!annoucementChannel );
 
 					if ( annoucementChannel || threadChannel ) {
 						for await ( const mod of await DB_Mods.find( {
@@ -188,7 +183,7 @@ const JobOptions : JobOptions = {
 										]
 									} );
 
-									const role = await guildClass.role( guild.options.modToRole?.find( r => r.modRef === mod.mod_reference )?.roleId || ( guild.options.defaultPingRole?.length > 0 ? guild.options.defaultPingRole : "0" ) );
+									const role = await guildClass.role( guild.options.RolePingRules?.find( r => r.modRefs.includes( mod.mod_reference ) )?.roleId || ( guild.options.defaultPingRole?.length > 0 ? guild.options.defaultPingRole : "0" ) );
 									let roleId = "0";
 									if ( role ) {
 										roleId = role.id;

@@ -6,7 +6,7 @@ import {
 import DB_Guilds      from "@server/mongodb/DB_Guilds";
 
 const JobOptions : JobOptions = {
-	Interval: 15 * 60000, // 5 minutes
+	Interval: 10 * 60000, // 10 minutes
 	JobName: "DiscordGuilds",
 	Task: async() => {
 		if ( global.DiscordBot && DiscordBot.isReady() ) {

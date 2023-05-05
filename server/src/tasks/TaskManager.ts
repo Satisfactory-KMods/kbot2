@@ -79,7 +79,7 @@ export class JobTask {
 	}
 
 	protected async RunTask() {
-		SystemLib.Log( "TASKS",
+		SystemLib.DebugLog( "TASKS",
 			"Running Task",
 			SystemLib.ToBashColor( "Red" ),
 			this.JobName
