@@ -123,6 +123,8 @@ const JobOptions : JobOptions = {
 								}
 
 								if ( modDocument.hash !== mod.versions[ 0 ].hash ) {
+
+									let lastMessageId = "0";
 									let changelogId : string | undefined = undefined;
 									if ( threadChannel ) {
 										const tag = threadChannel.availableTags.find( e => e.name === mod.mod_reference );
@@ -141,6 +143,7 @@ const JobOptions : JobOptions = {
 											} );
 
 											changelogId = thread?.id;
+											lastMessageId = changelogId;
 
 											if ( thread && grouped.length > 0 ) {
 												for ( const message of grouped ) {
@@ -152,6 +155,7 @@ const JobOptions : JobOptions = {
 											}
 										}
 									}
+
 
 									if ( !mod.hidden || ( mod.hidden && guild.options.modsAnnounceHiddenMods ) ) {
 										const embed = createEmbed( {
@@ -190,7 +194,6 @@ const JobOptions : JobOptions = {
 											roleId = role.id;
 										}
 
-										let lastMessageId = "0";
 										if ( embed && annoucementChannel ) {
 											const msg = await annoucementChannel.send( {
 												embeds: [ embed ],
@@ -200,14 +203,15 @@ const JobOptions : JobOptions = {
 											if ( msg ) {
 												lastMessageId = msg.id;
 											}
-
-											await DB_ModUpdates.findByIdAndUpdate( modDocument._id, {
-												hash: mod.versions[ 0 ].hash,
-												lastUpdate: new Date(),
-												lastMessageId
-											} );
 										}
 									}
+
+
+									await DB_ModUpdates.findByIdAndUpdate( modDocument._id, {
+										hash: mod.versions[ 0 ].hash,
+										lastUpdate: new Date(),
+										lastMessageId
+									} );
 								}
 							}
 						}
