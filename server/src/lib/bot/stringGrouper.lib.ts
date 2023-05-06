@@ -1,8 +1,10 @@
+import { threadTitleLimit } from "@shared/Default/discord";
+
 export interface StringGroup extends Record<string, string[]> {
 	Data : string [];
 }
 
-export function BuildStringGroup( String : string, MaxPerGroup = 100 ) : StringGroup[] | undefined {
+export function BuildStringGroup( String : string, MaxPerGroup = threadTitleLimit ) : StringGroup[] | undefined {
 	const StringGroups : StringGroup[] = [];
 
 	if ( String.length <= MaxPerGroup ) {
@@ -22,7 +24,7 @@ export function BuildStringGroup( String : string, MaxPerGroup = 100 ) : StringG
 		let LastGroupIdx = 0;
 		for ( const Line of String.split( /\r?\n/ ) ) {
 			if ( Line.length + 4 > MaxPerGroup ) {
-				SystemLib.LogError( "grouping", "Line.length + 4 > MaxPerGroup" );
+				SystemLib.LogWarning( "grouping", "Line.length + 4 > MaxPerGroup" );
 				return undefined;
 			}
 
