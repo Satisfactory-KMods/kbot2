@@ -14,6 +14,7 @@ import {
 	GroupToString
 }                              from "@server/lib/bot/stringGrouper.lib";
 import { ThreadChannel }       from "discord.js";
+import { messageTextLimit }    from "@shared/Default/discord";
 
 export interface ModGraphQLRequest {
 	getMods : GetMods;
@@ -29,7 +30,7 @@ const client = new GraphQLClient( "https://api.ficsit.app/v2/query", { headers: 
 const GraphQuery = ( Offset : number ) => {
 	return gql`
         query {
-            getMods( filter: { limit: 100, offset: ${ Offset } } ) {
+            getMods( filter: { limit: 100, offset: ${ Offset }, hidden: true } ) {
                 mods {
                     versions( filter: {order_by: created_at} ) { version, sml_version, id, created_at, updated_at, changelog, hash  },
                     mod_reference,
@@ -127,7 +128,7 @@ const JobOptions : JobOptions = {
 										const tag = threadChannel.availableTags.find( e => e.name === mod.mod_reference );
 										const appliedTags = tag ? [ tag.id ] : [];
 
-										const grouped = BuildStringGroup( mod.versions[ 0 ].changelog );
+										const grouped = BuildStringGroup( mod.versions[ 0 ].changelog, messageTextLimit );
 										if ( grouped && grouped.length > 0 ) {
 											const name = `${ mod.name } - v.${ mod.versions[ 0 ].version }`.substring( 0, 99 );
 											const content = GroupToString( grouped.splice( 0, 1 )![ 0 ] );
@@ -152,58 +153,60 @@ const JobOptions : JobOptions = {
 										}
 									}
 
-									const embed = createEmbed( {
-										author: {
-											name: mod.name,
-											iconURL: mod.logo
-										},
-										thumbnail: mod.logo,
-										title: `v.${ mod.versions[ 0 ].version } - ${ mod.name }`,
-										fields: [
-											{
-												name: mod.versions[ 0 ].changelog !== "" ? mod.versions[ 0 ].changelog.split( /\r?\n/ )[ 0 ].substring( 0, 255 ) : "...",
-												value: `Now available on SMM and SMR \n\n For any suggestion please use <#${ guild.options.suggestionChannelId }> \n And for bug reports <#${ guild.options.bugChannelId }>.`
+									if ( !mod.hidden || ( mod.hidden && guild.options.modsAnnounceHiddenMods ) ) {
+										const embed = createEmbed( {
+											author: {
+												name: mod.name,
+												iconURL: mod.logo
 											},
-											{
-												name: "Changelog",
-												value: changelogId ? `<#${ changelogId }>` : `[Click here](https://ficsit.app/mod/${ mod.mod_reference }/version/${ mod.versions[ 0 ].id })`,
-												inline: true
-											},
-											{
-												name: "Mod Page",
-												value: `[Click here](https://ficsit.app/mod/${ mod.mod_reference })`,
-												inline: true
-											},
-											{
-												name: "All our Mods",
-												value: `[Click here](https://ficsit.app/user/${ guild.options.ficsitUserIds[ 0 ] })`,
-												inline: true
-											}
-										]
-									} );
-
-									const role = await guildClass.role( guild.options.RolePingRules?.find( r => r.modRefs.includes( mod.mod_reference ) )?.roleId || ( guild.options.defaultPingRole?.length > 0 ? guild.options.defaultPingRole : "0" ) );
-									let roleId = "0";
-									if ( role ) {
-										roleId = role.id;
-									}
-
-									let lastMessageId = "0";
-									if ( embed && annoucementChannel ) {
-										const msg = await annoucementChannel.send( {
-											embeds: [ embed ],
-											content: `${ roleId === "0" ? "@everyone" : "<@&" + roleId + ">" } new mod update has been released!\n\n`
+											thumbnail: mod.logo,
+											title: `v.${ mod.versions[ 0 ].version } - ${ mod.name }`,
+											fields: [
+												{
+													name: mod.versions[ 0 ].changelog !== "" ? mod.versions[ 0 ].changelog.split( /\r?\n/ )[ 0 ].substring( 0, 255 ) : "...",
+													value: `Now available on SMM and SMR \n\n For any suggestion please use <#${ guild.options.suggestionChannelId }> \n And for bug reports <#${ guild.options.bugChannelId }>.`
+												},
+												{
+													name: "Changelog",
+													value: changelogId ? `<#${ changelogId }>` : `[Click here](https://ficsit.app/mod/${ mod.mod_reference }/version/${ mod.versions[ 0 ].id })`,
+													inline: true
+												},
+												{
+													name: "Mod Page",
+													value: `[Click here](https://ficsit.app/mod/${ mod.mod_reference })`,
+													inline: true
+												},
+												{
+													name: "All our Mods",
+													value: `[Click here](https://ficsit.app/user/${ guild.options.ficsitUserIds[ 0 ] })`,
+													inline: true
+												}
+											]
 										} );
 
-										if ( msg ) {
-											lastMessageId = msg.id;
+										const role = await guildClass.role( guild.options.RolePingRules?.find( r => r.modRefs.includes( mod.mod_reference ) )?.roleId || ( guild.options.defaultPingRole?.length > 0 ? guild.options.defaultPingRole : "0" ) );
+										let roleId = "0";
+										if ( role ) {
+											roleId = role.id;
 										}
 
-										await DB_ModUpdates.findByIdAndUpdate( modDocument._id, {
-											hash: mod.versions[ 0 ].hash,
-											lastUpdate: new Date(),
-											lastMessageId
-										} );
+										let lastMessageId = "0";
+										if ( embed && annoucementChannel ) {
+											const msg = await annoucementChannel.send( {
+												embeds: [ embed ],
+												content: `${ roleId === "0" ? "@everyone" : "<@&" + roleId + ">" } new mod update has been released!\n\n`
+											} );
+
+											if ( msg ) {
+												lastMessageId = msg.id;
+											}
+
+											await DB_ModUpdates.findByIdAndUpdate( modDocument._id, {
+												hash: mod.versions[ 0 ].hash,
+												lastUpdate: new Date(),
+												lastMessageId
+											} );
+										}
 									}
 								}
 							}
