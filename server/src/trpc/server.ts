@@ -102,11 +102,10 @@ Api.get( "/api/v2/download/:downloadId", async( req : Request, res : Response ) 
 Api.post( "/api/v1/upload/patreon", MW_AuthGuild_Leg, async( req : Request, res : Response ) => {
 	const schema = z.object( {
 		guildId: z.string().min( 5 ),
-		modRef: z.string().min( 5 ),
+		modRef: z.string().min( 1 ),
 		changelogContent: z.string().min( 5 ),
 		version: z.string().min( 2 )
 	} );
-
 	const { guildId, modRef, changelogContent, version } = req.body;
 	const post = { guildId, modRef, changelogContent, version };
 	const file = req.files?.file;
