@@ -130,34 +130,15 @@ Api.post( "/api/v1/upload/patreon", MW_AuthGuild_Leg, async( req : Request, res 
 				!fs.existsSync( path.join( __MountDir, "patreon" ) ) && fs.mkdirSync( path.join( __MountDir, "patreon" ), { recursive: true } );
 				await ( file as fileUpload.UploadedFile ).mv( path.join( __MountDir, "patreon", `${ releaseDocument._id }.zip` ) );
 
-				const annoucementChannel = await guild.textChannel( patreonOptions.announcementChannel );
-				if ( annoucementChannel ) {
-					const embed = createEmbed( {
-						author: {
-							name: mod.name,
-							iconURL: mod.logo
-						},
-						thumbnail: mod.logo,
-						title: "Download now!",
-						url: `${ process.env.BASE_URL }download/${ releaseDocument._id }`
-					} );
-					if ( embed ) {
-						await annoucementChannel.send( {
-							embeds: [ embed ],
-							content: `${ patreonOptions.pingRoles.map( e => `<@&${ e }>` ).join( ", " ) }\n\n${ releaseDocument.changelogContent }`.substring( 0, messageTextLimit - 1 )
-						} );
-					}
-				}
-
 				const threadChannel = await guild.forumChannel( patreonOptions.changelogForum );
 				if ( threadChannel ) {
 					const tag = threadChannel.availableTags.find( e => e.name === mod.mod_reference );
 					const appliedTags = tag ? [ tag.id ] : [];
 
-					const grouped = BuildStringGroup( changelogContent );
+					const grouped = BuildStringGroup( changelogContent, messageTextLimit );
 					if ( grouped && grouped.length > 0 ) {
 						const name = `${ mod.name } - v.${ version }`.substring( 0, 99 );
-						const content = GroupToString( grouped.splice( 1, 1 )![ 0 ] );
+						const content = GroupToString( grouped.splice( 0, 1 )![ 0 ] );
 						const thread : ThreadChannel | undefined = await threadChannel.threads.create( {
 							name,
 							message: { content },
@@ -171,6 +152,25 @@ Api.post( "/api/v1/upload/patreon", MW_AuthGuild_Leg, async( req : Request, res 
 									const content = GroupToString( message );
 									await thread.send( { content } );
 								}
+							}
+						}
+
+						const annoucementChannel = await guild.textChannel( patreonOptions.announcementChannel );
+						if ( annoucementChannel ) {
+							const embed = createEmbed( {
+								author: {
+									name: mod.name,
+									iconURL: mod.logo
+								},
+								thumbnail: mod.logo,
+								title: "Download now!",
+								url: `${ process.env.BASE_URL }download/${ releaseDocument._id }`
+							} );
+							if ( embed ) {
+								await annoucementChannel.send( {
+									embeds: [ embed ],
+									content: `${ patreonOptions.pingRoles.map( e => `<@&${ e }>` ).join( ", " ) }\n\n${ patreonOptions.patreonReleaseText.replaceAll( "{changelogmessage}", thread.id.toString() ) }`.substring( 0, messageTextLimit - 1 )
+								} );
 							}
 						}
 					}
