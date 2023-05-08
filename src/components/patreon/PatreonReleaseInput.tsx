@@ -108,7 +108,7 @@ const PatreonReleaseInput : FC<PatreonReleaseInputProps> = ( { onReleaseAdded } 
 			<div className="mb-3 block">
 				<Label value="Version"/>
 			</div>
-			<TextInput className="mt-2 mb-3" value={ version } onChange={ e => setChangelogContent( e.target.value ) }/>
+			<TextInput className="mt-2 mb-3" value={ version } onChange={ e => setVersion( e.target.value ) }/>
 
 			<div className="mb-3 block">
 				<Label value="Changelog"/>
