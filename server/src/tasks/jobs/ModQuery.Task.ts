@@ -1,20 +1,20 @@
-import {
-	gql,
-	GraphQLClient
-}                              from "graphql-request";
-import { MO_Mod }              from "@shared/types/MongoDB";
-import DB_Mods                 from "@server/mongodb/DB_Mods";
-import { JobOptions }          from "@server/tasks/TaskManager";
-import DB_Guilds               from "@server/mongodb/DB_Guilds";
-import DB_ModUpdates           from "@server/mongodb/DB_ModUpdates";
+import { createEmbed } from "@server/lib/bot/embed.lib";
 import { DiscordGuildManager } from "@server/lib/bot/guild.lib";
-import { createEmbed }         from "@server/lib/bot/embed.lib";
 import {
 	BuildStringGroup,
 	GroupToString
-}                              from "@server/lib/bot/stringGrouper.lib";
-import { ThreadChannel }       from "discord.js";
-import { messageTextLimit }    from "@shared/Default/discord";
+} from "@server/lib/bot/stringGrouper.lib";
+import DB_Guilds from "@server/mongodb/DB_Guilds";
+import DB_Mods from "@server/mongodb/DB_Mods";
+import DB_ModUpdates from "@server/mongodb/DB_ModUpdates";
+import { JobOptions } from "@server/tasks/TaskManager";
+import { messageTextLimit } from "@shared/Default/discord";
+import { MO_Mod } from "@shared/types/MongoDB";
+import { ThreadChannel } from "discord.js";
+import {
+	gql,
+	GraphQLClient
+} from "graphql-request";
 
 export interface ModGraphQLRequest {
 	getMods : GetMods;
@@ -25,6 +25,7 @@ export interface GetMods {
 	count : number;
 }
 
+const postedMods = new Map<string, string[]>();
 
 const client = new GraphQLClient( "https://api.ficsit.app/v2/query", { headers: {} } );
 const GraphQuery = ( Offset : number ) => {
@@ -90,7 +91,12 @@ const JobOptions : JobOptions = {
 			}
 			global.modCache = await DB_Mods.find();
 
+			
 			for await ( const guild of DB_Guilds.find( { "options.modsUpdateAnnouncement": true, isInGuild: true } ) ) {
+				if ( !postedMods.has( guild.guildId ) ) {
+					postedMods.set( guild.guildId, [] );
+				}
+
 				const guildClass = await DiscordGuildManager.GetGuild( guild.guildId );
 				if ( guildClass?.IsValid ) {
 					const threadChannel = await guildClass.forumChannel( guild.options.changelogForumId || "0" );
@@ -123,6 +129,10 @@ const JobOptions : JobOptions = {
 								}
 
 								if ( modDocument.hash !== mod.versions[ 0 ].hash ) {
+									if ( postedMods.get( guild.guildId )?.includes( modDocument.hash ) ) {
+										continue;
+									}
+									postedMods.get( guild.guildId )?.push( modDocument.hash );
 
 									let lastMessageId = "0";
 									let changelogId : string | undefined = undefined;
