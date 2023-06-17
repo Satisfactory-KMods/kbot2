@@ -1,12 +1,12 @@
 import {
 	Button,
 	ButtonProps
-}                        from "flowbite-react";
+} from "flowbite-react";
 import React, {
 	FC,
 	PropsWithChildren
-}                        from "react";
-import { CgSpinner }     from "react-icons/all";
+} from "react";
+import { CgSpinner } from "react-icons/cg";
 import { IconBaseProps } from "react-icons/lib/cjs/iconBase";
 
 interface ILoadButtonProps extends ButtonProps, PropsWithChildren {

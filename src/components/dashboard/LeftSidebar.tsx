@@ -1,21 +1,25 @@
 import { Sidebar } from "flowbite-react";
-import { FC }      from "react";
+import { FC } from "react";
+import {
+	BiBot
+} from "react-icons/bi";
+import {
+	BsEmojiNeutral
+} from "react-icons/bs";
 import {
 	HiAnnotation,
 	HiChat,
 	HiHome
-}                  from "react-icons/hi";
+} from "react-icons/hi";
 import {
-	Link,
-	useParams
-}                  from "react-router-dom";
-import {
-	BiBot,
-	BsEmojiNeutral,
 	SiDiscord,
 	SiGithub,
 	SiPatreon
-}                  from "react-icons/all";
+} from "react-icons/si";
+import {
+	Link,
+	useParams
+} from "react-router-dom";
 
 const LeftSidebar : FC = () => {
 	const { guildId } = useParams();

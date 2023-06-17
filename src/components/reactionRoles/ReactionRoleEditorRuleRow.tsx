@@ -1,24 +1,24 @@
+import SaveModal from "@comp/SaveModal";
+import useGuild from "@hooks/useGuild";
+import useSelection from "@hooks/useSelection";
+import { useToggle } from "@kyri123/k-reactutils";
+import {
+	OptionSelection,
+	roleToSelectedMulti
+} from "@lib/selectConversion";
+import { MO_ReactionRoleMap } from "@shared/types/MongoDB";
+import EmojiPicker, { Theme } from "emoji-picker-react";
+import {
+	Button,
+	Modal
+} from "flowbite-react";
 import {
 	FC,
 	useEffect,
 	useState
-}                             from "react";
-import useGuild               from "@hooks/useGuild";
-import {
-	OptionSelection,
-	roleToSelectedMulti
-}                             from "@lib/selectConversion";
-import useSelection           from "@hooks/useSelection";
-import { MO_ReactionRoleMap } from "@shared/types/MongoDB";
-import EmojiPicker, { Theme } from "emoji-picker-react";
-import { useToggle }          from "@kyri123/k-reactutils";
-import {
-	Button,
-	Modal
-}                             from "flowbite-react";
-import { BiTrash }            from "react-icons/all";
+} from "react";
+import { BiTrash } from "react-icons/bi";
 import Select, { MultiValue } from "react-select";
-import SaveModal              from "@comp/SaveModal";
 
 export interface ReactionRoleEditorRuleRowProps {
 	isEditing? : boolean;

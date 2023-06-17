@@ -1,22 +1,34 @@
+import LoadButton from "@comp/LoadButton";
+import { useToggle } from "@kyri123/k-reactutils";
+import {
+	fireSwalFromApi,
+	fireToastFromApi
+} from "@lib/sweetAlert";
+import {
+	tRPC_Guild,
+	tRPC_handleError
+} from "@lib/tRPC";
+import { messageTextLimit } from "@shared/Default/discord";
 import {
 	MO_ChatCommands,
 	ReactionMatchRule
-}                           from "@shared/types/MongoDB";
+} from "@shared/types/MongoDB";
+import {
+	Button,
+	Label,
+	Tabs,
+	TextInput,
+	Textarea,
+	ToggleSwitch
+} from "flowbite-react";
+import ButtonGroup from "flowbite-react/lib/esm/components/Button/ButtonGroup";
 import {
 	FC,
 	useEffect,
 	useId,
 	useRef,
 	useState
-}                           from "react";
-import {
-	Button,
-	Label,
-	Tabs,
-	Textarea,
-	TextInput,
-	ToggleSwitch
-}                           from "flowbite-react";
+} from "react";
 import {
 	BiBot,
 	BiMessage,
@@ -24,22 +36,10 @@ import {
 	BiSave,
 	BiText,
 	BiTrash
-}                           from "react-icons/all";
-import LoadButton           from "@comp/LoadButton";
-import CreatableSelect      from "react-select/creatable";
-import { MultiValue }       from "react-select";
-import { useToggle }        from "@kyri123/k-reactutils";
-import {
-	tRPC_Guild,
-	tRPC_handleError
-}                           from "@lib/tRPC";
-import { useParams }        from "react-router-dom";
-import { messageTextLimit } from "@shared/Default/discord";
-import {
-	fireSwalFromApi,
-	fireToastFromApi
-}                           from "@lib/sweetAlert";
-import ButtonGroup          from "flowbite-react/lib/esm/components/Button/ButtonGroup";
+} from "react-icons/bi";
+import { useParams } from "react-router-dom";
+import { MultiValue } from "react-select";
+import CreatableSelect from "react-select/creatable";
 
 interface IChatCommandEditorProps {
 	editData? : MO_ChatCommands;

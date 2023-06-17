@@ -1,11 +1,11 @@
-import { FC }                from "react";
-import { Tabs }              from "flowbite-react";
+import PatreonReleaseInput from "@comp/patreon/PatreonReleaseInput";
+import PatreonSettingsEditor from "@comp/patreon/PatreonSettingsEditor";
+import { Tabs } from "flowbite-react";
+import { FC } from "react";
 import {
 	BiCog,
 	BiUpload
-}                            from "react-icons/all";
-import PatreonSettingsEditor from "@comp/patreon/PatreonSettingsEditor";
-import PatreonReleaseInput   from "@comp/patreon/PatreonReleaseInput";
+} from "react-icons/bi";
 
 const Component : FC = () => {
 	return (
