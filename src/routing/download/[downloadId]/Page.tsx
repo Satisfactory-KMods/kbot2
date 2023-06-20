@@ -16,7 +16,7 @@ import {
 	BiDownload
 } from "react-icons/bi";
 import { useParams } from "react-router-dom";
-
+ 
 const Component : FC = () => {
 	usePageTitle( `Kbot 2.0 - Download Dev-Build` );
 	const [ isLoading, setIsLoading ] = useState( false );
