@@ -92,7 +92,7 @@ Api.get( "/api/v1/mod/:modRef", async( req : Request, res : Response ) => {
 		}
 		const mod = await DB_Mods.findOne( { mod_reference: modRef } );
 		if ( mod ) {
-			return res.status( 200 ).json( { success: true, mod } );
+			return res.status( 200 ).json( { success: true, mods: [mod] } );
 		}
 	}
 	return res.status( 401 ).json( { success: false, message: "Invalid modRef" } );
