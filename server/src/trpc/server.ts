@@ -98,8 +98,8 @@ Api.get( "/api/v1/mod/:modRef", async( req : Request, res : Response ) => {
 	return res.status( 401 ).json( { success: false, message: "Invalid modRef" } );
 } );
 
-Api.post( "/api/v1/mod/:modRef", async( req : Request, res : Response ) => {
-	const { modRefs } = req.query as Partial<{modRefs: string[]}>;
+Api.post( "/api/v1/mod", async( req : Request, res : Response ) => {
+	const { modRefs } = req.body as Partial<{modRefs: string[]}>;
 	if ( modRefs && Array.isArray( modRefs ) ) {
 		const mods = await DB_Mods.find( { mod_reference: modRefs } );
 		if ( mods?.length > 0 ) { 
