@@ -1,11 +1,18 @@
-FROM node:20.2.0-alpine3.18
+FROM node:18-bullseye
 
-WORKDIR ./
+RUN apt-get update && \
+  apt-get install -y python-is-python3 python3 python3-dev python3-pip python3-virtualenv && \
+  rm -rf /var/lib/apt/lists/* && \
+  python --version && \
+  node -v && npm -v
+RUN npm install -g pnpm
+
+WORKDIR /
 
 # Packages
-COPY *.json ./
-COPY *.lock ./
-RUN yarn install
+COPY package.json ./
+COPY *.yaml ./
+RUN pnpm install
 
 # Copy main configs
 COPY .env.* ./
@@ -22,6 +29,6 @@ COPY ./public ./public
 COPY ./shared ./shared
 
 # create main files
-RUN yarn build
+RUN pnpm build
 
-CMD yarn production
+CMD pnpm production
