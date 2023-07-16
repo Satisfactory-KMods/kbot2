@@ -1,7 +1,7 @@
 {
 	"compilerOptions": {
 		"module": "esnext",
-		"moduleResolution": "node",
+		"moduleResolution": "Node",
 		"target": "esnext",
 		"removeComments": false,
 		"allowJs": true,
@@ -16,9 +16,6 @@
 		"noEmit": true,
 		"jsx": "react-jsx",
 		"baseUrl": ".",
-		"types": [
-			"node"
-		],
 		"paths": {
 			"@context/*": [
 				"./src/context/*"

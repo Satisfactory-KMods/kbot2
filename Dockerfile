@@ -15,6 +15,7 @@ COPY *.yaml ./
 RUN pnpm install
 
 # Copy main configs
+COPY *.json ./
 COPY .env.* ./
 COPY *.ts ./
 COPY *.js ./
