@@ -3,7 +3,7 @@
   "version": "2.3.0",
   "private": true,
   "scripts": {
-    "production": "NODE_ENV=production ts-node --transpile-only --project ./server/tsconfig.json -r tsconfig-paths/register ./server/src/index.ts",
+    "production": "NODE_ENV=production ts-node  --project ./server/tsconfig.json -r tsconfig-paths/register ./server/src/index.ts",
     "devserver": "ts-node --project ./server/tsconfig.json -r tsconfig-paths/register ./server/src/index.ts",
     "dev": "concurrently -m 2 \"vite --host --port 3000\" \"nodemon\"",
     "build": "pnpm run build:lint && pnpm run build:web && pnpm run build:server",
@@ -11,9 +11,9 @@
     "build:web": "vite build --mode production",
     "build:server": "tsc --project ./server/tsconfig.json && tsc-alias -p ./server/tsconfig.json",
     "lint": "concurrently -m 3 \"pnpm run lint:server\" \"pnpm run lint:shared\" \"pnpm run lint:react\"",
-    "lint:server": "eslint ./server/src/**/*.{ts,tsx,js,jsx} --fix",
-    "lint:shared": "eslint ./shared/**/*.{ts,tsx,js,jsx} --fix",
-    "lint:react": "eslint ./src/**/*.{ts,tsx,js,jsx} --fix",
+    "lint:server": "eslint ./server --fix",
+    "lint:shared": "eslint ./shared --fix",
+    "lint:react": "eslint ./src --fix",
     "prepare": "husky install"
   },
   "dependencies": {
