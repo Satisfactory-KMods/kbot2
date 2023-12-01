@@ -1,12 +1,6 @@
 {
-	"watch": [
-		"server",
-		"shared"
-	],
+	"watch": ["server", "shared"],
 	"ext": "ts",
-	"ignore": [
-		"server/**/*.spec.ts",
-		"server/**/*.test.ts"
-	],
-	"exec": "pnpm run devserver"
+	"ignore": ["server/**/*.spec.ts", "server/**/*.test.ts"],
+	"exec": "bun run devserver"
 }

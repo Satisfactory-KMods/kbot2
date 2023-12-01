@@ -1,14 +1,7 @@
-import { FC } from "react";
+import { FC } from 'react';
 
-const Component : FC = () => {
-
-	return (
-		<>
-
-		</>
-	);
+const Component: FC = () => {
+	return <></>;
 };
 
-export {
-	Component
-};
+export { Component };

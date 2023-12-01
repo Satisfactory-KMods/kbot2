@@ -17,53 +17,20 @@
 		"jsx": "react-jsx",
 		"baseUrl": ".",
 		"paths": {
-			"@context/*": [
-				"./src/context/*"
-			],
-			"@app/*": [
-				"./src/*"
-			],
-			"@hooks/*": [
-				"./src/hooks/*"
-			],
-			"@lib/*": [
-				"./src/lib/*"
-			],
-			"@comp/*": [
-				"./src/components/*"
-			],
-			"@style/*": [
-				"./src/style/*"
-			],
-			"@routing/*": [
-				"./src/routing/*"
-			],
-			"@shared/*": [
-				"./shared/*"
-			],
-			"@guild/*": [
-				"./src/routing/guild/[guildId]/*"
-			],
-			"@server/*": [
-				"./server/src/*"
-			],
-			"@/*": [
-				"./*"
-			]
+			"@context/*": ["./src/context/*"],
+			"@app/*": ["./src/*"],
+			"@hooks/*": ["./src/hooks/*"],
+			"@lib/*": ["./src/lib/*"],
+			"@comp/*": ["./src/components/*"],
+			"@style/*": ["./src/style/*"],
+			"@routing/*": ["./src/routing/*"],
+			"@shared/*": ["./shared/*"],
+			"@guild/*": ["./src/routing/guild/[guildId]/*"],
+			"@server/*": ["./server/src/*"],
+			"@/*": ["./*"]
 		},
-		"lib": [
-			"dom",
-			"dom.iterable",
-			"esnext"
-		]
+		"lib": ["dom", "dom.iterable", "esnext"]
 	},
-	"include": [
-		"shared/**/*.ts",
-		"src/**/*.ts",
-		"src/**/*.tsx"
-	],
-	"exclude": [
-		"node_modules",
-		"server/**/*"
-	]
+	"include": ["shared/**/*.ts", "src/**/*.ts", "src/**/*.tsx"],
+	"exclude": ["node_modules", "server/**/*"]
 }
