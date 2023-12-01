@@ -89,4 +89,5 @@ jobs:
 
             - name: 'Create Release'
               run: |
+                  export GH_TOKEN=${{ secrets.PAT }}
                   pnpm semantic-release
