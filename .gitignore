@@ -4,6 +4,7 @@ node_modules
 /dist
 /BuildServer
 /mount
+.env
 
 # local env files
 .env.development
