@@ -127,6 +127,9 @@ dependencies:
     version: 3.22.4
 
 devDependencies:
+  '@semantic-release/github':
+    specifier: ^9.2.4
+    version: 9.2.4(semantic-release@22.0.8)
   '@testing-library/jest-dom':
     specifier: ^6.1.5
     version: 6.1.5

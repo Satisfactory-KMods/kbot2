@@ -54,10 +54,10 @@ Api.use( function( req, res, next ) {
 
 mongoose
 	.connect(
-		`mongodb://${ process.env.MONGODB_HOST }:${ process.env.MONGODB_PORT }`,
+		`mongodb://${ process.env.MONGO_HOST }:${ process.env.MONGO_PORT }`,
 		{
-			user: process.env.MONGODB_USER,
-			pass: process.env.MONGODB_PASSWD,
+			user: process.env.MONGO_USER,
+			pass: process.env.MONGO_PASSWORD,
 			dbName: process.env.MONGODB_DATABASE
 		}
 	)
