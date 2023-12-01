@@ -54,6 +54,7 @@
     "similarity": "^1.2.1",
     "sweetalert2": "^11.10.1",
     "sweetalert2-react-content": "^5.0.7",
+    "tsconfig-paths": "^4.2.0",
     "tslib": "^2.6.2",
     "zod": "^3.22.4"
   },
