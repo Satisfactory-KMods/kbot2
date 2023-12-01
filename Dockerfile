@@ -5,31 +5,12 @@ RUN apt-get update && \
   rm -rf /var/lib/apt/lists/* && \
   python --version && \
   node -v && npm -v
-RUN npm install -g pnpm
+RUN npm install -g pnpm bun
 
-WORKDIR /
-
-# Packages
-COPY package.json ./
-COPY *.yaml ./
-RUN pnpm install
-
-# Copy main configs
-COPY *.json ./
-COPY .env.* ./
-COPY *.ts ./
-COPY *.js ./
-COPY *.cjs ./
-COPY .eslintrc ./
-COPY *.html ./
-
-# Copy source folder
-COPY ./src ./src
-COPY ./server ./server
-COPY ./public ./public
-COPY ./shared ./shared
+COPY . /dist
+WORKDIR /dist
 
 # create main files
-RUN pnpm build
+RUN bun run build
 
-CMD pnpm production
+CMD pnpm run production

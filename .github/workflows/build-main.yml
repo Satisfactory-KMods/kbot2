@@ -45,11 +45,9 @@ jobs:
 
             - name: lint and type check
               run: |
-                  cp .env.example .env
                   pnpm add -g bun
                   pnpm i
                   bun run lint
-                  rm .env
 
             - name: Log into registry
               if: github.event_name != 'pull_request'

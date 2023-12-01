@@ -3,7 +3,7 @@
   "version": "2.3.0",
   "private": true,
   "scripts": {
-    "production": "NODE_ENV=production ts-node --project ./server/tsconfig.json -r tsconfig-paths/register ./server/src/index.ts",
+    "production": "NODE_ENV=production ts-node --transpile-only --project ./server/tsconfig.json -r tsconfig-paths/register ./server/src/index.ts",
     "devserver": "ts-node --project ./server/tsconfig.json -r tsconfig-paths/register ./server/src/index.ts",
     "dev": "concurrently -m 2 \"vite --host --port 3000\" \"nodemon\"",
     "build": "pnpm run build:lint && pnpm run build:web && pnpm run build:server",
