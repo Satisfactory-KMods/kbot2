@@ -1,49 +1,37 @@
-import {
-	AllHTMLAttributes,
-	FC,
-	PropsWithChildren,
-	useContext,
-	useMemo
-}                  from "react";
-import { ERoles }  from "@shared/Enum/ERoles";
-import AuthContext from "@context/AuthContext";
+import AuthContext from '@context/AuthContext';
+import { ERoles } from '@shared/Enum/ERoles';
+import { AllHTMLAttributes, FC, PropsWithChildren, useContext, useMemo } from 'react';
 
 export interface ShowConditionProps extends PropsWithChildren, AllHTMLAttributes<HTMLDivElement> {
-	show : boolean;
+	show: boolean;
 }
 
-const ShowCondition : FC<ShowConditionProps> = ( { show, children, ...props } ) => {
-	if ( !show ) {
+const ShowCondition: FC<ShowConditionProps> = ({ show, children, ...props }) => {
+	if (!show) {
 		return null;
 	}
 
-	return (
-		<div { ...props }>
-			{ children }
-		</div>
-	);
+	return <div {...props}>{children}</div>;
 };
 
-
 export interface IuseAuthCond {
-	loggedIn : boolean;
-	role : ERoles;
+	loggedIn: boolean;
+	role: ERoles;
 }
 
+const useAuthValidate = (condition: Partial<IuseAuthCond>): Partial<ShowConditionProps> => {
+	const [user] = useContext(AuthContext);
 
-const useAuthValidate = ( condition : Partial<IuseAuthCond> ) : Partial<ShowConditionProps> => {
-	const [ user ] = useContext( AuthContext );
-
-	const show = useMemo( () => {
-		if ( condition.loggedIn !== undefined || condition.role !== undefined ) {
+	const show = useMemo(() => {
+		if (condition.loggedIn !== undefined || condition.role !== undefined) {
 			const needToBeLoggedIn = condition.loggedIn || condition.role === undefined;
-			if ( condition.role !== undefined ) {
-				return user.HasPermssion( condition.role );
+			if (condition.role !== undefined) {
+				return user.HasPermssion(condition.role);
 			}
 			return needToBeLoggedIn === user.IsValid;
 		}
 		return true;
-	}, [ condition, user ] );
+	}, [condition, user]);
 
 	return {
 		show: true

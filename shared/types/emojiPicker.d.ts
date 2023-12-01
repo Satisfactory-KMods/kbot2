@@ -1,20 +1,19 @@
 export interface EmojiCategory {
-	id : number,
-	name : string
+	id: number;
+	name: string;
 }
 
-
 export interface Emoji {
-	emoji : string,
-	unicode : string,
-	version : string,
-	name : string
+	emoji: string;
+	unicode: string;
+	version: string;
+	name: string;
 }
 
 export interface EmojiSubCategory extends EmojiCategory {
-	emojis : Emoji[];
+	emojis: Emoji[];
 }
 
 export interface EmojiMainCategory extends EmojiCategory {
-	subcats : EmojiSubCategory[];
+	subcats: EmojiSubCategory[];
 }

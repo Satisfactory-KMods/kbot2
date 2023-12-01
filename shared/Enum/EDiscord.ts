@@ -1,5 +1,5 @@
 export enum EChannelType {
-	voice = "voice",
-	text = "text",
-	forum = "forum"
+	voice = 'voice',
+	text = 'text',
+	forum = 'forum'
 }
