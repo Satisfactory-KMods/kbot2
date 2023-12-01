@@ -62,8 +62,7 @@ DiscordBot.on( "interactionCreate", async( interaction ) => {
 // Wait for the bot to be ready before start the frontend
 export default async function() {
 	await new Promise<void>( ( resolve ) => {
-		const Do = async() => {
-
+		(async() => {
 			// fire once if the bot to be ready
 			DiscordBot.once( "ready", async() => {
 				const rest = new REST( { version: "10" } ).setToken( process.env.TOKEN! );
@@ -104,7 +103,6 @@ export default async function() {
 
 			// start the client login
 			await DiscordBot.login( process.env.TOKEN );
-		};
-		Do();
+		})();
 	} );
 }

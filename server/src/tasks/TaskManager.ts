@@ -11,7 +11,7 @@ export interface JobOptions {
 export class JobTask {
 	public JobName = "";
 	protected Interval = 60000;
-	protected Task : NodeJS.Timer;
+	protected Task : any;
 	protected TaskFunction : ( CallCount : number ) => Promise<void>;
 	protected TickCount = 1;
 	protected IsRun = false;
