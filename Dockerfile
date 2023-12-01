@@ -13,4 +13,4 @@ WORKDIR /dist
 # create main files
 RUN bun run build
 
-CMD pnpm run production
+CMD bun run production
