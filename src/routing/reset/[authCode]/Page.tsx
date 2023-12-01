@@ -1,26 +1,26 @@
+import LoadButton from "@comp/LoadButton";
+import AuthContext from "@context/AuthContext";
+import { usePageTitle } from "@kyri123/k-reactutils";
+import { fireSwalFromApi } from "@lib/sweetAlert";
+import {
+	tRPC_Public,
+	tRPC_handleError
+} from "@lib/tRPC";
+import { ResetLoaderData } from "@routing/reset/[authCode]/Loader";
+import { TextInput } from "flowbite-react";
 import {
 	FC,
 	FormEvent,
 	useContext,
 	useRef,
 	useState
-}                          from "react";
+} from "react";
+import { SlLogin } from "react-icons/sl";
 import {
 	useLoaderData,
 	useNavigate,
 	useParams
-}                          from "react-router-dom";
-import { usePageTitle }    from "@kyri123/k-reactutils";
-import { TextInput }       from "flowbite-react";
-import { SlLogin }         from "react-icons/all";
-import LoadButton          from "@comp/LoadButton";
-import { fireSwalFromApi } from "@lib/sweetAlert";
-import AuthContext         from "@context/AuthContext";
-import {
-	tRPC_handleError,
-	tRPC_Public
-}                          from "@lib/tRPC";
-import { ResetLoaderData } from "@routing/reset/[authCode]/Loader";
+} from "react-router-dom";
 
 const Component : FC = () => {
 	usePageTitle( `Kbot 2.0 - Reset Password` );
@@ -96,3 +96,4 @@ const Component : FC = () => {
 export {
 	Component
 };
+

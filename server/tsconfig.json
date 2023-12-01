@@ -5,9 +5,6 @@
       "server/src",
       "shared"
     ],
-    "types": [
-      "node"
-    ],
     "target": "ESNext",
     "module": "commonjs",
     "strict": true,

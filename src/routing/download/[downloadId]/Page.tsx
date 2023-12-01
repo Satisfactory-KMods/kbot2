@@ -1,22 +1,22 @@
+import LoadButton from "@comp/LoadButton";
+import { usePageTitle } from "@kyri123/k-reactutils";
+import {
+	tRPC_Public,
+	tRPC_handleError
+} from "@lib/tRPC";
+import { TextInput } from "flowbite-react";
 import {
 	FC,
 	FormEvent,
 	useRef,
 	useState
-}                       from "react";
-import { useParams }    from "react-router-dom";
-import { usePageTitle } from "@kyri123/k-reactutils";
-import { TextInput }    from "flowbite-react";
+} from "react";
 import {
 	BiCog,
 	BiDownload
-}                       from "react-icons/all";
-import LoadButton       from "@comp/LoadButton";
-import {
-	tRPC_handleError,
-	tRPC_Public
-}                       from "@lib/tRPC";
-
+} from "react-icons/bi";
+import { useParams } from "react-router-dom";
+ 
 const Component : FC = () => {
 	usePageTitle( `Kbot 2.0 - Download Dev-Build` );
 	const [ isLoading, setIsLoading ] = useState( false );
@@ -76,3 +76,4 @@ const Component : FC = () => {
 export {
 	Component
 };
+

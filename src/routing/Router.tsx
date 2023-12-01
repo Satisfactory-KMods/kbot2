@@ -3,9 +3,8 @@ import {
 	createRoutesFromElements,
 	Navigate,
 	Route
-}            from "react-router-dom";
-import React from "react";
-
+} from "react-router-dom";
+ 
 const rootRouter = createBrowserRouter( createRoutesFromElements(
 	<>
 		<Route path="error/:ErrorCode" lazy={ () => import("@routing/error/[ErrorCode]/Page") }/>

@@ -1,27 +1,29 @@
-import {
-	FC,
-	useId,
-	useState
-}                         from "react";
-import {
-	useLoaderData,
-	useParams
-}                         from "react-router-dom";
+import ReactionRoleEditor from "@comp/reactionRoles/ReactionRoleEditor";
 import {
 	GuildReactionRolesLoader,
 	queryReactionRoles
-}                         from "@guild/reactionroles/Loader";
+} from "@guild/reactionroles/Loader";
+import usePages from "@hooks/usePages";
 import {
 	Accordion,
 	Pagination,
 	Tabs
-}                         from "flowbite-react";
-import usePages           from "@hooks/usePages";
+} from "flowbite-react";
 import {
-	BiCog,
+	FC,
+	useId,
+	useState
+} from "react";
+import {
+	BiCog
+} from "react-icons/bi";
+import {
 	HiOutlineArrowCircleDown
-}                         from "react-icons/all";
-import ReactionRoleEditor from "@comp/reactionRoles/ReactionRoleEditor";
+} from "react-icons/hi";
+import {
+	useLoaderData,
+	useParams
+} from "react-router-dom";
 
 const Component : FC = () => {
 	const { guildId } = useParams();

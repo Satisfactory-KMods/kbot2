@@ -1,17 +1,17 @@
-import { Navbar }  from "flowbite-react";
+import AuthContext from "@context/AuthContext";
+import { Navbar } from "flowbite-react";
 import {
 	FC,
 	useContext
-}                  from "react";
-import {
-	Link,
-	useParams
-}                  from "react-router-dom";
+} from "react";
 import {
 	BiDoorOpen,
 	BiServer
-}                  from "react-icons/all";
-import AuthContext from "@context/AuthContext";
+} from "react-icons/bi";
+import {
+	Link,
+	useParams
+} from "react-router-dom";
 
 
 const TopNavbar : FC = () => {

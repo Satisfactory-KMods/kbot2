@@ -1,28 +1,28 @@
+import { LoaderDataBase } from "@app/types/routing";
+import LoadButton from "@comp/LoadButton";
+import AuthContext from "@context/AuthContext";
+import { usePageTitle } from "@kyri123/k-reactutils";
+import {
+	tRPC_Public,
+	tRPC_handleError
+} from "@lib/tRPC";
+import {
+	Checkbox,
+	Label,
+	TextInput
+} from "flowbite-react";
 import {
 	FC,
 	FormEvent,
 	useContext,
 	useRef,
 	useState
-}                         from "react";
+} from "react";
+import { SlLogin } from "react-icons/sl";
 import {
 	useLoaderData,
 	useNavigate
-}                         from "react-router-dom";
-import { LoaderDataBase } from "@app/types/routing";
-import { usePageTitle }   from "@kyri123/k-reactutils";
-import {
-	Checkbox,
-	Label,
-	TextInput
-}                         from "flowbite-react";
-import LoadButton         from "@comp/LoadButton";
-import { SlLogin }        from "react-icons/all";
-import AuthContext        from "@context/AuthContext";
-import {
-	tRPC_handleError,
-	tRPC_Public
-}                         from "@lib/tRPC";
+} from "react-router-dom";
 
 const Component : FC = () => {
 	usePageTitle( `Kbot 2.0 - Login` );
@@ -105,3 +105,4 @@ const Component : FC = () => {
 export {
 	Component
 };
+

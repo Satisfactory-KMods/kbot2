@@ -1,6 +1,6 @@
-import { MO_Guild }    from "@shared/types/MongoDB";
-import { FC }          from "react";
-import { BiUser }      from "react-icons/all";
+import { MO_Guild } from "@shared/types/MongoDB";
+import { FC } from "react";
+import { BiUser } from "react-icons/bi";
 import { useNavigate } from "react-router-dom";
 
 interface IGuildSelectRowProps {

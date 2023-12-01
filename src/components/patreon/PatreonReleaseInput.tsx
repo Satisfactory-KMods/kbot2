@@ -1,28 +1,28 @@
+import LoadButton from "@comp/LoadButton";
+import useGuild from "@hooks/useGuild";
+import {
+	OptionSelection,
+	modsToSelection
+} from "@lib/selectConversion";
+import { fireToastFromApi } from "@lib/sweetAlert";
+import {
+	tRPC_handleError,
+	tRPC_token
+} from "@lib/tRPC";
+import {
+	FileInput,
+	Label,
+	TextInput,
+	Textarea
+} from "flowbite-react";
 import React, {
 	FC,
 	useEffect,
 	useMemo,
 	useState
-}                              from "react";
-import {
-	modsToSelection,
-	OptionSelection
-}                              from "@lib/selectConversion";
-import useGuild                from "@hooks/useGuild";
-import {
-	FileInput,
-	Label,
-	Textarea,
-	TextInput
-}                              from "flowbite-react";
+} from "react";
+import { BiUpload } from "react-icons/bi";
 import Select, { SingleValue } from "react-select";
-import LoadButton              from "@comp/LoadButton";
-import { BiUpload }            from "react-icons/all";
-import {
-	tRPC_handleError,
-	tRPC_token
-}                              from "@lib/tRPC";
-import { fireToastFromApi }    from "@lib/sweetAlert";
 
 
 interface PatreonReleaseInputProps {
@@ -108,7 +108,7 @@ const PatreonReleaseInput : FC<PatreonReleaseInputProps> = ( { onReleaseAdded } 
 			<div className="mb-3 block">
 				<Label value="Version"/>
 			</div>
-			<TextInput className="mt-2 mb-3" value={ version } onChange={ e => setChangelogContent( e.target.value ) }/>
+			<TextInput className="mt-2 mb-3" value={ version } onChange={ e => setVersion( e.target.value ) }/>
 
 			<div className="mb-3 block">
 				<Label value="Changelog"/>

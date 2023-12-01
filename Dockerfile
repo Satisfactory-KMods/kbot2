@@ -1,27 +1,16 @@
-FROM node:alpine
+FROM node:18-bullseye
 
-WORKDIR ./
+RUN apt-get update && \
+  apt-get install -y python-is-python3 python3 python3-dev python3-pip python3-virtualenv && \
+  rm -rf /var/lib/apt/lists/* && \
+  python --version && \
+  node -v && npm -v
+RUN npm install -g pnpm bun
 
-# Packages
-COPY *.json ./
-COPY *.lock ./
-RUN yarn install
-
-# Copy main configs
-COPY .env.* ./
-COPY *.ts ./
-COPY *.js ./
-COPY *.cjs ./
-COPY .eslintrc ./
-COPY *.html ./
-
-# Copy source folder
-COPY ./src ./src
-COPY ./server ./server
-COPY ./public ./public
-COPY ./shared ./shared
+COPY . /dist
+WORKDIR /dist
 
 # create main files
-RUN yarn build
+RUN bun run build
 
-CMD yarn production
+CMD pnpm run production

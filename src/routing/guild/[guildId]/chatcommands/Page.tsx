@@ -1,30 +1,32 @@
+import LoadButton from "@comp/LoadButton";
+import ChatCommandEditor from "@comp/chatCommands/ChatCommandEditor";
+import GuildContext from "@context/GuildContext";
+import { GuildCommandsLoaderData } from "@guild/chatcommands/Loader";
+import usePages from "@hooks/usePages";
+import { fireToastFromApi } from "@lib/sweetAlert";
+import {
+	tRPC_Guild,
+	tRPC_handleError
+} from "@lib/tRPC";
+import { MO_ChatCommands } from "@shared/types/MongoDB";
+import {
+	Accordion,
+	Pagination,
+	TextInput
+} from "flowbite-react";
 import {
 	FC,
 	useContext,
 	useRef,
 	useState
-}                                  from "react";
-import { useLoaderData }           from "react-router-dom";
-import { MO_ChatCommands }         from "@shared/types/MongoDB";
-import ChatCommandEditor           from "@comp/chatCommands/ChatCommandEditor";
+} from "react";
 import {
-	Accordion,
-	Pagination,
-	TextInput
-}                                  from "flowbite-react";
+	BiSave
+} from "react-icons/bi";
 import {
-	tRPC_Guild,
-	tRPC_handleError
-}                                  from "@lib/tRPC";
-import {
-	BiSave,
 	HiOutlineArrowCircleDown
-}                                  from "react-icons/all";
-import GuildContext                from "@context/GuildContext";
-import LoadButton                  from "@comp/LoadButton";
-import { fireToastFromApi }        from "@lib/sweetAlert";
-import { GuildCommandsLoaderData } from "@guild/chatcommands/Loader";
-import usePages                    from "@hooks/usePages";
+} from "react-icons/hi";
+import { useLoaderData } from "react-router-dom";
 
 const Component : FC = () => {
 	const { guildData, triggerGuildUpdate } = useContext( GuildContext );

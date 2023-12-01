@@ -1,11 +1,9 @@
-import fs   from "fs";
+import fs from "fs";
 import path from "path";
-
-export type TTasksRunner = "MakeItClean" | "DiscordGuilds" | "FicsitQuery";
 
 export interface JobOptions {
 	Interval : number,
-	JobName : TTasksRunner,
+	JobName : string,
 	Task : ( CallCount : number ) => Promise<void>
 	DisableInitSync? : boolean
 }
@@ -13,7 +11,7 @@ export interface JobOptions {
 export class JobTask {
 	public JobName = "";
 	protected Interval = 60000;
-	protected Task : NodeJS.Timer;
+	protected Task : any;
 	protected TaskFunction : ( CallCount : number ) => Promise<void>;
 	protected TickCount = 1;
 	protected IsRun = false;
@@ -98,15 +96,16 @@ export class TaskManagerClass {
 			const Stats = fs.statSync(
 				path.join( __BaseDir, "/tasks/jobs", File )
 			);
-			if ( Stats.isFile() && File.endsWith( ".Task.ts" ) ) {
+			const jobName = File.replace( ".Task.ts", "" )
+			if ( Stats.isFile() && File.endsWith( ".Task.ts" ) && !this.Jobs[ jobName ] ) {
 				const JobOptions : JobOptions = ( await import( path.join( __BaseDir, "/tasks/jobs", File ) ) ).default;
 				const JobClass = await JobTask.ConstructJob( JobOptions );
-				this.Jobs[ JobClass.JobName ] = JobClass;
+				this.Jobs[ jobName ] = JobClass;
 			}
 		}
 	}
 
-	RunTask( Task : TTasksRunner, ResetTimer = false ) {
+	RunTask( Task : string, ResetTimer = false ) {
 		if ( this.Jobs[ Task ] ) {
 			this.Jobs[ Task ].ForceTask( ResetTimer ).then( r => {
 			} );

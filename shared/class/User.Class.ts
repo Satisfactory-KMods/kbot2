@@ -1,4 +1,4 @@
-import jwt, { JwtPayload } from "jwt-decode";
+import  { JwtPayload, jwtDecode as jwt } from "jwt-decode";
 import { ERoles }          from "@shared/Enum/ERoles";
 import { DefaultUser }     from "@shared/Default/Auth.Default";
 import { MO_UserAccount }  from "@shared/types/MongoDB";

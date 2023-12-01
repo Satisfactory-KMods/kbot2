@@ -1,21 +1,25 @@
+import Ribbon from "@comp/elements/Ribbon";
+import AuthContext from "@context/AuthContext";
+import { Button } from "flowbite-react";
 import {
 	FC,
 	useContext
-}                  from "react";
+} from "react";
 import {
-	Link,
-	Outlet
-}                  from "react-router-dom";
-import Ribbon      from "@comp/elements/Ribbon";
-import { Button }  from "flowbite-react";
+	BiBot
+} from "react-icons/bi";
 import {
-	BiBot,
-	BsDoorOpen,
+	BsDoorOpen
+} from "react-icons/bs";
+import {
 	SiDiscord,
 	SiGithub,
 	SiPatreon
-}                  from "react-icons/all";
-import AuthContext from "@context/AuthContext";
+} from "react-icons/si";
+import {
+	Link,
+	Outlet
+} from "react-router-dom";
 
 const Component : FC = () => {
 	const [ user, logout ] = useContext( AuthContext );
@@ -75,3 +79,4 @@ const Component : FC = () => {
 export {
 	Component
 };
+

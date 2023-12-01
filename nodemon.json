@@ -8,5 +8,5 @@
 		"server/**/*.spec.ts",
 		"server/**/*.test.ts"
 	],
-	"exec": "yarn devserver"
+	"exec": "pnpm run devserver"
 }
