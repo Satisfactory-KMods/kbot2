@@ -7,7 +7,7 @@ settings:
 dependencies:
   '@commitlint/cli':
     specifier: ^18.4.3
-    version: 18.6.1(@types/node@18.19.31)(typescript@5.4.4)
+    version: 18.6.1(@types/node@20.12.6)(typescript@5.4.4)
   '@commitlint/config-conventional':
     specifier: ^18.4.3
     version: 18.6.3
@@ -155,8 +155,8 @@ devDependencies:
     specifier: ^4.14.202
     version: 4.17.0
   '@types/node':
-    specifier: ^18.19.0
-    version: 18.19.31
+    specifier: ^20.0.0
+    version: 20.12.6
   '@types/react':
     specifier: ^18.2.39
     version: 18.2.75
@@ -216,7 +216,7 @@ devDependencies:
     version: 3.4.3(ts-node@10.9.2)
   ts-node:
     specifier: ^10.9.1
-    version: 10.9.2(@types/node@18.19.31)(typescript@5.4.4)
+    version: 10.9.2(@types/node@20.12.6)(typescript@5.4.4)
   tsc-alias:
     specifier: ^1.8.8
     version: 1.8.8
@@ -225,7 +225,7 @@ devDependencies:
     version: 5.4.4
   vite:
     specifier: ^5.0.4
-    version: 5.2.8(@types/node@18.19.31)(sass@1.74.1)
+    version: 5.2.8(@types/node@20.12.6)(sass@1.74.1)
   vite-plugin-eslint:
     specifier: ^1.8.1
     version: 1.8.1(eslint@8.57.0)(vite@5.2.8)
@@ -1981,14 +1981,14 @@ packages:
     dev: true
     optional: true
 
-  /@commitlint/cli@18.6.1(@types/node@18.19.31)(typescript@5.4.4):
+  /@commitlint/cli@18.6.1(@types/node@20.12.6)(typescript@5.4.4):
     resolution: {integrity: sha512-5IDE0a+lWGdkOvKH892HHAZgbAjcj1mT5QrfA/SVbLJV/BbBMGyKN0W5mhgjekPJJwEQdVNvhl9PwUacY58Usw==}
     engines: {node: '>=v18'}
     hasBin: true
     dependencies:
       '@commitlint/format': 18.6.1
       '@commitlint/lint': 18.6.1
-      '@commitlint/load': 18.6.1(@types/node@18.19.31)(typescript@5.4.4)
+      '@commitlint/load': 18.6.1(@types/node@20.12.6)(typescript@5.4.4)
       '@commitlint/read': 18.6.1
       '@commitlint/types': 18.6.1
       execa: 5.1.1
@@ -2060,7 +2060,7 @@ packages:
       '@commitlint/types': 18.6.1
     dev: false
 
-  /@commitlint/load@18.6.1(@types/node@18.19.31)(typescript@5.4.4):
+  /@commitlint/load@18.6.1(@types/node@20.12.6)(typescript@5.4.4):
     resolution: {integrity: sha512-p26x8734tSXUHoAw0ERIiHyW4RaI4Bj99D8YgUlVV9SedLf8hlWAfyIFhHRIhfPngLlCe0QYOdRKYFt8gy56TA==}
     engines: {node: '>=v18'}
     dependencies:
@@ -2070,7 +2070,7 @@ packages:
       '@commitlint/types': 18.6.1
       chalk: 4.1.2
       cosmiconfig: 8.3.6(typescript@5.4.4)
-      cosmiconfig-typescript-loader: 5.0.0(@types/node@18.19.31)(cosmiconfig@8.3.6)(typescript@5.4.4)
+      cosmiconfig-typescript-loader: 5.0.0(@types/node@20.12.6)(cosmiconfig@8.3.6)(typescript@5.4.4)
       lodash.isplainobject: 4.0.6
       lodash.merge: 4.6.2
       lodash.uniq: 4.5.0
@@ -3330,19 +3330,19 @@ packages:
     resolution: {integrity: sha512-fB3Zu92ucau0iQ0JMCFQE7b/dv8Ot07NI3KaZIkIUNXq82k4eBAqUaneXfleGY9JWskeS9y+u0nXMyspcuQrCg==}
     dependencies:
       '@types/connect': 3.4.38
-      '@types/node': 18.19.31
+      '@types/node': 20.12.6
     dev: true
 
   /@types/busboy@1.5.3:
     resolution: {integrity: sha512-YMBLFN/xBD8bnqywIlGyYqsNFXu6bsiY7h3Ae0kO17qEuTjsqeyYMRPSUDacIKIquws2Y6KjmxAyNx8xB3xQbw==}
     dependencies:
-      '@types/node': 18.19.31
+      '@types/node': 20.12.6
     dev: true
 
   /@types/connect@3.4.38:
     resolution: {integrity: sha512-K6uROf1LD88uDQqJCktA4yzL1YYAK6NgfsI0v/mTgyPKWsX1CnJ0XPSDhViejru1GcRkLWb8RlzFYJRqGUbaug==}
     dependencies:
-      '@types/node': 18.19.31
+      '@types/node': 20.12.6
     dev: true
 
   /@types/debug@4.1.12:
@@ -3381,7 +3381,7 @@ packages:
   /@types/express-serve-static-core@4.17.41:
     resolution: {integrity: sha512-OaJ7XLaelTgrvlZD8/aa0vvvxZdUmlCn6MtWeB7TkiKW70BQLc9XEPpDLPdbo52ZhXUCrznlWdCHWxJWtdyajA==}
     dependencies:
-      '@types/node': 18.19.31
+      '@types/node': 20.12.6
       '@types/qs': 6.9.10
       '@types/range-parser': 1.2.7
       '@types/send': 0.17.4
@@ -3417,7 +3417,7 @@ packages:
   /@types/jsonwebtoken@9.0.6:
     resolution: {integrity: sha512-/5hndP5dCjloafCXns6SZyESp3Ldq7YjH3zwzwczYnjxIT0Fqzk5ROSYVGfFyczIue7IUEj8hkvLbPoLQ18vQw==}
     dependencies:
-      '@types/node': 18.19.31
+      '@types/node': 20.12.6
     dev: true
 
   /@types/lodash@4.17.0:
@@ -3445,8 +3445,8 @@ packages:
     resolution: {integrity: sha512-nG96G3Wp6acyAgJqGasjODb+acrI7KltPiRxzHPXnP3NgI28bpQDRv53olbqGXbfcgF5aiiHmO3xpwEpS5Ld9g==}
     dev: false
 
-  /@types/node@18.19.31:
-    resolution: {integrity: sha512-ArgCD39YpyyrtFKIqMDvjz79jto5fcI/SVUs2HwB+f0dAzq68yqOdyaSivLiLugSziTpNXLQrVb7RZFmdZzbhA==}
+  /@types/node@20.12.6:
+    resolution: {integrity: sha512-3KurE8taB8GCvZBPngVbp0lk5CKi8M9f9k1rsADh0Evdz5SzJ+Q+Hx9uHoFGsLnLnd1xmkDQr2hVhlA0Mn0lKQ==}
     dependencies:
       undici-types: 5.26.5
 
@@ -3493,7 +3493,7 @@ packages:
     resolution: {integrity: sha512-x2EM6TJOybec7c52BX0ZspPodMsQUd5L6PRwOunVyVUhXiBSKf3AezDL8Dgvgt5o0UfKNfuA0eMLr2wLT4AiBA==}
     dependencies:
       '@types/mime': 1.3.5
-      '@types/node': 18.19.31
+      '@types/node': 20.12.6
     dev: true
 
   /@types/serve-static@1.15.5:
@@ -3501,7 +3501,7 @@ packages:
     dependencies:
       '@types/http-errors': 2.0.4
       '@types/mime': 3.0.4
-      '@types/node': 18.19.31
+      '@types/node': 20.12.6
     dev: true
 
   /@types/similarity@1.2.3:
@@ -3523,14 +3523,14 @@ packages:
   /@types/whatwg-url@8.2.2:
     resolution: {integrity: sha512-FtQu10RWgn3D9U4aazdwIE2yzphmTJREDqNdODHrbrZmmMqI0vMheC/6NE/J1Yveaj8H+ela+YwWTjq5PGmuhA==}
     dependencies:
-      '@types/node': 18.19.31
+      '@types/node': 20.12.6
       '@types/webidl-conversions': 7.0.3
     dev: false
 
   /@types/ws@8.5.9:
     resolution: {integrity: sha512-jbdrY0a8lxfdTp/+r7Z4CkycbOFN8WX+IOchLJr3juT/xzbJ8URyTVSJ/hvNdadTgM1mnedb47n+Y31GsFnQlg==}
     dependencies:
-      '@types/node': 18.19.31
+      '@types/node': 20.12.6
     dev: false
 
   /@typescript-eslint/eslint-plugin@5.62.0(@typescript-eslint/parser@5.62.0)(eslint@8.57.0)(typescript@5.4.4):
@@ -3690,7 +3690,7 @@ packages:
       '@babel/plugin-transform-react-jsx-source': 7.24.1(@babel/core@7.24.4)
       '@types/babel__core': 7.20.5
       react-refresh: 0.14.0
-      vite: 5.2.8(@types/node@18.19.31)(sass@1.74.1)
+      vite: 5.2.8(@types/node@20.12.6)(sass@1.74.1)
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -4571,7 +4571,7 @@ packages:
   /core-util-is@1.0.3:
     resolution: {integrity: sha512-ZQBvi1DcpJ4GDqanjucZ2Hj3wEO5pZDS89BWbkcrvdxksJorwUDDZamX9ldFkp9aw2lmBDLgkObEA4DWNJ9FYQ==}
 
-  /cosmiconfig-typescript-loader@5.0.0(@types/node@18.19.31)(cosmiconfig@8.3.6)(typescript@5.4.4):
+  /cosmiconfig-typescript-loader@5.0.0(@types/node@20.12.6)(cosmiconfig@8.3.6)(typescript@5.4.4):
     resolution: {integrity: sha512-+8cK7jRAReYkMwMiG+bxhcNKiHJDM6bR9FD/nGBXOWdMLuYawjF5cGrtLilJ+LGd3ZjCXnJjR5DkfWPoIVlqJA==}
     engines: {node: '>=v16'}
     peerDependencies:
@@ -4579,7 +4579,7 @@ packages:
       cosmiconfig: '>=8.2'
       typescript: '>=4'
     dependencies:
-      '@types/node': 18.19.31
+      '@types/node': 20.12.6
       cosmiconfig: 8.3.6(typescript@5.4.4)
       jiti: 1.21.0
       typescript: 5.4.4
@@ -8320,7 +8320,7 @@ packages:
     dependencies:
       lilconfig: 2.1.0
       postcss: 8.4.38
-      ts-node: 10.9.2(@types/node@18.19.31)(typescript@5.4.4)
+      ts-node: 10.9.2(@types/node@20.12.6)(typescript@5.4.4)
       yaml: 2.3.1
     dev: true
 
@@ -8338,7 +8338,7 @@ packages:
     dependencies:
       lilconfig: 3.1.1
       postcss: 8.4.38
-      ts-node: 10.9.2(@types/node@18.19.31)(typescript@5.4.4)
+      ts-node: 10.9.2(@types/node@20.12.6)(typescript@5.4.4)
       yaml: 2.4.1
 
   /postcss-nested@6.0.1(postcss@8.4.38):
@@ -9787,7 +9787,7 @@ packages:
     resolution: {integrity: sha512-k43M7uCG1AkTyxgnmI5MPwKoUvS/bRvLvUb7+Pgpdlmok8AoqmUaZxUUw8zKM5B1lqZrt41GjYgnvAi0fppqgQ==}
     dev: false
 
-  /ts-node@10.9.2(@types/node@18.19.31)(typescript@5.4.4):
+  /ts-node@10.9.2(@types/node@20.12.6)(typescript@5.4.4):
     resolution: {integrity: sha512-f0FFpIdcHgn8zcPSbf1dRevwt047YMnaiJM3u2w2RewrB+fob/zePZcrOyQoLMMO7aBIddLcQIEK5dYjkLnGrQ==}
     hasBin: true
     peerDependencies:
@@ -9806,7 +9806,7 @@ packages:
       '@tsconfig/node12': 1.0.11
       '@tsconfig/node14': 1.0.3
       '@tsconfig/node16': 1.0.4
-      '@types/node': 18.19.31
+      '@types/node': 20.12.6
       acorn: 8.11.3
       acorn-walk: 8.3.2
       arg: 4.1.3
@@ -10236,10 +10236,10 @@ packages:
       '@types/eslint': 8.44.0
       eslint: 8.57.0
       rollup: 2.79.1
-      vite: 5.2.8(@types/node@18.19.31)(sass@1.74.1)
+      vite: 5.2.8(@types/node@20.12.6)(sass@1.74.1)
     dev: true
 
-  /vite@5.2.8(@types/node@18.19.31)(sass@1.74.1):
+  /vite@5.2.8(@types/node@20.12.6)(sass@1.74.1):
     resolution: {integrity: sha512-OyZR+c1CE8yeHw5V5t59aXsUPPVTHMDjEZz8MgguLL/Q7NblxhZUlTu9xSPqlsUO/y+X7dlU05jdhvyycD55DA==}
     engines: {node: ^18.0.0 || >=20.0.0}
     hasBin: true
@@ -10267,7 +10267,7 @@ packages:
       terser:
         optional: true
     dependencies:
-      '@types/node': 18.19.31
+      '@types/node': 20.12.6
       esbuild: 0.20.2
       postcss: 8.4.38
       rollup: 4.14.1
