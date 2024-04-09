@@ -1,4 +1,4 @@
-FROM node:18-bullseye
+FROM node:20-bullseye@sha256:c8a1c68561dab3f14505d472dc97d62e57275412c29ee481da60f724251d7b5e
 
 RUN apt-get update && \
   apt-get install -y python-is-python3 python3 python3-dev python3-pip python3-virtualenv && \
