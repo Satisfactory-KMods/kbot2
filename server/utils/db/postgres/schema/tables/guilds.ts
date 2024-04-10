@@ -1,4 +1,12 @@
-import { boolean, char, colJson, primaryKey, varchar } from '@kmods/drizzle-pg/pg-core';
+import {
+	boolean,
+	char,
+	colJson,
+	colTimestamp,
+	integer,
+	primaryKey,
+	varchar
+} from '@kmods/drizzle-pg/pg-core';
 import { dbSchema } from '../pgSchema';
 
 export type ModRoles = {
@@ -8,6 +16,10 @@ export type ModRoles = {
 
 export const scGuild = dbSchema.table('discord_guild', {
 	guild_id: varchar('guild_id', { length: 512 }).primaryKey().notNull(),
+	total_members: integer('total_members').notNull().default(0),
+	guild_created: colTimestamp('guild_created').notNull().defaultNow(),
+	name: varchar('name', { length: 512 }).notNull().default(''),
+	owner_id: varchar('owner_id', { length: 512 }).notNull().default('0'),
 	active: boolean('active').notNull().default(true)
 });
 

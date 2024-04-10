@@ -51,11 +51,6 @@ class DiscordGuild<TValid extends boolean = false> {
 
 	private async initializeGuild() {
 		await this.initializeGuildDatabase();
-		const Guild = await db
-			.select()
-			.from(scGuild)
-			.where(and(eq(scGuild.guild_id, this.guildId), eq(scGuild.active, true)))
-			.first();
 
 		this.guild =
 			botClient.guilds.cache.find((guild) => {
@@ -64,9 +59,27 @@ class DiscordGuild<TValid extends boolean = false> {
 			((await botClient.guilds.fetch(this.guildId).catch(() => {
 				return null;
 			})) as any);
-		if (Guild && this.guild) {
+		if (this.guild) {
+			await this.guild.fetch();
+
+			await db
+				.update(scGuild)
+				.set({
+					name: this.guild.name,
+					owner_id: this.guild.ownerId,
+					active: true,
+					total_members: this.guild.memberCount,
+					guild_created: new Date(this.guild.createdTimestamp)
+				})
+				.where(and(eq(scGuild.guild_id, this.guildId)));
+
 			await this.doFetch();
 			this.Valid = true;
+		} else {
+			await db
+				.update(scGuild)
+				.set({ active: false })
+				.where(and(eq(scGuild.guild_id, this.guildId)));
 		}
 	}
 

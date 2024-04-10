@@ -22,6 +22,13 @@
       "when": 1712787063952,
       "tag": "0002_tricky_luminals",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1712788245337,
+      "tag": "0003_left_colossus",
+      "breakpoints": true
     }
   ]
 }
