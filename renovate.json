@@ -11,6 +11,7 @@
   "baseBranches": ["dev", "next"],
   "ignoreDeps": [
     "@nuxt/image",
-    "sharp"
+    "sharp",
+    "next-auth"
   ]
 }
