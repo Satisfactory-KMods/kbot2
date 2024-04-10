@@ -1,7 +1,19 @@
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+	const { status, signIn } = useAuth();
+
+	if (status.value !== 'authenticated') {
+		signIn('discord');
+	}
+
+	watch(status, (newStatus) => {
+		if (newStatus === 'authenticated') {
+			signIn('discord');
+		}
+	});
+</script>
 
 <template>
-	<div>
+	<div v-if="status === 'authenticated'">
 		<slot />
 	</div>
 </template>

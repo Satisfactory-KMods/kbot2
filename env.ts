@@ -1,5 +1,7 @@
 import { z } from 'zod';
 
+const version = '2.0.0';
+
 const zodStringOrNumber = z
 	.string()
 	.or(z.number())
@@ -30,6 +32,8 @@ export const env = z
 	})
 	.transform((env) => {
 		return {
+			version,
+			dev: process.env.NODE_ENV !== 'production',
 			auth: {
 				secret: env.NEXTAUTH_SECRET,
 				url: env.NEXTAUTH_URL,
