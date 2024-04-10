@@ -16,13 +16,13 @@ jobs:
     prepare-and-build-app:
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v2
+            - uses: actions/checkout@v4
 
             - name: Set up Docker Buildx
               uses: docker/setup-buildx-action@v3
 
             - name: Install Node.js
-              uses: actions/setup-node@v3
+              uses: actions/setup-node@v4
               with:
                   node-version: 18
 
@@ -37,7 +37,7 @@ jobs:
               run: |
                   echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
 
-            - uses: actions/cache@v3
+            - uses: actions/cache@v4
               name: Setup pnpm cache
               with:
                   path: ${{ env.STORE_PATH }}
@@ -55,7 +55,7 @@ jobs:
 
             - name: Log into registry
               if: github.event_name != 'pull_request'
-              uses: docker/login-action@28218f9b04b4f3f62068d7b6ce6ca5b26e35336c
+              uses: docker/login-action@5f4866a30a54f16a52d2ecb4a3898e9e424939cf
               with:
                   registry: ${{ env.REGISTRY }}
                   username: ${{ github.actor }}
@@ -63,7 +63,7 @@ jobs:
 
             - name: Extract Docker metadata
               id: meta
-              uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
+              uses: docker/metadata-action@c314eea2b27e3cb3c7d7be0618510234d8f6178e
               with:
                   images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
 
@@ -78,7 +78,7 @@ jobs:
                   cache-to: type=gha,mode=max
 
             - name: Deploy
-              uses: appleboy/ssh-action@v1.0.0
+              uses: appleboy/ssh-action@v1.0.3
               with:
                   host: ${{ secrets.SSH_HOST }}
                   username: ${{ secrets.SSH_USER }}
