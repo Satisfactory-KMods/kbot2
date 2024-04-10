@@ -6,7 +6,6 @@ import { botRest } from '../bot';
 import ping from './ping';
 
 export type Slashcommand = {
-	name: string;
 	data: SlashCommandBuilder;
 	execute: (interaction: Interaction<CacheType>) => void | Promise<void>;
 };
@@ -18,6 +17,15 @@ export const slashcommandRegisterArray = slashcommands.map(({ data }) => {
 
 export async function refreshSlashCommands() {
 	try {
+		slashcommands.forEach((cmd) => {
+			const findExisting = slashcommands.find((existing) => {
+				return existing.data.name === cmd.data.name && cmd.data !== existing.data;
+			});
+			if (findExisting) {
+				log('bot-fatal', `Duplicate command found: ${cmd.data.name}`);
+			}
+		});
+
 		await botRest.put(Routes.applicationCommands(env.auth.discord.clientId), {
 			body: slashcommandRegisterArray
 		});
@@ -39,6 +47,10 @@ export async function initSlashCommands() {
 			return;
 		}
 
+		log(
+			'bot-slashcommands',
+			`Command: ${interaction.commandName} from ${interaction.user.tag}`
+		);
 		await command.execute(interaction);
 	});
 

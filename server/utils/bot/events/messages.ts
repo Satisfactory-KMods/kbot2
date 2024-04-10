@@ -11,18 +11,13 @@ botClient.on(Events.MessageCreate, async (message) => {
 	}
 });
 
-log('bot', 'Messages event loaded');
-
 async function handleInGuild(message: Message<true>) {
 	if (message.content === 'ping') {
 		await message.reply('Pong!');
 	}
 }
 
-async function handleNotInGuild(message: Message<false>) {
-	if (message.content === 'Pong') {
-		await message.reply('Ping!');
-	}
-}
+// eslint-disable-next-line unused-imports/no-unused-vars
+async function handleNotInGuild(message: Message<false>) {}
 
 export {};

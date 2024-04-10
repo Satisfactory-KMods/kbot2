@@ -306,7 +306,9 @@ export const logger = new Logger(
 		'bot': LogLevel.LOG,
 		'bot-fatal': LogLevel.FATAL,
 		'bot-error': LogLevel.ERROR,
-		'bot-warn': LogLevel.WARN
+		'bot-warn': LogLevel.WARN,
+		'bot-slashcommands': LogLevel.INFO,
+		'bot-messages': LogLevel.INFO
 	},
 	{ colors: true }
 );
