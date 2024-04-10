@@ -1,20 +1,27 @@
 {
-	"version": "5",
-	"dialect": "pg",
-	"entries": [
-		{
-			"idx": 0,
-			"version": "5",
-			"when": 1712766886297,
-			"tag": "0000_jazzy_black_tarantula",
-			"breakpoints": true
-		},
-		{
-			"idx": 1,
-			"version": "5",
-			"when": 1712767722452,
-			"tag": "0001_faulty_jasper_sitwell",
-			"breakpoints": true
-		}
-	]
+  "version": "5",
+  "dialect": "pg",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1712766886297,
+      "tag": "0000_jazzy_black_tarantula",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1712767722452,
+      "tag": "0001_faulty_jasper_sitwell",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1712787063952,
+      "tag": "0002_tricky_luminals",
+      "breakpoints": true
+    }
+  ]
 }
