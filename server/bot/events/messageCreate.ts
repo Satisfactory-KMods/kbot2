@@ -21,4 +21,6 @@ async function handleInGuild(message: Message<true>) {
 // eslint-disable-next-line unused-imports/no-unused-vars
 async function handleNotInGuild(message: Message<false>) {}
 
+log('bot', 'MessageCreate event loaded');
+
 export {};

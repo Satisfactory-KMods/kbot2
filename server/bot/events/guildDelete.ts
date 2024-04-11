@@ -8,3 +8,7 @@ botClient.on(Events.GuildDelete, async (event) => {
 
 	log('bot', `Left guild ${event.name} (${event.id})`);
 });
+
+log('bot', 'GuildDelete event loaded');
+
+export {};

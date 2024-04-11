@@ -9,3 +9,7 @@ botClient.on(Events.GuildCreate, async (event) => {
 
 	log('bot', `Joined guild ${event.name} (${event.id})`);
 });
+
+log('bot', 'GuildCreate event loaded');
+
+export {};

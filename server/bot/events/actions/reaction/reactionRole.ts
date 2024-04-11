@@ -63,7 +63,7 @@ export async function handleReactionRole(
 					});
 					const message = reaction.message;
 					if (rule && message) {
-						const member = await guild.guildMember(user.id as string);
+						const member = await guild.guildMember(user.id);
 						for (const roleId of rule.roleIds) {
 							const role = await guild.role(roleId);
 							if (member && role) {

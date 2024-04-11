@@ -14,6 +14,6 @@ botClient.once(Events.ClientReady, async (client) => {
 	await client.user.setUsername(`KBot 2.0${env.dev ? ' - Dev' : ''}`);
 });
 
-log('bot', 'Ready event loaded');
+log('bot', 'ClientReady event loaded');
 
 export {};

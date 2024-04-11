@@ -7,3 +7,5 @@ botClient.on(Events.MessageReactionAdd, async (reaction, user) => {
 
 	await handleReactionRole(reaction, user);
 });
+
+log('bot', 'MessageReactionAdd event loaded');

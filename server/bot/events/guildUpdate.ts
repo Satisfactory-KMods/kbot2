@@ -11,3 +11,7 @@ botClient.on(Events.GuildUpdate, async (event) => {
 
 	log('bot', `Update guild ${event.name} (${event.id})`);
 });
+
+log('bot', 'GuildUpdate event loaded');
+
+export {};
