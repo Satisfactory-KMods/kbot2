@@ -1,7 +1,23 @@
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+	import { ModalsContainer } from 'vue-final-modal';
+	useDarkMode();
+
+	useHead({
+		title: 'KBot2',
+		htmlAttrs: {
+			class: `nuxt-ui-scrollbars`
+		}
+	});
+</script>
 
 <template>
-	<NuxtLayout>
-		<NuxtPage />
-	</NuxtLayout>
+	<div>
+		<NuxtLoadingIndicator />
+
+		<NuxtLayout>
+			<NuxtPage />
+		</NuxtLayout>
+
+		<ModalsContainer />
+	</div>
 </template>

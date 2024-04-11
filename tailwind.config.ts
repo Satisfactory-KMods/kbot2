@@ -1,7 +1,11 @@
 import type tailwind from 'tailwindcss';
 /** @type {import('tailwindcss').Config} */
 export default {
-	content: ['presets/**/*.{js,vue,ts}', './**/*.{html,js,vue,ts,jsx,tsx}'],
+	content: [
+		'./presets/**/*.{js,ts}',
+		'./components/**/*.{ts,js,vue}',
+		'./pages/**/*.{ts,js,vue}'
+	],
 	theme: {
 		extend: {
 			colors: {

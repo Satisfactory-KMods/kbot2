@@ -9,6 +9,7 @@ export default defineNuxtConfig({
 		'@sidebase/nuxt-auth',
 		'@nuxt/image',
 		'nuxt-icon',
+		'@nuxtjs/color-mode',
 		'nuxt-primevue',
 		'@pinia/nuxt',
 		'@pinia-plugin-persistedstate/nuxt',
@@ -71,8 +72,8 @@ export default defineNuxtConfig({
 				 * we want to create urls to invite the bot to the server
 				 * for exmaplte: runtimeConfig: https://discord.com/oauth2/authorize?client_id=${useRuntimeConfig().discordClientId}
 				 */
-
-				discordClientId: env.auth.discord.clientId
+				discordClientId: env.auth.discord.clientId,
+				discordInviteUrl: `https://discord.com/oauth2/authorize?client_id=${env.auth.discord.clientId}`
 			}
 		}
 	}

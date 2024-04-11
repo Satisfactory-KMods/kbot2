@@ -17,6 +17,9 @@ dependencies:
   '@sidebase/nuxt-auth':
     specifier: ^0.7.1
     version: 0.7.1(next-auth@4.21.1)(rollup@4.14.1)
+  '@vueuse/components':
+    specifier: ^10.9.0
+    version: 10.9.0(vue@3.4.21)
   '@vueuse/nuxt':
     specifier: ^10.9.0
     version: 10.9.0(nuxt@3.11.2)(rollup@4.14.1)(vue@3.4.21)
@@ -41,6 +44,9 @@ dependencies:
   next-auth:
     specifier: 4.21.1
     version: 4.21.1(next@13.5.6)(react-dom@18.2.0)(react@18.2.0)
+  node-cron:
+    specifier: ^3.0.3
+    version: 3.0.3
   nuxt:
     specifier: ^3.11.2
     version: 3.11.2(@types/node@20.12.7)(@unocss/reset@0.59.0)(eslint@8.57.0)(floating-vue@5.2.2)(rollup@4.14.1)(sass@1.74.1)(typescript@5.4.5)(unocss@0.59.0)(vite@5.2.8)
@@ -59,6 +65,9 @@ dependencies:
   vue:
     specifier: ^3.4.21
     version: 3.4.21(typescript@5.4.5)
+  vue-final-modal:
+    specifier: ^4.5.4
+    version: 4.5.4(@vueuse/core@10.9.0)(@vueuse/integrations@10.9.0)(focus-trap@7.5.4)(vue@3.4.21)
   vue-router:
     specifier: ^4.3.0
     version: 4.3.0(vue@3.4.21)
@@ -100,6 +109,9 @@ devDependencies:
   '@nuxt/types':
     specifier: ^2.17.3
     version: 2.17.3
+  '@nuxtjs/color-mode':
+    specifier: ^3.4.0
+    version: 3.4.0(rollup@4.14.1)
   '@nuxtjs/eslint-config-typescript':
     specifier: ^12.1.0
     version: 12.1.0(eslint@8.57.0)(typescript@5.4.5)
@@ -121,6 +133,9 @@ devDependencies:
   '@types/lodash':
     specifier: ^4.17.0
     version: 4.17.0
+  '@types/node-cron':
+    specifier: ^3.0.11
+    version: 3.0.11
   '@typescript-eslint/eslint-plugin':
     specifier: ^7.6.0
     version: 7.6.0(@typescript-eslint/parser@7.6.0)(eslint@8.57.0)(typescript@5.4.5)
@@ -2356,6 +2371,18 @@ packages:
       - vti
       - vue-tsc
 
+  /@nuxtjs/color-mode@3.4.0(rollup@4.14.1):
+    resolution: {integrity: sha512-rS51nG3zW8ksOwNubIP3BPQ+vBL0r2M6td1kkB/VaR1e1uVtNfWlBPfZjb604bgNCE2AeRNqaI0CrxkfnQ6h6Q==}
+    dependencies:
+      '@nuxt/kit': 3.11.2(rollup@4.14.1)
+      pathe: 1.1.2
+      pkg-types: 1.0.3
+      semver: 7.6.0
+    transitivePeerDependencies:
+      - rollup
+      - supports-color
+    dev: true
+
   /@nuxtjs/eslint-config-typescript@12.1.0(eslint@8.57.0)(typescript@5.4.5):
     resolution: {integrity: sha512-l2fLouDYwdAvCZEEw7wGxOBj+i8TQcHFu3zMPTLqKuv1qu6WcZIr0uztkbaa8ND1uKZ9YPqKx6UlSOjM4Le69Q==}
     peerDependencies:
@@ -3187,6 +3214,10 @@ packages:
     deprecated: This is a stub types definition. mime provides its own type definitions, so you do not need this installed.
     dependencies:
       mime: 4.0.1
+    dev: true
+
+  /@types/node-cron@3.0.11:
+    resolution: {integrity: sha512-0ikrnug3/IyneSHqCBeslAhlK2aBfYek1fGo4bP4QnZPmiqSGRK+Oy7ZMisLWkesffJvQ1cqAcBnJC+8+nxIAg==}
     dev: true
 
   /@types/node@16.18.96:
@@ -11820,6 +11851,20 @@ packages:
     transitivePeerDependencies:
       - supports-color
     dev: true
+
+  /vue-final-modal@4.5.4(@vueuse/core@10.9.0)(@vueuse/integrations@10.9.0)(focus-trap@7.5.4)(vue@3.4.21):
+    resolution: {integrity: sha512-wYunoN89Ago2d6p/hevyo4KSfar1HxScllS6FaHujCGyx69fsb40YPGzN17bk9K68daYAgrJ1inxv+fvhIGv5A==}
+    peerDependencies:
+      '@vueuse/core': '>=10.0.0'
+      '@vueuse/integrations': '>=10.0.0'
+      focus-trap: '>=7.2.0'
+      vue: '>=3.2.0'
+    dependencies:
+      '@vueuse/core': 10.9.0(vue@3.4.21)
+      '@vueuse/integrations': 10.9.0(focus-trap@7.5.4)(vue@3.4.21)
+      focus-trap: 7.5.4
+      vue: 3.4.21(typescript@5.4.5)
+    dev: false
 
   /vue-i18n@9.11.1(vue@3.4.21):
     resolution: {integrity: sha512-S7Xi8DkLQG4xnnbxkxzipJK6CdfLdZkmApn95st89HFGp8LTmTH0Tv+Zw6puhOCZJCFrH73PHo3Ylwd2+Bmdxg==}
