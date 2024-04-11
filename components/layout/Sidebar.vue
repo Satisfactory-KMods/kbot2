@@ -2,14 +2,13 @@
 	import type { MenuItem } from 'primevue/menuitem';
 
 	const { params } = useParams({ values: { guild: String() }, event: checkParams });
-	const { mt, t } = useLang('navigation.sidebar');
 	const { signOut, data } = useAuth();
 
 	function checkParams() {
 		if (!params.guild) {
 			throw createError({
 				status: 404,
-				message: t('error.not-found'),
+				message: 'No server provided',
 				fatal: true
 			});
 		}
@@ -55,27 +54,25 @@
 				<Avatar :image="data.user.image" class="mr-2" shape="circle" />
 				<span class="inline-flex flex-col justify-start">
 					<span class="font-bold">{{ data.user.name }}</span>
-					<span class="text-sm">
-						{{ mt('user-discord-id', { id: data.user.discordId }) }}
-					</span>
+					<span class="text-sm"> ID: {{ data.user.discordId }} </span>
 					<Button
 						size="small"
 						class="mt-1"
 						icon="pi pi-sign-out"
-						:label="mt('logout')"
+						label="Logout"
 						@click="signOut()" />
 				</span>
 			</div>
 		</template>
 		<template #submenuheader="{ item }">
 			<span class="font-bold leading-none text-primary-500 dark:text-primary-400">
-				{{ mt(String(item.label)) }}
+				{{ String(item.label) }}
 			</span>
 		</template>
 		<template #item="{ item, props }">
 			<NuxtLink v-ripple :href="item.url" class="flex items-center" v-bind="props.action">
 				<span :class="item.icon" />
-				<span class="ml-2">{{ mt(String(item.label)) }}</span>
+				<span class="ml-2">{{ String(item.label) }}</span>
 				<Badge v-if="item.badge" class="ml-auto" :value="item.badge" />
 				<span
 					v-if="item.shortcut"

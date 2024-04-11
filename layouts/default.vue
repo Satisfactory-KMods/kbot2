@@ -14,7 +14,7 @@
 </script>
 
 <template>
-	<div v-if="status === 'authenticated'">
+	<div v-if="status === 'authenticated'" class="full-wh">
 		<Sidebar v-model:visible="visible">
 			<template #header>
 				<span class="inline-flex w-full items-center gap-1 px-2 py-2">

@@ -11,7 +11,7 @@
 </script>
 
 <template>
-	<div>
+	<div class="full-wh overflow-auto">
 		<NuxtLoadingIndicator />
 
 		<NuxtLayout>

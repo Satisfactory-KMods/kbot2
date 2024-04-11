@@ -23,7 +23,7 @@
 </script>
 
 <template>
-	<div v-if="status === 'authenticated'">
+	<div v-if="status === 'authenticated'" class="full-wh">
 		<slot />
 	</div>
 </template>

@@ -13,7 +13,6 @@ export default defineNuxtConfig({
 		'nuxt-primevue',
 		'@pinia/nuxt',
 		'@pinia-plugin-persistedstate/nuxt',
-		'@nuxtjs/i18n',
 		'@nuxtjs/tailwindcss'
 	],
 	components: {
@@ -33,11 +32,6 @@ export default defineNuxtConfig({
 	},
 	vite: {
 		plugins: [ViteYaml()]
-	},
-	i18n: {
-		defaultLocale: 'de',
-		locales: ['en', 'de'],
-		vueI18n: './i18n.config.ts' // if you are using custom path, default
 	},
 	alias: {
 		cookie: 'cookie'
@@ -66,15 +60,12 @@ export default defineNuxtConfig({
 			}
 		},
 		runtimeConfig: {
-			public: {
-				/**
-				 * Will be available on both server and client
-				 * we want to create urls to invite the bot to the server
-				 * for exmaplte: runtimeConfig: https://discord.com/oauth2/authorize?client_id=${useRuntimeConfig().discordClientId}
-				 */
-				discordClientId: env.auth.discord.clientId,
-				discordInviteUrl: `https://discord.com/oauth2/authorize?client_id=${env.auth.discord.clientId}`
-			}
+			/**
+			 * Will be available on both server and client
+			 * we want to create urls to invite the bot to the server
+			 * for exmaplte: runtimeConfig: https://discord.com/oauth2/authorize?client_id=${useRuntimeConfig().discordClientId}
+			 */
+			public: env.nuxt.public
 		}
 	}
 });

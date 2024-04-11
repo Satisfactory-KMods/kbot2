@@ -38,3 +38,15 @@
 	background-color: rgb(var(--color-gray-600) / 1);
 	background-color: rgb(var(--color-gray-600) / var(--tw-bg-opacity));
 }
+
+#__nuxt,
+.full-wh {
+	display: flex;
+	flex-direction: column;
+	min-height: 100vh;
+	height: 100vh;
+	max-height: 100vh;
+	min-width: 100%;
+	width: 100%;
+	max-width: 100%;
+}
