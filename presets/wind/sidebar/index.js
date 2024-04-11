@@ -104,7 +104,7 @@ export default {
 		class: [
 			// Spacing and Size
 			'px-6 pb-6',
-			'mt-6',
+			//'mt-6',
 			'h-full',
 			'w-full',
 

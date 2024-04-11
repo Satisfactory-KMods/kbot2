@@ -2,7 +2,7 @@ export default {
     root: {
         class: [
             // Sizing and Shape
-            'min-w-[12rem]',
+            'min-w-[12rem] w-full',
             'rounded-md',
             'h-full',
             // overflow

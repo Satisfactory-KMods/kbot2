@@ -46,15 +46,8 @@
 </script>
 
 <template>
-	<Menu :model="items" class="w-full md:w-[17rem]">
+	<Menu :model="items">
 		<template #start>
-			<span class="inline-flex w-full items-center gap-1 px-2 py-2 sm:w-[15rem]">
-				<NuxtImg src="/images/logo.png" width="30" height="30" class="me-2" />
-				<span class="text-xl font-medium">
-					KBot<span class="text-primary-500 dark:text-primary-400">2</span>
-				</span>
-			</span>
-
 			<div
 				v-if="data?.user"
 				class="p-link dark:text-surface-0/80 relative flex w-full cursor-default items-center overflow-hidden rounded-none p-2 pl-3">
