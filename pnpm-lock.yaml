@@ -50,6 +50,9 @@ dependencies:
   postgres:
     specifier: ^3.4.4
     version: 3.4.4
+  primeicons:
+    specifier: ^7.0.0
+    version: 7.0.0
   primevue:
     specifier: ^3.51.0
     version: 3.51.0(vue@3.4.21)
@@ -9927,6 +9930,10 @@ packages:
 
   /pretty-format@3.8.0:
     resolution: {integrity: sha512-WuxUnVtlWL1OfZFQFuqvnvs6MiAGk9UNsBostyBOB0Is9wb5uRESevA6rnl/rkksXaGX3GzZhPup5d6Vp1nFew==}
+    dev: false
+
+  /primeicons@7.0.0:
+    resolution: {integrity: sha512-jK3Et9UzwzTsd6tzl2RmwrVY/b8raJ3QZLzoDACj+oTJ0oX7L9Hy+XnVwgo4QVKlKpnP/Ur13SXV/pVh4LzaDw==}
     dev: false
 
   /primevue@3.49.1(vue@3.4.21):

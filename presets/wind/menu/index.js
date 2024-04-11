@@ -4,12 +4,13 @@ export default {
             // Sizing and Shape
             'min-w-[12rem]',
             'rounded-md',
+            'h-full',
+            // overflow
+            'overflow-auto',
             // Spacing
             'p-1.5',
             // Colors
-            'bg-surface-0 dark:bg-surface-700',
-            'text-surface-700 dark:text-white/80',
-            'ring-1 ring-surface-200 dark:ring-surface-700'
+            'text-surface-700 dark:text-white/80'
         ]
     },
     menu: {
@@ -96,7 +97,6 @@ export default {
             'rounded-tr-none',
 
             // Colors
-            'bg-surface-0 dark:bg-surface-700',
             'text-surface-600 dark:text-surface-0/60'
         ]
     },

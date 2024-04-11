@@ -33,6 +33,7 @@
 		"nuxt": "^3.11.2",
 		"pinia": "^2.1.7",
 		"postgres": "^3.4.4",
+		"primeicons": "^7.0.0",
 		"primevue": "^3.51.0",
 		"vue": "^3.4.21",
 		"vue-router": "^4.3.0",

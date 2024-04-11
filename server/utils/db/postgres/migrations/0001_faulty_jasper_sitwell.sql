@@ -1,1 +1,0 @@
-ALTER TABLE "kbot2"."user" ADD COLUMN "hoster" boolean DEFAULT false NOT NULL;

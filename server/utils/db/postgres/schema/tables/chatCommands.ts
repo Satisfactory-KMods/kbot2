@@ -1,10 +1,10 @@
-import { colJson, uuid, varchar } from '@kmods/drizzle-pg/pg-core';
+import { colJson, numeric, uuid, varchar } from '@kmods/drizzle-pg/pg-core';
 import { dbSchema } from '../pgSchema';
 import { scGuild } from './guilds';
 
 export const scChatCommands = dbSchema.table('discord_guild_chat_commands', {
 	command_id: uuid('command_id').primaryKey().notNull().defaultRandom(),
-	guild_id: varchar('guild_id', { length: 512 })
+	guild_id: numeric('guild_id')
 		.notNull()
 		.references(
 			() => {

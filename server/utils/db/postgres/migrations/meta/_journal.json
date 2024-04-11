@@ -5,29 +5,8 @@
     {
       "idx": 0,
       "version": "5",
-      "when": 1712766886297,
-      "tag": "0000_jazzy_black_tarantula",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "5",
-      "when": 1712767722452,
-      "tag": "0001_faulty_jasper_sitwell",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "5",
-      "when": 1712787063952,
-      "tag": "0002_tricky_luminals",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "5",
-      "when": 1712788245337,
-      "tag": "0003_left_colossus",
+      "when": 1712813861904,
+      "tag": "0000_happy_kang",
       "breakpoints": true
     }
   ]

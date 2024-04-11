@@ -15,6 +15,15 @@ export default defineNuxtConfig({
 		'@nuxtjs/i18n',
 		'@nuxtjs/tailwindcss'
 	],
+	components: {
+		global: true,
+		dirs: [
+			{
+				path: '~/components/layout',
+				prefix: 'Layout'
+			}
+		]
+	},
 	primevue: {
 		options: {
 			unstyled: true
@@ -32,7 +41,11 @@ export default defineNuxtConfig({
 	alias: {
 		cookie: 'cookie'
 	},
-	css: ['~/assets/css/tailwind.css', 'primevue/resources/themes/lara-dark-blue/theme.css'],
+	css: [
+		'~/assets/css/tailwind.css',
+		'primevue/resources/themes/lara-dark-blue/theme.css',
+		'primeicons/primeicons.css'
+	],
 	tailwindcss: {
 		cssPath: '~/assets/css/tailwind.css'
 	},

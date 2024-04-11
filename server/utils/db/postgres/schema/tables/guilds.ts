@@ -4,6 +4,7 @@ import {
 	colJson,
 	colTimestamp,
 	integer,
+	numeric,
 	primaryKey,
 	varchar
 } from '@kmods/drizzle-pg/pg-core';
@@ -15,18 +16,18 @@ export type ModRoles = {
 };
 
 export const scGuild = dbSchema.table('discord_guild', {
-	guild_id: varchar('guild_id', { length: 512 }).primaryKey().notNull(),
+	guild_id: numeric('guild_id').primaryKey().notNull(),
 	total_members: integer('total_members').notNull().default(0),
 	guild_created: colTimestamp('guild_created').notNull().defaultNow(),
 	name: varchar('name', { length: 512 }).notNull().default(''),
-	owner_id: varchar('owner_id', { length: 512 }).notNull().default('0'),
+	owner_id: numeric('owner_id').notNull().default('0'),
 	active: boolean('active').notNull().default(true)
 });
 
 export const scGuildAdmins = dbSchema.table(
 	'discord_guild_admins',
 	{
-		guild_id: varchar('guild_id', { length: 512 })
+		guild_id: numeric('guild_id')
 			.notNull()
 			.references(
 				() => {
@@ -34,7 +35,7 @@ export const scGuildAdmins = dbSchema.table(
 				},
 				{ onDelete: 'cascade' }
 			),
-		user_id: varchar('user_id', { length: 512 }).notNull()
+		user_id: numeric('user_id').notNull()
 	},
 	(t) => {
 		return {
@@ -44,7 +45,7 @@ export const scGuildAdmins = dbSchema.table(
 );
 
 export const scGuildConfiguration = dbSchema.table('discord_guild_configuration', {
-	guild_id: varchar('guild_id', { length: 512 })
+	guild_id: numeric('guild_id')
 		.primaryKey()
 		.notNull()
 		.references(
@@ -53,18 +54,16 @@ export const scGuildConfiguration = dbSchema.table('discord_guild_configuration'
 			},
 			{ onDelete: 'cascade' }
 		),
-	changelog_suggestion_channel_id: varchar('changelog_suggestion_channel_id', { length: 512 }),
-	changelog_bug_channel_id: varchar('changelog_bug_channel_id', { length: 512 })
+	changelog_suggestion_channel_id: numeric('changelog_suggestion_channel_id')
 		.notNull()
 		.default('0'),
+	changelog_bug_channel_id: numeric('changelog_bug_channel_id').notNull().default('0'),
 	changelog_announce_hidden_mods: boolean('changelog_announce_hidden_mods')
 		.notNull()
 		.default(false),
-	changelog_forum_id: varchar('changelog_forum_id', { length: 512 }).notNull().default('0'),
-	update_text_channel_id: varchar('update_text_channel_id', { length: 512 })
-		.notNull()
-		.default('0'),
-	default_ping_role: varchar('default_ping_role', { length: 512 }).notNull().default('0'),
+	changelog_forum_id: numeric('changelog_forum_id').notNull().default('0'),
+	update_text_channel_id: numeric('update_text_channel_id').notNull().default('0'),
+	default_ping_role: numeric('default_ping_role').notNull().default('0'),
 	blacklisted_mods: colJson('blacklisted_mods').notNull().default([]),
 	ficsit_user_ids: colJson('ficsit_user_ids').notNull().default([]),
 	mod_roles_map: colJson('mod_roles_map').$type<ModRoles[]>().notNull().default([]),
@@ -74,7 +73,7 @@ export const scGuildConfiguration = dbSchema.table('discord_guild_configuration'
 export const scGuildPatreons = dbSchema.table(
 	'discord_guild_patreons',
 	{
-		guild_id: varchar('guild_id', { length: 512 })
+		guild_id: numeric('guild_id')
 			.notNull()
 			.references(
 				() => {
@@ -82,7 +81,7 @@ export const scGuildPatreons = dbSchema.table(
 				},
 				{ onDelete: 'cascade' }
 			),
-		user_id: varchar('user_id', { length: 512 }).notNull()
+		user_id: numeric('user_id').notNull()
 	},
 	(t) => {
 		return {
@@ -92,7 +91,7 @@ export const scGuildPatreons = dbSchema.table(
 );
 
 export const scGuildPatreonSettings = dbSchema.table('discord_guild_patreon_settings', {
-	guild_id: varchar('guild_id', { length: 512 })
+	guild_id: numeric('guild_id')
 		.primaryKey()
 		.notNull()
 		.references(
@@ -102,9 +101,7 @@ export const scGuildPatreonSettings = dbSchema.table('discord_guild_patreon_sett
 			{ onDelete: 'cascade' }
 		),
 	ping_roles: colJson('ping_roles').notNull().default([]),
-	announcement_channel_id: varchar('announcement_channel_id', { length: 512 })
-		.notNull()
-		.default('0'),
-	changelog_forum: varchar('changelog_forum', { length: 512 }).notNull().default('0'),
-	patreon_release_text: varchar('patreon_release_text', { length: 512 }).notNull().default('0')
+	announcement_channel_id: numeric('announcement_channel_id').notNull().default('0'),
+	changelog_forum: numeric('changelog_forum').notNull().default('0'),
+	patreon_release_text: varchar('patreon_release_text', { length: 8196 }).notNull().default('0')
 });

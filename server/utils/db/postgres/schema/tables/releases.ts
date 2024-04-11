@@ -1,9 +1,9 @@
-import { boolean, colDate, uuid, varchar } from '@kmods/drizzle-pg/pg-core';
+import { boolean, colDate, numeric, uuid, varchar } from '@kmods/drizzle-pg/pg-core';
 import { dbSchema } from '../pgSchema';
 import { scGuild } from './guilds';
 
 export const scReleases = dbSchema.table('discord_guild_releases', {
-	guild_id: varchar('guild_id', { length: 512 })
+	guild_id: numeric('guild_id')
 		.primaryKey()
 		.notNull()
 		.references(
@@ -15,5 +15,5 @@ export const scReleases = dbSchema.table('discord_guild_releases', {
 	file: uuid('file').notNull().defaultRandom(),
 	patreon: boolean('patreon').notNull().default(false),
 	expires: colDate('expires'),
-	mod_ref: varchar('mod_ref', { length: 512 }).notNull()
+	mod_ref: varchar('mod_ref', { length: 256 }).notNull()
 });

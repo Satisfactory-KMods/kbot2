@@ -2,19 +2,28 @@
 	const { status, signIn } = useAuth();
 
 	if (status.value !== 'authenticated') {
-		signIn('discord');
+		await signIn('discord');
+
+		throw createError({
+			status: 302,
+			message: 'Unauthorized'
+		});
 	}
 
-	watch(status, (newStatus) => {
+	watch(status, async (newStatus) => {
 		if (newStatus === 'authenticated') {
-			signIn('discord');
+			await signIn('discord');
+
+			throw createError({
+				status: 302,
+				message: 'Unauthorized'
+			});
 		}
 	});
 </script>
 
 <template>
 	<div v-if="status === 'authenticated'">
-		<LayoutSidebar />
 		<slot />
 	</div>
 </template>
