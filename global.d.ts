@@ -2,8 +2,13 @@ import type { DefaultSession } from 'next-auth';
 
 // ts global for yaml
 declare module '*.yaml' {
-	const content: any;
-	export default content;
+	const json: Record<string, string>;
+	export default json;
+}
+
+declare module '*.yml' {
+	const json: Record<string, string>;
+	export default json;
 }
 
 declare module 'next-auth' {

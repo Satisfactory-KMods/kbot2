@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 	import type { MenuItem } from 'primevue/menuitem';
 
-	const { params } = useParams({ values: { guild: String() } });
+	const { params } = useParams({ values: { guild: String() }, event: checkParams });
 	const { mt, t } = useLang('navigation.sidebar');
 	const { signOut, data } = useAuth();
 
@@ -14,6 +14,7 @@
 			});
 		}
 	}
+	checkParams();
 
 	const items = ref<MenuItem[]>([
 		{
