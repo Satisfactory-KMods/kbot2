@@ -1,6 +1,7 @@
 import { ActivityType, Events } from 'discord.js';
 import { env } from '~/env';
 import { log } from '~/utils/logger';
+import { botClient } from '../bot';
 
 botClient.once(Events.ClientReady, async (client) => {
 	log('bot', `Logged in as ${client.user.tag}!`);

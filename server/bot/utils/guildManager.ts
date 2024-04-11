@@ -1,6 +1,7 @@
-import { and, eq } from '@kmods/drizzle-pg';
+import { and, eq, notInArray } from '@kmods/drizzle-pg';
 import {
 	ChannelType,
+	PermissionFlagsBits,
 	type Collection,
 	type Guild,
 	type GuildForumThreadCreateOptions,
@@ -8,13 +9,15 @@ import {
 	type MessagePayload,
 	type NonThreadGuildBasedChannel
 } from 'discord.js';
+import { log } from '~/utils/logger';
 import {
 	db,
 	scGuild,
 	scGuildAdmins,
 	scGuildConfiguration,
 	scGuildPatreonSettings
-} from '../../db/postgres/pg';
+} from '../../utils/db/postgres/pg';
+import { botClient } from '../bot';
 
 class DiscordGuild<TValid extends boolean = false> {
 	public readonly guildId;
@@ -49,6 +52,66 @@ class DiscordGuild<TValid extends boolean = false> {
 		}
 	}
 
+	public async updateGuildDatas(fetch = true) {
+		if (fetch) {
+			await this.guild?.fetch();
+			await this.doFetch().catch(() => {
+				log('bot-warn', `Failed to fetch guild data for ${this.guildId}`);
+			});
+		}
+
+		await db.transaction(async (trx) => {
+			if (!this.guild) {
+				return log('bot-warn', `Guild ${this.guildId} not found`);
+			}
+
+			await trx
+				.update(scGuild)
+				.set({
+					name: this.guild.name,
+					owner_id: this.guild.ownerId,
+					active: true,
+					image: this.guild.iconURL({ forceStatic: true }) ?? '',
+					total_members: this.guild.memberCount,
+					guild_created: new Date(this.guild.createdTimestamp)
+				})
+				.where(and(eq(scGuild.guild_id, this.guildId)));
+
+			const usersWithPermission = this.guild.members.cache
+				.filter((member) => {
+					return (
+						member.permissions.has(PermissionFlagsBits.Administrator) &&
+						!member.user.bot
+					);
+				})
+				.map((member) => {
+					return member.id;
+				});
+
+			await db
+				.delete(scGuildAdmins)
+				.where(
+					and(
+						notInArray(scGuildAdmins.user_id, usersWithPermission),
+						eq(scGuildAdmins.guild_id, this.guildId)
+					)
+				);
+			await Promise.all(
+				usersWithPermission.map((userId) => {
+					return trx
+						.insert(scGuildAdmins)
+						.values({
+							guild_id: this.guildId,
+							user_id: userId
+						})
+						.onConflictDoNothing();
+				})
+			);
+
+			log('bot', 'Guild data updated', this.guild.name);
+		});
+	}
+
 	private async initializeGuild() {
 		await this.initializeGuildDatabase();
 
@@ -59,21 +122,9 @@ class DiscordGuild<TValid extends boolean = false> {
 			((await botClient.guilds.fetch(this.guildId).catch(() => {
 				return null;
 			})) as any);
+
 		if (this.guild) {
-			await this.guild.fetch();
-
-			await db
-				.update(scGuild)
-				.set({
-					name: this.guild.name,
-					owner_id: this.guild.ownerId,
-					active: true,
-					total_members: this.guild.memberCount,
-					guild_created: new Date(this.guild.createdTimestamp)
-				})
-				.where(and(eq(scGuild.guild_id, this.guildId)));
-
-			await this.doFetch();
+			await this.updateGuildDatas();
 			this.Valid = true;
 		} else {
 			await db
@@ -90,15 +141,33 @@ class DiscordGuild<TValid extends boolean = false> {
 	public async doFetch() {
 		if (this.lastFetch.valueOf() + this.fetchInterval <= Date.now() && this.guild) {
 			await Promise.all([
-				this.guild.members.fetch().catch(() => {}),
-				this.guild.roles.fetch().catch(() => {}),
-				this.guild.invites.fetch().catch(() => {}),
-				this.guild.channels.fetch().catch(() => {}),
-				this.guild.bans.fetch().catch(() => {}),
-				this.guild.commands.fetch().catch(() => {}),
-				this.guild.autoModerationRules.fetch().catch(() => {}),
-				this.guild.emojis.fetch().catch(() => {}),
-				this.guild.stickers.fetch().catch(() => {})
+				this.guild.members.fetch().catch(() => {
+					return null;
+				}),
+				this.guild.roles.fetch().catch(() => {
+					return null;
+				}),
+				this.guild.invites.fetch().catch(() => {
+					return null;
+				}),
+				this.guild.channels.fetch().catch(() => {
+					return null;
+				}),
+				this.guild.bans.fetch().catch(() => {
+					return null;
+				}),
+				this.guild.commands.fetch().catch(() => {
+					return null;
+				}),
+				this.guild.autoModerationRules.fetch().catch(() => {
+					return null;
+				}),
+				this.guild.emojis.fetch().catch(() => {
+					return null;
+				}),
+				this.guild.stickers.fetch().catch(() => {
+					return null;
+				})
 			]);
 			this.lastFetch = new Date();
 		}
@@ -129,7 +198,9 @@ class DiscordGuild<TValid extends boolean = false> {
 			if (guild.channels.cache.has(channelId)) {
 				return guild.channels.cache.get(channelId);
 			}
-			return guild.channels.fetch(channelId).catch(() => {});
+			return guild.channels.fetch(channelId).catch(() => {
+				return null;
+			});
 		}
 		return undefined;
 	}
@@ -147,7 +218,9 @@ class DiscordGuild<TValid extends boolean = false> {
 
 	public guildMember(memberId: string) {
 		if (this.guild) {
-			return this.guild.members.fetch(memberId).catch(() => {});
+			return this.guild.members.fetch(memberId).catch(() => {
+				return null;
+			});
 		}
 		return undefined;
 	}
@@ -187,7 +260,9 @@ class DiscordGuild<TValid extends boolean = false> {
 	public async user(userId: string) {
 		const guild = this.getGuild;
 		if (guild && userId) {
-			return await guild.members.fetch(userId).catch(() => {});
+			return await guild.members.fetch(userId).catch(() => {
+				return null;
+			});
 		}
 		return undefined;
 	}
@@ -195,7 +270,9 @@ class DiscordGuild<TValid extends boolean = false> {
 	public async role(roleId: string) {
 		const guild = this.getGuild;
 		if (guild && roleId) {
-			return await guild.roles.fetch(roleId).catch(() => {});
+			return await guild.roles.fetch(roleId).catch(() => {
+				return null;
+			});
 		}
 		return undefined;
 	}
@@ -203,7 +280,11 @@ class DiscordGuild<TValid extends boolean = false> {
 	public async allTextChannels() {
 		const guild = this.getGuild;
 		if (guild) {
-			return (await guild.channels.fetch().catch(() => {}))?.filter((R) => {
+			return (
+				await guild.channels.fetch().catch(() => {
+					return null;
+				})
+			)?.filter((R) => {
 				return R?.isTextBased;
 			});
 		}
@@ -215,7 +296,11 @@ class DiscordGuild<TValid extends boolean = false> {
 	> {
 		const guild = this.getGuild;
 		if (guild) {
-			return (await guild.channels.fetch().catch(() => {}))?.filter((R) => {
+			return (
+				await guild.channels.fetch().catch(() => {
+					return null;
+				})
+			)?.filter((R) => {
 				return R?.isVoiceBased;
 			});
 		}
@@ -225,7 +310,11 @@ class DiscordGuild<TValid extends boolean = false> {
 	public async allForumChannels() {
 		const guild = this.getGuild;
 		if (guild) {
-			return (await guild.channels.fetch().catch(() => {}))?.filter((R) => {
+			return (
+				await guild.channels.fetch().catch(() => {
+					return null;
+				})
+			)?.filter((R) => {
 				return R?.isThread;
 			});
 		}
@@ -235,7 +324,11 @@ class DiscordGuild<TValid extends boolean = false> {
 	public async allChannels() {
 		const guild = this.getGuild;
 		if (guild) {
-			return (await guild.channels.fetch().catch(() => {}))?.filter((R) => {
+			return (
+				await guild.channels.fetch().catch(() => {
+					return null;
+				})
+			)?.filter((R) => {
 				return R?.isThread;
 			});
 		}
@@ -245,7 +338,9 @@ class DiscordGuild<TValid extends boolean = false> {
 	public async allRoles() {
 		const guild = this.getGuild;
 		if (guild) {
-			return await guild.roles.fetch().catch(() => {});
+			return await guild.roles.fetch().catch(() => {
+				return null;
+			});
 		}
 		return [];
 	}
@@ -253,7 +348,9 @@ class DiscordGuild<TValid extends boolean = false> {
 	public async allMember() {
 		const guild = this.getGuild;
 		if (guild) {
-			return await guild.roles.fetch().catch(() => {});
+			return await guild.roles.fetch().catch(() => {
+				return null;
+			});
 		}
 		return [];
 	}
@@ -264,7 +361,9 @@ class DiscordGuild<TValid extends boolean = false> {
 	}): Promise<boolean> {
 		const channel = await this.textChannel(opt.channelId);
 		if (channel) {
-			return !!(await channel.send(opt.message).catch(() => {}));
+			return !!(await channel.send(opt.message).catch(() => {
+				return null;
+			}));
 		}
 		return false;
 	}
@@ -275,7 +374,9 @@ class DiscordGuild<TValid extends boolean = false> {
 	}): Promise<boolean> {
 		const channel = await this.forumChannel(opt.channelId);
 		if (channel && channel.isThreadOnly()) {
-			return !!(await channel.threads.create(opt.thread).catch(() => {}));
+			return !!(await channel.threads.create(opt.thread).catch(() => {
+				return null;
+			}));
 		}
 		return false;
 	}
@@ -294,18 +395,17 @@ export const DiscordGuildManager = new (class {
 		}
 	}
 
-	public async GetGuild(guildId: string): Promise<DiscordGuild | null> {
-		if (this.guilds.has(guildId)) {
-			const guild = this.guilds.get(guildId);
-			await guild!.doFetch();
-			return guild!;
-		} else {
-			const GuildClass = await DiscordGuild.constructGuild(guildId);
-			if (GuildClass.IsValid) {
-				this.guilds.set(guildId, GuildClass);
-				return GuildClass;
+	public async GetGuild(guildId: string, fetch = false): Promise<DiscordGuild> {
+		const guild = this.guilds.get(guildId);
+		if (guild) {
+			if (fetch) {
+				await guild.doFetch();
 			}
+			return guild;
 		}
-		return null;
+
+		const GuildClass = await DiscordGuild.constructGuild(guildId);
+		this.guilds.set(guildId, GuildClass);
+		return GuildClass;
 	}
 })();

@@ -1,4 +1,5 @@
 import { Events } from 'discord.js';
+import { botClient } from '../bot';
 import { handleReactionRole } from './actions/reaction/reactionRole';
 
 botClient.on(Events.MessageReactionAdd, async (reaction, user) => {

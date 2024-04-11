@@ -1,5 +1,6 @@
 import { Events, type Message } from 'discord.js';
 import { log } from '~/utils/logger';
+import { botClient } from '../bot';
 
 botClient.on(Events.MessageCreate, async (message) => {
 	if (message.author.bot) return;

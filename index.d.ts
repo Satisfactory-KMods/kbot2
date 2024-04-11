@@ -24,3 +24,14 @@ declare module 'next-auth' {
 		expires: string;
 	}
 }
+
+declare module 'nuxt/schema' {
+	interface PublicRuntimeConfig {
+		version: string;
+		discordClientId: string;
+		discordInviteUrl: string;
+	}
+}
+
+// It is always important to ensure you import/export something when augmenting a type
+export {};

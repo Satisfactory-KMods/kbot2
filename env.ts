@@ -36,6 +36,7 @@ export const env = z
 			dev: process.env.NODE_ENV !== 'production',
 			nuxt: {
 				public: {
+					version,
 					discordClientId: env.DISCORD_CLIENT_ID,
 					discordInviteUrl: `https://discord.com/oauth2/authorize?client_id=${env.DISCORD_CLIENT_ID}&permissions=8&scope=bot`
 				}

@@ -11,6 +11,10 @@ export async function discordInitBot() {
 	await import('./events/clientReady');
 	await import('./events/messageCreate');
 	await import('./events/messageReactionAdd');
+	await import('./events/guildUpdate');
+	await import('./events/guildCreate');
+	await import('./events/guildDelete');
+	await import('./events/interactionCreate');
 
 	await botClient.login(env.auth.discord.token).catch((err) => {
 		log('bot-fatal', err, `| Token: ${env.auth.discord.token}`);

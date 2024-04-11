@@ -3,6 +3,16 @@
 		layout: 'default-raw'
 	});
 
+	const { data } = await useFetch('/api/servers', { method: 'GET' });
+
+	if (!data.value) {
+		throw createError({
+			status: 404,
+			message: 'Failed to fetch data from the server',
+			fatal: true
+		});
+	}
+
 	const config = useRuntimeConfig().public;
 </script>
 
@@ -18,9 +28,21 @@
 						</div>
 					</Message>
 
-					<a :href="String(config.discordInviteUrl)" target="_blank">
-						<Button outlined label="Invite Kbot2" icon="pi-add" class="mt-2" />
-					</a>
+					<NuxtLink
+						v-for="server of data"
+						:key="server.guild_id"
+						:href="`/guild/${server.guild_id}`">
+						<Button outlined :label="server.name" icon="pi-add" class="mt-2" />
+					</NuxtLink>
+
+					<ButtonGroup>
+						<a :href="config.discordInviteUrl" target="_blank" class="block w-full">
+							<Button class="mt-2 w-full">
+								<Icon name="mdi:robot" class="mr-2" />
+								Invite Kbot2
+							</Button>
+						</a>
+					</ButtonGroup>
 				</template>
 			</Card>
 		</div>

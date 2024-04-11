@@ -2,7 +2,7 @@ import type { CacheType, Interaction, SlashCommandBuilder } from 'discord.js';
 import { Events, Routes } from 'discord.js';
 import { env } from '~/env';
 import { log } from '~/utils/logger';
-import { botRest } from '../bot';
+import { botClient, botRest } from '../bot';
 import ping from './ping';
 
 export type Slashcommand = {

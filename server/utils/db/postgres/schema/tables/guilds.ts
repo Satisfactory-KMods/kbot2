@@ -19,6 +19,7 @@ export const scGuild = dbSchema.table('discord_guild', {
 	guild_id: numeric('guild_id').primaryKey().notNull(),
 	total_members: integer('total_members').notNull().default(0),
 	guild_created: colTimestamp('guild_created').notNull().defaultNow(),
+	image: varchar('image', { length: 1024 }).notNull().default(''),
 	name: varchar('name', { length: 512 }).notNull().default(''),
 	owner_id: numeric('owner_id').notNull().default('0'),
 	active: boolean('active').notNull().default(true)

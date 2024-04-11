@@ -1,4 +1,5 @@
 import { log } from '~/utils/logger';
+import { botClient } from '../bot';
 import { DiscordGuildManager } from './guildManager';
 
 export function initGuilds() {
