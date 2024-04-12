@@ -42,9 +42,9 @@
 					<span class="inline-flex w-full items-center gap-1 px-2 py-2">
 						<NuxtImg src="/images/logo.png" width="30" height="30" />
 						<span class="text-xl font-medium">
-							KBot<span class="text-primary-500 dark:text-primary-400">
-								2 Webinterface
-							</span>
+							KBot<span class="text-primary-500 dark:text-primary-400"
+								>2 Webinterface</span
+							>
 						</span>
 					</span>
 				</template>

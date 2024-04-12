@@ -28,12 +28,19 @@ export const env = z
 		POSTGRES_USER: z.string(),
 		POSTGRES_DB: z.string(),
 		POSTGRES_HOST: z.string(),
-		POSTGRES_PORT: zodStringOrNumber
+		POSTGRES_PORT: zodStringOrNumber,
+		// Ficsit app url
+		FICSIT_APP_API_URL: z.string(),
+		FIVSIT_APP_API_TOKEN: z.string().optional()
 	})
 	.transform((env) => {
 		return {
 			version,
 			dev: process.env.NODE_ENV !== 'production',
+			ficsit: {
+				url: env.FICSIT_APP_API_URL,
+				token: env.FIVSIT_APP_API_TOKEN
+			},
 			nuxt: {
 				public: {
 					version,

@@ -1,8 +1,8 @@
 import type { AdapterAccount } from '@auth/core/adapters';
 import { boolean, colTimestamp, integer, primaryKey, text } from '@kmods/drizzle-pg/pg-core';
-import { dbSchema } from '../pgSchema';
+import { kbot2Schema } from '../pgSchema';
 
-export const users = dbSchema.table('user', {
+export const users = kbot2Schema.table('user', {
 	id: text('id').notNull().primaryKey(),
 	name: text('name'),
 	email: text('email').notNull(),
@@ -11,7 +11,7 @@ export const users = dbSchema.table('user', {
 	hoster: boolean('hoster').notNull().default(false)
 });
 
-export const accounts = dbSchema.table(
+export const accounts = kbot2Schema.table(
 	'account',
 	{
 		userId: text('userId')
@@ -40,7 +40,7 @@ export const accounts = dbSchema.table(
 	}
 );
 
-export const sessions = dbSchema.table('session', {
+export const sessions = kbot2Schema.table('session', {
 	sessionToken: text('sessionToken').notNull().primaryKey(),
 	userId: text('userId')
 		.notNull()
@@ -53,7 +53,7 @@ export const sessions = dbSchema.table('session', {
 	expires: colTimestamp('expires').notNull()
 });
 
-export const verificationTokens = dbSchema.table(
+export const verificationTokens = kbot2Schema.table(
 	'verificationToken',
 	{
 		identifier: text('identifier').notNull(),

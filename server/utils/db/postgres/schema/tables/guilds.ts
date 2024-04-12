@@ -8,14 +8,14 @@ import {
 	primaryKey,
 	varchar
 } from '@kmods/drizzle-pg/pg-core';
-import { dbSchema } from '../pgSchema';
+import { kbot2Schema } from '../pgSchema';
 
 export type ModRoles = {
 	modRef: string;
 	roleId: string;
 };
 
-export const scGuild = dbSchema.table('discord_guild', {
+export const scGuild = kbot2Schema.table('discord_guild', {
 	guild_id: numeric('guild_id').primaryKey().notNull(),
 	total_members: integer('total_members').notNull().default(0),
 	guild_created: colTimestamp('guild_created').notNull().defaultNow(),
@@ -25,7 +25,7 @@ export const scGuild = dbSchema.table('discord_guild', {
 	active: boolean('active').notNull().default(true)
 });
 
-export const scGuildAdmins = dbSchema.table(
+export const scGuildAdmins = kbot2Schema.table(
 	'discord_guild_admins',
 	{
 		guild_id: numeric('guild_id')
@@ -45,7 +45,7 @@ export const scGuildAdmins = dbSchema.table(
 	}
 );
 
-export const scGuildConfiguration = dbSchema.table('discord_guild_configuration', {
+export const scGuildConfiguration = kbot2Schema.table('discord_guild_configuration', {
 	guild_id: numeric('guild_id')
 		.primaryKey()
 		.notNull()
@@ -71,7 +71,7 @@ export const scGuildConfiguration = dbSchema.table('discord_guild_configuration'
 	chat_command_prefix: char('chat_command_prefix', { length: 1 }).notNull().default('.')
 });
 
-export const scGuildPatreons = dbSchema.table(
+export const scGuildPatreons = kbot2Schema.table(
 	'discord_guild_patreons',
 	{
 		guild_id: numeric('guild_id')
@@ -91,7 +91,7 @@ export const scGuildPatreons = dbSchema.table(
 	}
 );
 
-export const scGuildPatreonSettings = dbSchema.table('discord_guild_patreon_settings', {
+export const scGuildPatreonSettings = kbot2Schema.table('discord_guild_patreon_settings', {
 	guild_id: numeric('guild_id')
 		.primaryKey()
 		.notNull()

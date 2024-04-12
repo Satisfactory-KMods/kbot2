@@ -15,6 +15,13 @@
       "when": 1712839323819,
       "tag": "0001_spicy_abomination",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1712952357719,
+      "tag": "0002_warm_polaris",
+      "breakpoints": true
     }
   ]
 }

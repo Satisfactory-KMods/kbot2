@@ -308,7 +308,13 @@ export const logger = new Logger(
 		'bot-error': LogLevel.ERROR,
 		'bot-warn': LogLevel.WARN,
 		'bot-slashcommands': LogLevel.INFO,
-		'bot-messages': LogLevel.INFO
+		'bot-messages': LogLevel.INFO,
+		'tasks': LogLevel.INFO,
+		'tasks-error': LogLevel.ERROR,
+		'tasks-warn': LogLevel.WARN,
+		'ficsit': LogLevel.INFO,
+		'ficsit-error': LogLevel.ERROR,
+		'ficsit-warn': LogLevel.WARN
 	},
 	{ colors: true }
 );

@@ -1,2 +1,4 @@
 import { pgSchema } from '@kmods/drizzle-pg/pg-core';
-export const dbSchema = pgSchema('kbot2');
+
+export const kbot2Schema = pgSchema('kbot2');
+export const ficsitAppSchema = pgSchema('ficsit_app');

@@ -1,8 +1,8 @@
 import { colJson, numeric, uuid, varchar } from '@kmods/drizzle-pg/pg-core';
-import { dbSchema } from '../pgSchema';
+import { kbot2Schema } from '../pgSchema';
 import { scGuild } from './guilds';
 
-export const scChatCommands = dbSchema.table('discord_guild_chat_commands', {
+export const scChatCommands = kbot2Schema.table('discord_guild_chat_commands', {
 	command_id: uuid('command_id').primaryKey().notNull().defaultRandom(),
 	guild_id: numeric('guild_id')
 		.notNull()
@@ -16,7 +16,7 @@ export const scChatCommands = dbSchema.table('discord_guild_chat_commands', {
 	auto_reaction_matches: colJson('auto_reaction_matches').notNull().default(false)
 });
 
-export const scChatCommandsTrigger = dbSchema.table('discord_guild_chat_commands_trigger', {
+export const scChatCommandsTrigger = kbot2Schema.table('discord_guild_chat_commands_trigger', {
 	command_id: uuid('command_id')
 		.primaryKey()
 		.notNull()

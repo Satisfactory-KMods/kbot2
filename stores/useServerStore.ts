@@ -8,7 +8,9 @@ export const useServerStore = defineStore('server-store', () => {
 	});
 
 	async function init(newGuild: string) {
-		const result = await $fetch(`/api/server/${newGuild}/data`).catch((e) => {
+		const result = await $fetch(`/api/server/${newGuild}/data`, {
+			headers: useRequestHeaders()
+		}).catch((e) => {
 			throw createError({
 				statusCode: 500,
 				message: e.message

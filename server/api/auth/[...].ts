@@ -3,7 +3,7 @@ import { DrizzleAdapter } from '@auth/drizzle-adapter';
 import { and, eq } from '@kmods/drizzle-pg';
 import DiscordProvider from 'next-auth/providers/discord';
 import { env } from '~/env';
-import { accounts, db, dbSchema, users } from '~/server/utils/db/postgres/pg';
+import { accounts, db, kbot2Schema, users } from '~/server/utils/db/postgres/pg';
 
 /**
  * https://github.com/nuxt/nuxt/issues/20576#issuecomment-1712859008
@@ -50,5 +50,5 @@ export default NuxtAuthHandler({
 		strategy: 'database',
 		updateAge: 86400 * 7
 	},
-	adapter: DrizzleAdapter(db as any, dbSchema.table as any) as any
+	adapter: DrizzleAdapter(db as any, kbot2Schema.table as any) as any
 });

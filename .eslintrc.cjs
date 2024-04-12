@@ -17,6 +17,7 @@ module.exports = {
 	],
 	plugins: ['unused-imports'],
 	rules: {
+		'camelcase': 'off',
 		'import/namespace': 'off',
 		'@typescript-eslint/non-nullable-type-assertion-style': 'off',
 		'@typescript-eslint/prefer-optional-chain': 'off',

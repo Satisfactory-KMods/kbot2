@@ -1,5 +1,5 @@
 import { colJson, numeric, uuid } from '@kmods/drizzle-pg/pg-core';
-import { dbSchema } from '../pgSchema';
+import { kbot2Schema } from '../pgSchema';
 import { scGuild } from './guilds';
 
 export type ReactionRole = {
@@ -7,7 +7,7 @@ export type ReactionRole = {
 	roleIds: string[];
 };
 
-export const scReactionRoles = dbSchema.table('discord_guild_reaction_roles', {
+export const scReactionRoles = kbot2Schema.table('discord_guild_reaction_roles', {
 	id: uuid('id').primaryKey().notNull().defaultRandom(),
 	guild_id: numeric('guild_id')
 		.notNull()
