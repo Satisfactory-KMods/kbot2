@@ -1,9 +1,6 @@
 <script lang="ts" setup>
-	import AuthUserDropdown from '~/components/common/AuthUserDropdown.vue';
-	import DarkmodeButton from '~/components/common/DarkmodeButton.vue';
-
 	definePageMeta({
-		layout: 'default-raw'
+		middleware: 'auth'
 	});
 
 	const { data } = await useFetch('/api/servers', { method: 'GET' });
@@ -30,10 +27,17 @@
 				class="w-full justify-end rounded-none md:rounded-lg">
 				<template #content>
 					<div class="flex items-center gap-2">
-						<span class="flex-1 text-xl font-semibold"> Please Pick a Server </span>
+						<span class="flex flex-1 gap-3 text-xl font-semibold">
+							<NuxtImg src="/images/logo.png" width="32" height="32" />
+							<span class="text-2xl font-medium">
+								KBot<span class="text-primary-500 dark:text-primary-400">
+									2 Webinterface
+								</span>
+							</span>
+						</span>
 
-						<AuthUserDropdown />
-						<DarkmodeButton />
+						<CommonAuthUserDropdown />
+						<CommonDarkmodeButton />
 					</div>
 				</template>
 			</Card>

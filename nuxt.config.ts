@@ -29,6 +29,22 @@ export default defineNuxtConfig({
 			{
 				path: '~/components/home',
 				prefix: 'Home'
+			},
+			{
+				path: '~/components/auth',
+				prefix: 'Auth'
+			},
+			{
+				path: '~/components/download',
+				prefix: 'Download'
+			},
+			{
+				path: '~/components/guild',
+				prefix: 'Guild'
+			},
+			{
+				path: '~/components/common',
+				prefix: 'Common'
 			}
 		]
 	},

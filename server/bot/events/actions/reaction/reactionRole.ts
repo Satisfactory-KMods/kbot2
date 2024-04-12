@@ -43,7 +43,7 @@ export async function handleReactionRole(
 ) {
 	try {
 		if (reaction.message.inGuild() && !user.bot) {
-			const guild = await DiscordGuildManager.GetGuild(reaction.message.guildId as string);
+			const guild = await DiscordGuildManager.getGuild(reaction.message.guildId as string);
 			if (guild?.IsValid) {
 				const reactionRole = await db
 					.select()
@@ -90,7 +90,7 @@ export async function startUp() {
 		.from(scReactionRoles)
 		.groupBy(scReactionRoles.guild_id);
 	for await (const reactionDocument of datas) {
-		const guild = await DiscordGuildManager.GetGuild(reactionDocument.guildId);
+		const guild = await DiscordGuildManager.getGuild(reactionDocument.guildId);
 		if (guild && guild.IsValid) {
 			for (const data of reactionDocument.datas) {
 				const message = await guild.message(data.message_id, data.channel_id);

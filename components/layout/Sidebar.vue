@@ -1,11 +1,21 @@
 <script lang="ts" setup>
 	import type { MenuItem } from 'primevue/menuitem';
 
-	const { params } = useParams({ values: { guild: String() }, event: checkParams });
+	const route = useRoute();
+	const { params } = useParams({
+		values: {
+			server: String()
+		},
+		event: checkParams
+	});
+
 	const { signOut, data } = useAuth();
 
 	function checkParams() {
-		if (!params.guild) {
+		if (
+			(!params.server || !params.server.match(/^[0-9]*$/)) &&
+			route.path.startsWith('/guild')
+		) {
 			throw createError({
 				status: 404,
 				message: 'No server provided',
@@ -15,34 +25,40 @@
 	}
 	checkParams();
 
-	const items = ref<MenuItem[]>([
-		{
-			separator: true
-		},
-		{
-			label: 'dashboard',
-			items: [
-				{
-					label: 'home',
-					url: `/server/${params.guild}/`,
-					icon: 'pi-home'
-				}
-			]
-		},
-		{
-			label: 'servers',
-			items: [
-				{
-					label: 'server-overview',
-					url: `/`,
-					icon: 'pi-server'
-				}
-			]
-		},
-		{
-			separator: true
+	const items = computed<MenuItem[]>(() => {
+		if (!params.server || !route.path.startsWith('/guild')) {
+			return [];
 		}
-	]);
+
+		return [
+			{
+				separator: true
+			},
+			{
+				label: 'dashboard',
+				items: [
+					{
+						label: 'Dashboard',
+						url: `/guild/${params.server}/`,
+						icon: 'pi pi-home'
+					}
+				]
+			},
+			{
+				label: 'servers',
+				items: [
+					{
+						label: 'Select a Servers',
+						url: `/`,
+						icon: 'pi pi-server'
+					}
+				]
+			},
+			{
+				separator: true
+			}
+		];
+	});
 </script>
 
 <template>
@@ -50,18 +66,15 @@
 		<template #start>
 			<div
 				v-if="data?.user"
-				class="p-link dark:text-surface-0/80 relative flex w-full cursor-default items-center overflow-hidden rounded-none p-2 pl-3">
+				class="p-link relative flex w-full cursor-default items-center overflow-hidden rounded-none p-2 pl-3 dark:text-surface-0/80">
 				<Avatar :image="data.user.image" class="mr-2" shape="circle" />
-				<span class="inline-flex flex-col justify-start">
+				<span class="inline-flex flex-1 flex-col justify-start">
 					<span class="font-bold">{{ data.user.name }}</span>
 					<span class="text-sm"> ID: {{ data.user.discordId }} </span>
-					<Button
-						size="small"
-						class="mt-1"
-						icon="pi pi-sign-out"
-						label="Logout"
-						@click="signOut()" />
 				</span>
+				<div class="mt-1 flex gap-2">
+					<Button size="small" icon="pi pi-sign-out" @click="signOut()" />
+				</div>
 			</div>
 		</template>
 		<template #submenuheader="{ item }">

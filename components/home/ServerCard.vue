@@ -10,7 +10,15 @@
 </script>
 
 <template>
-	<NuxtLink :href="`/guild/${$props.data.guild_id}`" class="server-card">
+	<NuxtLink
+		no-prefetch
+		:href="{
+			name: `guild-server`,
+			params: {
+				server: $props.data.guild_id
+			}
+		}"
+		class="server-card">
 		<NuxtImg
 			width="48"
 			height="48"

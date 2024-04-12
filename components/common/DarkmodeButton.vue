@@ -3,7 +3,12 @@
 </script>
 
 <template>
-	<Button v-ripple outlined :icon="active ? 'pi pi-moon' : 'pi pi-sun'" @click="toggle()">
+	<Button
+		v-ripple
+		v-bind="$attrs"
+		outlined
+		:icon="active ? 'pi pi-moon' : 'pi pi-sun'"
+		@click="toggle()">
 		<slot />
 	</Button>
 </template>

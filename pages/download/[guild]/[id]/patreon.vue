@@ -1,5 +1,9 @@
 <script lang="ts" setup>
 	const { status, data, lastRefreshedAt, signIn, signOut } = useAuth();
+
+	definePageMeta({
+		middleware: 'auth'
+	});
 </script>
 
 <template>

@@ -1,8 +1,8 @@
-import { getServerSession } from '#auth';
 import { eq } from '@kmods/drizzle-pg';
 import { getColumns } from '@kmods/drizzle-pg/pg-core';
 import type { Return } from '~/utils/typeUtils';
 import { db, scGuild, scGuildAdmins } from '../utils/db/postgres/pg';
+import { getServerSessionChecked } from '../utils/session';
 
 function getServersByDiscordId(discordId: string) {
 	return db
@@ -15,14 +15,7 @@ function getServersByDiscordId(discordId: string) {
 export type DiscordServerByUser = Return<typeof getServersByDiscordId>;
 
 export default defineEventHandler(async (event) => {
-	const session = await getServerSession(event);
+	const { user } = await getServerSessionChecked(event);
 
-	if (!session) {
-		throw createError({
-			status: 401,
-			message: 'Unauthorized'
-		});
-	}
-
-	return await getServersByDiscordId(session.user.discordId);
+	return await getServersByDiscordId(user.discordId);
 });

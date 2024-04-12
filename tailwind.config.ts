@@ -10,17 +10,6 @@ export default {
 	theme: {
 		extend: {
 			colors: {
-				'primary-50': 'rgb(var(--custom-primary-50))',
-				'primary-100': 'rgb(var(--custom-primary-100))',
-				'primary-200': 'rgb(var(--custom-primary-200))',
-				'primary-300': 'rgb(var(--custom-primary-300))',
-				'primary-400': 'rgb(var(--custom-primary-400))',
-				'primary-500': 'rgb(var(--custom-primary-500))',
-				'primary-600': 'rgb(var(--custom-primary-600))',
-				'primary-700': 'rgb(var(--custom-primary-700))',
-				'primary-800': 'rgb(var(--custom-primary-800))',
-				'primary-900': 'rgb(var(--custom-primary-900))',
-				'primary-950': 'rgb(var(--custom-primary-950))',
 				'surface-0': 'rgb(var(--custom-surface-0))',
 				'surface-50': 'rgb(var(--custom-surface-50))',
 				'surface-100': 'rgb(var(--custom-surface-100))',
@@ -33,7 +22,7 @@ export default {
 				'surface-800': 'rgb(var(--custom-surface-800))',
 				'surface-900': 'rgb(var(--custom-surface-900))',
 				'surface-950': 'rgb(var(--custom-surface-950))',
-				'kmods-primary': {
+				'primary': {
 					'50': '#f3f7fc',
 					'100': '#e6eff8',
 					'200': '#c8deef',
@@ -47,7 +36,7 @@ export default {
 					'950': '#15283c',
 					'default': '#265e8b'
 				},
-				'kmods-secondary': {
+				'secondary': {
 					'50': '#effaf4',
 					'100': '#d8f3e2',
 					'200': '#b3e7c8',

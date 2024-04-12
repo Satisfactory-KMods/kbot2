@@ -21,7 +21,6 @@ import { botClient } from '../bot';
 
 class DiscordGuild<TValid extends boolean = false> {
 	public readonly guildId;
-	private Valid = false;
 	private guild: TValid extends true ? Guild : Guild | null = null as any;
 	private lastFetch: Date = new Date(0);
 	private fetchInterval: number = 60 * 60 * 1000;
@@ -125,7 +124,6 @@ class DiscordGuild<TValid extends boolean = false> {
 
 		if (this.guild) {
 			await this.updateGuildDatas();
-			this.Valid = true;
 		} else {
 			await db
 				.update(scGuild)
@@ -135,7 +133,7 @@ class DiscordGuild<TValid extends boolean = false> {
 	}
 
 	public isValid(): this is DiscordGuild<true> {
-		return this.Valid;
+		return this.guild !== null;
 	}
 
 	public async doFetch() {
@@ -380,22 +378,18 @@ class DiscordGuild<TValid extends boolean = false> {
 		}
 		return false;
 	}
-
-	get IsValid(): boolean {
-		return this.Valid;
-	}
 }
 
 export const DiscordGuildManager = new (class {
 	private guilds = new Map<string, DiscordGuild>();
 
-	public RemoveGuild(guildId: string): void {
+	public removeGuild(guildId: string): void {
 		if (this.guilds.has(guildId)) {
 			this.guilds.delete(guildId);
 		}
 	}
 
-	public async GetGuild(guildId: string, fetch = false): Promise<DiscordGuild> {
+	public async getGuild(guildId: string, fetch = false): Promise<DiscordGuild> {
 		const guild = this.guilds.get(guildId);
 		if (guild) {
 			if (fetch) {

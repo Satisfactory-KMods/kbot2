@@ -4,7 +4,7 @@ import { botClient } from '../bot';
 import { DiscordGuildManager } from '../utils/guildManager';
 
 botClient.on(Events.GuildUpdate, async (event) => {
-	const guild = await DiscordGuildManager.GetGuild(event.id);
+	const guild = await DiscordGuildManager.getGuild(event.id);
 	if (guild.isValid()) {
 		await guild.updateGuildDatas();
 	}
