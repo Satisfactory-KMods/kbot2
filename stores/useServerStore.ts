@@ -3,7 +3,7 @@ import type { DiscordServerBaseData } from '~/server/api/server/[guildId]/data.g
 
 export const useServerStore = defineStore('server-store', () => {
 	const data = ref<DiscordServerBaseData>();
-	const activeGuild = computed(() => {
+	const guildId = computed(() => {
 		return String(data.value?.guild_id);
 	});
 
@@ -19,5 +19,5 @@ export const useServerStore = defineStore('server-store', () => {
 		return result;
 	}
 
-	return { data, activeGuild, init };
+	return { data, guildId, init };
 });
