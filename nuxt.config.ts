@@ -15,12 +15,19 @@ export default defineNuxtConfig({
 		'@pinia-plugin-persistedstate/nuxt',
 		'@nuxtjs/tailwindcss'
 	],
+	colorMode: {
+		classSuffix: ''
+	},
 	components: {
 		global: true,
 		dirs: [
 			{
 				path: '~/components/layout',
 				prefix: 'Layout'
+			},
+			{
+				path: '~/components/home',
+				prefix: 'Home'
 			}
 		]
 	},

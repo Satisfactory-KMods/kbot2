@@ -6,6 +6,9 @@
 		title: 'KBot2',
 		htmlAttrs: {
 			class: `nuxt-ui-scrollbars`
+		},
+		bodyAttrs: {
+			class: `bg-gray-100 dark:bg-surface-950 dark:text-white dark:text-opacity-75 text-black layout-wrapper layout-news-active layout-ripple-disabled`
 		}
 	});
 </script>

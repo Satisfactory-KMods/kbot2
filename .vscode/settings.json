@@ -1,4 +1,7 @@
 {
+	// tailwind support
+	"css.customData": [".vscode/tailwind.json"],
+
 	// int
 	"editor.defaultFormatter": "esbenp.prettier-vscode",
 	"typescript.experimental.aiQuickFix": true,
