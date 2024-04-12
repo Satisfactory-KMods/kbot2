@@ -59,18 +59,41 @@
 							:data="server" />
 					</div>
 
-					<ButtonGroup>
-						<NuxtLink
-							external
-							:href="config.discordInviteUrl"
-							target="_blank"
-							class="block w-full">
-							<Button class="mt-2 w-full">
-								<Icon name="mdi:robot" class="mr-2" />
-								Invite KBot2
+					<div class="mt-2 flex w-full gap-2">
+						<NuxtLink external class="flex-1" :href="config.githubRepo" target="_blank">
+							<Button severity="secondary" class="w-full">
+								<Icon name="mdi:github" class="me-2" />
+								Github (Source)
 							</Button>
 						</NuxtLink>
-					</ButtonGroup>
+						<NuxtLink
+							external
+							class="flex-1"
+							:href="config.discordSupport"
+							target="_blank">
+							<Button severity="secondary" class="w-full">
+								<Icon name="ic:baseline-discord" class="mr-2" />
+								Our Discord
+							</Button>
+						</NuxtLink>
+						<NuxtLink external class="flex-1" :href="config.patreonUrl" target="_blank">
+							<Button severity="secondary" class="w-full">
+								<Icon name="ph:patreon-logo-duotone" class="mr-2" />
+								Support Us
+							</Button>
+						</NuxtLink>
+					</div>
+
+					<NuxtLink
+						class="w-full"
+						external
+						:href="config.discordInviteUrl"
+						target="_blank">
+						<Button class="mt-2 w-full">
+							<Icon name="mdi:robot" class="mr-2" />
+							Invite KBot2
+						</Button>
+					</NuxtLink>
 				</template>
 			</Card>
 		</div>

@@ -16,7 +16,8 @@ export default defineNuxtConfig({
 		'@nuxtjs/tailwindcss'
 	],
 	colorMode: {
-		classSuffix: ''
+		classSuffix: '',
+		preference: 'light'
 	},
 	components: {
 		global: true,

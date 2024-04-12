@@ -30,6 +30,9 @@ declare module 'nuxt/schema' {
 		version: string;
 		discordClientId: string;
 		discordInviteUrl: string;
+		patreonUrl: string;
+		githubRepo: string;
+		discordSupport: string;
 	}
 }
 

@@ -38,7 +38,10 @@ export const env = z
 				public: {
 					version,
 					discordClientId: env.DISCORD_CLIENT_ID,
-					discordInviteUrl: `https://discord.com/oauth2/authorize?client_id=${env.DISCORD_CLIENT_ID}&permissions=8&scope=bot`
+					discordInviteUrl: `https://discord.com/oauth2/authorize?client_id=${env.DISCORD_CLIENT_ID}&permissions=8&scope=bot`,
+					patreonUrl: 'https://www.patreon.com/kmods',
+					githubRepo: 'https://github.com/Kyri123/kbot2',
+					discordSupport: 'https://discord.gg/BeH4GRRWxc'
 				}
 			},
 			auth: {
