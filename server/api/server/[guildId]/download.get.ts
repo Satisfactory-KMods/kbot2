@@ -1,9 +1,8 @@
 import { and, eq } from '@kmods/drizzle-pg';
 import { getColumns } from '@kmods/drizzle-pg/pg-core';
 import { z } from 'zod';
+import { getRouteBaseParams } from '~/server/bot/utils/routes';
 import { db, scDownloads, scGuildPatreons } from '~/server/utils/db/postgres/pg';
-import { getServerSessionChecked } from '~/server/utils/session';
-import { zodNumeric } from '~/server/utils/zodSchemas';
 import type { Return } from '~/utils/typeUtils';
 
 function getDownloadsForGuildId(
@@ -40,13 +39,12 @@ export type DiscordServerBaseData = Return<typeof getDownloadsForGuildId>;
 const zNumber = z.number().min(0);
 
 export default defineEventHandler(async (event) => {
-	const { user } = await getServerSessionChecked(event);
+	const { user, guildId } = await getRouteBaseParams(event);
 
 	const query = getQuery(event);
 	const patreon = query.query === 'true';
 	const limit = zNumber.parse(query.limit ? parseInt(String(query.limit)) : 20);
 	const offset = zNumber.parse(query.offset ? parseInt(String(query.offset)) : 20);
-	const guildId = zodNumeric(getRouterParam(event, 'guildId'), 'Server Id must be numeric');
 
 	return await getDownloadsForGuildId(guildId, user.discordId, patreon, limit, offset);
 });

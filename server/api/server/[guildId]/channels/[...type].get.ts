@@ -1,12 +1,10 @@
 import type { ValueOf } from '@kmods/drizzle-pg/pg-core';
 import { z } from 'zod';
-import { DiscordGuildManager } from '~/server/bot/utils/guildManager';
-import { hasPermissionForGuild } from '~/server/bot/utils/permissions';
+import { getRouteBaseParams } from '~/server/bot/utils/routes';
 import { ChannelTypes } from '~/utils/enums';
 
 export default defineEventHandler(async (event) => {
-	const { user } = await getServerSessionChecked(event);
-	const guildId = zodNumeric(getRouterParam(event, 'guildId'), 'Server Id must be numeric');
+	const { guildData } = await getRouteBaseParams(event);
 	const channelTypes = z
 		.nativeEnum(ChannelTypes, {
 			errorMap: () => {
@@ -33,16 +31,6 @@ export default defineEventHandler(async (event) => {
 			return [v];
 		})
 		.parse(getRouterParam(event, 'type')?.split('/') ?? []);
-	await hasPermissionForGuild(guildId, user.discordId);
-
-	// also intialize the guild if it doesn't exist
-	const guildData = await DiscordGuildManager.getGuild(guildId, false);
-	if (!guildData.isValid()) {
-		throw createError({
-			statusCode: 404,
-			message: 'Guild not found'
-		});
-	}
 
 	const guild = guildData.getGuild;
 

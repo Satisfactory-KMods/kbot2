@@ -1,19 +1,7 @@
-import { DiscordGuildManager } from '~/server/bot/utils/guildManager';
-import { hasPermissionForGuild } from '~/server/bot/utils/permissions';
+import { getRouteBaseParams } from '~/server/bot/utils/routes';
 
 export default defineEventHandler(async (event) => {
-	const { user } = await getServerSessionChecked(event);
-	const guildId = zodNumeric(getRouterParam(event, 'guildId'), 'Server Id must be numeric');
-	await hasPermissionForGuild(guildId, user.discordId);
-
-	// also intialize the guild if it doesn't exist
-	const guildData = await DiscordGuildManager.getGuild(guildId, false);
-	if (!guildData.isValid()) {
-		throw createError({
-			statusCode: 404,
-			message: 'Guild not found'
-		});
-	}
+	const { guildData } = await getRouteBaseParams(event);
 
 	const guild = guildData.getGuild;
 

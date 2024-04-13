@@ -1,9 +1,8 @@
 import { and, eq } from '@kmods/drizzle-pg';
 import { getColumns } from '@kmods/drizzle-pg/pg-core';
 import { DiscordGuildManager } from '~/server/bot/utils/guildManager';
+import { getRouteBaseParams } from '~/server/bot/utils/routes';
 import { db, scGuild, scGuildAdmins } from '~/server/utils/db/postgres/pg';
-import { getServerSessionChecked } from '~/server/utils/session';
-import { zodNumeric } from '~/server/utils/zodSchemas';
 import type { Return } from '~/utils/typeUtils';
 
 async function getServerBaseData(guildId: string, discordId: string) {
@@ -46,8 +45,7 @@ async function getServerBaseData(guildId: string, discordId: string) {
 export type DiscordServerBaseData = Return<typeof getServerBaseData>;
 
 export default defineEventHandler(async (event) => {
-	const { user } = await getServerSessionChecked(event);
-	const guildId = zodNumeric(getRouterParam(event, 'guildId'), 'Server Id must be numeric');
+	const { user, guildId } = await getRouteBaseParams(event);
 
 	return await getServerBaseData(guildId, user.discordId);
 });
