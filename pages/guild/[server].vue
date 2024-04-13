@@ -50,10 +50,12 @@
 				</template>
 				<LayoutSidebar />
 			</Sidebar>
-			<div class="layout-border-color hidden w-96 overflow-auto border-r lg:block">
+			<div class="layout-border-color hidden w-96 overflow-auto border-r 2xl:block">
 				<LayoutSidebar />
 			</div>
-			<div class="flex-1 overflow-auto">
+			<div class="flex flex-1 flex-col overflow-auto">
+				<LayoutStateBar />
+				<Divider />
 				<NuxtPage />
 			</div>
 		</div>

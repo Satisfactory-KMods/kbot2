@@ -19,11 +19,11 @@ import {
 } from '../../utils/db/postgres/pg';
 import { botClient } from '../bot';
 
-class DiscordGuild<TValid extends boolean = false> {
+export class DiscordGuild<TValid extends boolean = false> {
 	public readonly guildId;
 	private guild: TValid extends true ? Guild : Guild | null = null as any;
 	private lastFetch: Date = new Date(0);
-	private fetchInterval: number = 60 * 60 * 1000;
+	private fetchInterval: number = 60 * 15 * 1000;
 
 	private constructor(guildId: string) {
 		this.guildId = guildId;
@@ -177,7 +177,7 @@ class DiscordGuild<TValid extends boolean = false> {
 		return GuildClass;
 	}
 
-	public get getGuild(): Guild | null {
+	public get getGuild() {
 		return this.guild;
 	}
 

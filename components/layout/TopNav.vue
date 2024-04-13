@@ -24,7 +24,7 @@
 
 		<Button
 			v-ripple
-			class="mx-3 block lg:hidden"
+			class="mx-3 block 2xl:hidden"
 			link
 			icon="pi pi-bars"
 			@click="$emit('update:modelValue', !$props.modelValue)" />

@@ -1,64 +1,7 @@
 <script lang="ts" setup>
-	import type { MenuItem } from 'primevue/menuitem';
-
-	const route = useRoute();
-	const { params } = useParams({
-		values: {
-			server: String()
-		},
-		event: checkParams
-	});
-
 	const { signOut, data } = useAuth();
 
-	function checkParams() {
-		if (
-			(!params.server || !params.server.match(/^[0-9]*$/)) &&
-			route.path.startsWith('/guild')
-		) {
-			throw createError({
-				status: 404,
-				message: 'No server provided',
-				fatal: true
-			});
-		}
-	}
-	checkParams();
-
-	const items = computed<MenuItem[]>(() => {
-		if (!params.server || !route.path.startsWith('/guild')) {
-			return [];
-		}
-
-		return [
-			{
-				separator: true
-			},
-			{
-				label: 'dashboard',
-				items: [
-					{
-						label: 'Dashboard',
-						url: `/guild/${params.server}/`,
-						icon: 'pi pi-home'
-					}
-				]
-			},
-			{
-				label: 'servers',
-				items: [
-					{
-						label: 'Select a Servers',
-						url: `/`,
-						icon: 'pi pi-server'
-					}
-				]
-			},
-			{
-				separator: true
-			}
-		];
-	});
+	const items = useNavigationUrls();
 </script>
 
 <template>
