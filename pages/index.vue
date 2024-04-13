@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 	definePageMeta({
-		middleware: 'auth'
+		middleware: 'need-auth'
 	});
 
 	const { data } = await useFetch('/api/servers', { method: 'GET' });

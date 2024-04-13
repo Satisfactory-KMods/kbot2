@@ -2,7 +2,7 @@
 	const { status, data, lastRefreshedAt, signIn, signOut } = useAuth();
 
 	definePageMeta({
-		middleware: 'auth'
+		middleware: 'need-auth'
 	});
 </script>
 
