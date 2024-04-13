@@ -3,9 +3,11 @@ import {
 	char,
 	colJson,
 	colTimestamp,
+	index,
 	integer,
 	numeric,
 	primaryKey,
+	unique,
 	varchar
 } from '@kmods/drizzle-pg/pg-core';
 import { kbot2Schema } from '../pgSchema';
@@ -95,7 +97,10 @@ export const scGuildConfigurationModRoles = kbot2Schema.table(
 	},
 	(t) => {
 		return {
-			primary: primaryKey({ columns: [t.guild_id, t.mod_reference] })
+			primary: primaryKey({ columns: [t.guild_id, t.mod_reference] }),
+			unique: unique().on(t.mod_reference, t.role_id),
+			mod_index: index().on(t.mod_reference),
+			role_index: index().on(t.role_id)
 		};
 	}
 );
@@ -108,6 +113,7 @@ export const scGuildConfigurationBlacklistedMods = kbot2Schema.table(
 	},
 	(t) => {
 		return {
+			mod_index: index().on(t.mod_reference),
 			primary: primaryKey({ columns: [t.guild_id, t.mod_reference] })
 		};
 	}
@@ -121,6 +127,7 @@ export const scGuildConfigurationFicsitUserIds = kbot2Schema.table(
 	},
 	(t) => {
 		return {
+			ficsit_user_id_index: index().on(t.ficsit_user_id),
 			primary: primaryKey({ columns: [t.guild_id, t.ficsit_user_id] })
 		};
 	}
@@ -134,6 +141,7 @@ export const scGuildPatreons = kbot2Schema.table(
 	},
 	(t) => {
 		return {
+			user_id_index: index().on(t.user_id),
 			primary: primaryKey({ columns: [t.guild_id, t.user_id] })
 		};
 	}

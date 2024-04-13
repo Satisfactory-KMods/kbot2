@@ -1,4 +1,4 @@
-import { boolean, colTimestamp, primaryKey, varchar } from '@kmods/drizzle-pg/pg-core';
+import { boolean, colTimestamp, index, primaryKey, varchar } from '@kmods/drizzle-pg/pg-core';
 import { kbot2Schema } from '../pgSchema';
 import { defaultGuildFields } from './guilds';
 
@@ -13,6 +13,7 @@ export const scModUpdates = kbot2Schema.table(
 	},
 	(t) => {
 		return {
+			mod_index: index().on(t.mod_reference),
 			primary: primaryKey({ columns: [t.guild_id, t.mod_reference] })
 		};
 	}
