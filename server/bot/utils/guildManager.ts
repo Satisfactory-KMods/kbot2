@@ -266,6 +266,14 @@ export class DiscordGuild<TValid extends boolean = false> {
 		return undefined;
 	}
 
+	public everyoneRoleId() {
+		const guild = this.getGuild;
+		if (guild) {
+			return guild.roles.everyone.id;
+		}
+		return undefined;
+	}
+
 	public async allTextChannels() {
 		const guild = this.getGuild;
 		if (guild) {
