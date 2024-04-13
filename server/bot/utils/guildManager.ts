@@ -10,13 +10,7 @@ import {
 	type NonThreadGuildBasedChannel
 } from 'discord.js';
 import { log } from '~/utils/logger';
-import {
-	db,
-	scGuild,
-	scGuildAdmins,
-	scGuildConfiguration,
-	scGuildPatreonSettings
-} from '../../utils/db/postgres/pg';
+import { db, scGuild, scGuildAdmins, scGuildConfiguration } from '../../utils/db/postgres/pg';
 import { botClient } from '../bot';
 
 export class DiscordGuild<TValid extends boolean = false> {
@@ -42,9 +36,6 @@ export class DiscordGuild<TValid extends boolean = false> {
 					guild_id: this.guildId
 				});
 				await trx.insert(scGuildConfiguration).values({
-					guild_id: this.guildId
-				});
-				await trx.insert(scGuildPatreonSettings).values({
 					guild_id: this.guildId
 				});
 			});
