@@ -1,6 +1,7 @@
 import ViteYaml from '@modyfi/vite-plugin-yaml';
 import { resolve } from 'path';
-import { env } from './env';
+import { components } from './nuxt.config.components';
+import { nitro } from './nuxt.config.nitro';
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
@@ -18,35 +19,6 @@ export default defineNuxtConfig({
 	colorMode: {
 		classSuffix: '',
 		preference: 'light'
-	},
-	components: {
-		global: true,
-		dirs: [
-			{
-				path: '~/components/layout',
-				prefix: 'Layout'
-			},
-			{
-				path: '~/components/home',
-				prefix: 'Home'
-			},
-			{
-				path: '~/components/auth',
-				prefix: 'Auth'
-			},
-			{
-				path: '~/components/download',
-				prefix: 'Download'
-			},
-			{
-				path: '~/components/guild',
-				prefix: 'Guild'
-			},
-			{
-				path: '~/components/common',
-				prefix: 'Common'
-			}
-		]
 	},
 	primevue: {
 		options: {
@@ -68,28 +40,8 @@ export default defineNuxtConfig({
 	tailwindcss: {
 		cssPath: '~/assets/css/tailwind.css'
 	},
+	pages: true,
 	devtools: { enabled: true },
-	nitro: {
-		storage: {
-			redis: {
-				driver: 'redis',
-				...env.redis
-			}
-		},
-		preset: 'node-server',
-		hooks: {
-			'dev:reload': () => {
-				// @ts-ignore
-				return require('sharp');
-			}
-		},
-		runtimeConfig: {
-			/**
-			 * Will be available on both server and client
-			 * we want to create urls to invite the bot to the server
-			 * for exmaplte: runtimeConfig: https://discord.com/oauth2/authorize?client_id=${useRuntimeConfig().discordClientId}
-			 */
-			public: env.nuxt.public
-		}
-	}
+	components,
+	nitro
 });

@@ -1,16 +1,9 @@
 <script lang="ts" setup>
-	definePageMeta({
-		middleware: 'auth'
-	});
+	const { signIn, status } = useAuth();
+	const { showAbout, showPolicy } = useGlobalStates();
 
-	const { data } = await useFetch('/api/servers', { method: 'GET' });
-
-	if (!data.value) {
-		throw createError({
-			status: 404,
-			message: 'Failed to fetch data from the server',
-			fatal: true
-		});
+	if (status.value === 'authenticated') {
+		useRouter().replace('/');
 	}
 
 	const config = useRuntimeConfig().public;
@@ -30,13 +23,13 @@
 						<span class="flex flex-1 gap-3 text-xl font-semibold">
 							<NuxtImg src="/images/logo.png" width="32" height="32" />
 							<span class="text-2xl font-medium">
-								KBot<span class="text-primary-500 dark:text-primary-400"
+								Welcome to the KBot<span
+									class="text-primary-500 dark:text-primary-400"
 									>2 Webinterface</span
 								>
 							</span>
 						</span>
 
-						<CommonAuthUserDropdown />
 						<CommonDarkmodeButton />
 					</div>
 				</template>
@@ -47,20 +40,43 @@
 					content: 'p-6'
 				}"
 				class="w-full justify-end rounded-none md:rounded-lg">
-				<template #title> </template>
 				<template #content>
-					<Message v-if="!data?.length" :closable="false">
-						<div class="block">
-							No Server Found. Please invite the bot to your server and try it again.
-						</div>
-					</Message>
+					<p class="py-2">
+						Before you can use the webinterface, you need to login with your Discord
+						account. This allow us to verify your identity and give you access to the
+						correct servers and the allowed downloads for previews and other data.
+						<br />
+					</p>
+					<p class="py-2">Please click on the button below to login.</p>
 
-					<div
-						class="flex max-h-96 w-full flex-col gap-2 overflow-y-auto overflow-x-hidden">
-						<HomeServerCard
-							v-for="server of data"
-							:key="server.guild_id"
-							:data="server" />
+					<Divider />
+
+					<Button
+						class="w-full"
+						@click="
+							signIn('discord', {
+								callbackUrl: String($route.query.callbackUrl)
+							})
+						">
+						<Icon name="mdi:discord" class="mr-2" />
+						Login with Discord
+					</Button>
+
+					<Divider />
+
+					<div class="mt-2 flex w-full gap-2">
+						<Button severity="secondary" class="w-full" @click="showAbout = !showAbout">
+							<Icon name="heroicons:book-open" class="mr-2" />
+							About
+						</Button>
+
+						<Button
+							severity="secondary"
+							class="w-full"
+							@click="showPolicy = !showPolicy">
+							<Icon name="heroicons:book-open" class="mr-2" />
+							Private Policy
+						</Button>
 					</div>
 
 					<div class="mt-2 flex w-full gap-2">
@@ -87,17 +103,6 @@
 							</Button>
 						</NuxtLink>
 					</div>
-
-					<NuxtLink
-						class="w-full"
-						external
-						:href="config.discordInviteUrl"
-						target="_blank">
-						<Button class="mt-2 w-full">
-							<Icon name="mdi:robot" class="mr-2" />
-							Invite KBot2
-						</Button>
-					</NuxtLink>
 				</template>
 			</Card>
 		</div>

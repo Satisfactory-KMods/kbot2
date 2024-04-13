@@ -19,6 +19,11 @@ export default NuxtAuthHandler({
 			clientSecret: env.auth.discord.clientSecret
 		})
 	],
+	pages: {
+		// Change the default behavior to use `/login` as the path for the sign-in page
+		signIn: '/login',
+		error: '/login'
+	},
 	callbacks: {
 		// we need to add discordId and superAdmin to the session
 		// so we can use that later to indentify the servers to assign the permissions

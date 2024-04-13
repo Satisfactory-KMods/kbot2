@@ -10,7 +10,7 @@
 	});
 
 	definePageMeta({
-		middleware: 'need-auth'
+		middleware: 'auth'
 	});
 
 	if (status.value !== 'authenticated') {

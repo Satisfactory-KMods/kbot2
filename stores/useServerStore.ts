@@ -8,7 +8,7 @@ export const useServerStore = defineStore('server-store', () => {
 	});
 
 	async function init(newGuild: string) {
-		const result = await $$fetch(`/api/server/${newGuild}/data`);
+		const result = await $$fetch(`/api/server/${newGuild}/data`, { method: 'GET' });
 
 		data.value = result;
 		return result;
