@@ -35,6 +35,7 @@ async function getChatCommandsForGuildId(guildId: string, limit = 20, offset = 0
 		.limit(limit)
 		.offset(offset)
 		.where(eq(scChatCommands.guild_id, guildId))
+		.orderBy(scChatCommands.command_id)
 		.then((rows) => {
 			return {
 				total,

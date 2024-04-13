@@ -21,6 +21,8 @@
 			<NuxtPage />
 		</NuxtLayout>
 
+		<Toast position="bottom-right" />
 		<ModalsContainer />
+		<ConfirmDialog />
 	</div>
 </template>

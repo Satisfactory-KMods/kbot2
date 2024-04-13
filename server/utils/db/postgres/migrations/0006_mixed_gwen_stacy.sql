@@ -1,0 +1,3 @@
+ALTER TABLE "kbot2"."discord_guild_chat_commands_trigger" DROP CONSTRAINT "discord_guild_chat_commands_trigger_pkey";--> statement-breakpoint
+ALTER TABLE "kbot2"."discord_guild_chat_commands_trigger" ADD CONSTRAINT "discord_guild_chat_commands_trigger_command_id_trigger_pk" PRIMARY KEY("command_id","trigger");--> statement-breakpoint
+CREATE INDEX IF NOT EXISTS "discord_guild_chat_commands_trigger_command_id_index" ON "kbot2"."discord_guild_chat_commands_trigger" ("command_id");

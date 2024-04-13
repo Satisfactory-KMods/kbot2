@@ -166,7 +166,7 @@ export const useParams = createQueryHandler('params');
  * @param event event to call when the params are updated
  * @return params and event as ref z
  * @example ```ts
- * const { params, refs, onParamsUpdated } = useQueryParams({
+ * const { params, refs, onParamsUpdated } = useSearchParams({
  *      values: { search: '' },
  *      event: () => {
  *          console.log('params updated', params);
@@ -177,4 +177,4 @@ export const useParams = createQueryHandler('params');
  * <input class="form-control" v-model="refs.search" />
  * ```
  */
-export const useQueryParams = createQueryHandler('query');
+export const useSearchParams = createQueryHandler('query');

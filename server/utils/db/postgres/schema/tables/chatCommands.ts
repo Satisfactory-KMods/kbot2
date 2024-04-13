@@ -1,4 +1,13 @@
-import { boolean, pgEnum, real, text, uuid, varchar } from '@kmods/drizzle-pg/pg-core';
+import {
+	boolean,
+	index,
+	pgEnum,
+	primaryKey,
+	real,
+	text,
+	uuid,
+	varchar
+} from '@kmods/drizzle-pg/pg-core';
 import { kbot2Schema } from '../pgSchema';
 import { defaultGuildFields } from './guilds';
 
@@ -15,18 +24,26 @@ export const scChatCommands = kbot2Schema.table('discord_guild_chat_commands', {
 	enable_auto_matching: boolean('enable_auto_matching').notNull().default(true)
 });
 
-export const scChatCommandsTrigger = kbot2Schema.table('discord_guild_chat_commands_trigger', {
-	command_id: uuid('command_id')
-		.primaryKey()
-		.notNull()
-		.defaultRandom()
-		.references(
-			() => {
-				return scChatCommands.command_id;
-			},
-			{ onDelete: 'cascade' }
-		),
-	trigger: varchar('trigger', { length: 512 }).notNull(),
-	match_percentage: real('match_percentage').notNull().default(0.75),
-	type: pgCommandTriggerMatchType('type').notNull().default('prefix')
-});
+export const scChatCommandsTrigger = kbot2Schema.table(
+	'discord_guild_chat_commands_trigger',
+	{
+		command_id: uuid('command_id')
+			.notNull()
+			.defaultRandom()
+			.references(
+				() => {
+					return scChatCommands.command_id;
+				},
+				{ onDelete: 'cascade' }
+			),
+		trigger: varchar('trigger', { length: 512 }).notNull(),
+		match_percentage: real('match_percentage').notNull().default(0.75),
+		type: pgCommandTriggerMatchType('type').notNull().default('prefix')
+	},
+	(t) => {
+		return {
+			index: index().on(t.command_id),
+			primary: primaryKey({ columns: [t.command_id, t.trigger] })
+		};
+	}
+);
