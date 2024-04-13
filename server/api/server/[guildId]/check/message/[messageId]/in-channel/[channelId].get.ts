@@ -21,16 +21,16 @@ export default defineEventHandler(async (event) => {
 							avatar: message.author.displayAvatarURL({ size: 64, forceStatic: true })
 						}
 					}
-				} as const;
+				};
 			})
 			.catch(() => {
 				return {
 					valid: false
-				} as const;
+				};
 			});
 	}
 
 	return {
 		valid: false
-	} as const;
+	};
 });
