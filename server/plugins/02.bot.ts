@@ -1,7 +1,7 @@
 import { log } from '~/utils/logger';
-import { discordInitBot } from '../bot';
+import { initDiscordBot } from '../bot';
 
 export default defineNitroPlugin(async () => {
-	log('log', 'Starting discordInitBot');
-	await discordInitBot();
+	log('log', 'Starting initDiscordBot');
+	await initDiscordBot();
 });

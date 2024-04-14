@@ -1,5 +1,3 @@
-import { and, eq } from '@kmods/drizzle-pg';
-import { pgAggJsonBuildObject } from '@kmods/drizzle-pg/pg-core';
 import type {
 	GuildMember,
 	Message,
@@ -10,32 +8,50 @@ import type {
 	User
 } from 'discord.js';
 import isEqual from 'lodash/isEqual';
-import { db, scReactionRoles } from '~/server/utils/db/postgres/pg';
+import { botClient } from '~/server/bot/bot';
+import type { GuildReactionRole } from '~/server/bot/utils/guild';
 import { log } from '~/utils/logger';
 import { DiscordGuildManager } from '../../../utils/guildManager';
 
-const toggleRole = async (member: GuildMember, role: Role) => {
-	if (!member.user.bot) {
-		try {
-			const hasRole =
-				member.roles.cache.find((r) => {
-					return r.id === role.id;
-				}) !== undefined;
-			hasRole ? await member.roles.remove(role) : await member.roles.add(role);
+async function toggleRole(
+	member: GuildMember,
+	role: Role,
+	{ skipMessage = false, force = undefined }: { skipMessage?: boolean; force?: boolean } = {}
+) {
+	if (member.user.bot) return;
+
+	try {
+		const hasRole =
+			typeof force === 'undefined'
+				? member.roles.cache.some((r) => {
+						return r.id === role.id;
+					})
+				: force;
+
+		hasRole
+			? await member.roles.remove(role).catch((e) => {
+					if (typeof force !== 'undefined') {
+						throw e;
+					}
+				})
+			: await member.roles.add(role).catch((e) => {
+					if (typeof force !== 'undefined') {
+						throw e;
+					}
+				});
+		if (!skipMessage) {
 			await member
 				.send(`Role ${role.name} was ${hasRole ? 'removed' : 'added'}`)
 				.catch(() => {});
-			log(
-				'bot',
-				`Role ${role.name} was ${hasRole ? 'removed' : 'added'} for user ${member.user.username}`
-			);
-		} catch (e) {
-			if (e instanceof Error) {
-				log('bot-error', e.message);
-			}
 		}
+		log(
+			'bot',
+			`Role ${role.name} was ${hasRole ? 'removed' : 'added'} for user ${member.user.username}`
+		);
+	} catch (e: any) {
+		log('bot-error', e.message);
 	}
-};
+}
 
 export async function handleReactionRole(
 	reaction: MessageReaction | PartialMessageReaction,
@@ -43,28 +59,21 @@ export async function handleReactionRole(
 ) {
 	try {
 		if (reaction.message.inGuild() && !user.bot) {
-			const guild = await DiscordGuildManager.getGuild(reaction.message.guildId as string);
+			const guild = await DiscordGuildManager.getGuild(reaction.message.guildId);
 			if (guild.isValid()) {
-				const reactionRole = await db
-					.select()
-					.from(scReactionRoles)
-					.where(
-						and(
-							eq(scReactionRoles.guild_id, reaction.message.guildId),
-							eq(scReactionRoles.message_id, reaction.message.id)
-						)
-					)
-					.first();
+				const reactionRole = guild.config.reactionRoles.find((r) => {
+					return r.message_id === reaction.message.id;
+				});
 
 				if (reactionRole) {
 					await reaction.users.remove(user.id);
-					const rule = reactionRole.reactions.find((v) => {
+					const rule = reactionRole.emojies.find((v) => {
 						return v.emoji.trim() === reaction.emoji.name?.trim();
 					});
 					const message = reaction.message;
 					if (rule && message) {
 						const member = await guild.guildMember(user.id);
-						for (const roleId of rule.roleIds) {
+						for (const roleId of rule.role_ids) {
 							const role = await guild.role(roleId);
 							if (member && role) {
 								await toggleRole(member, role);
@@ -81,61 +90,56 @@ export async function handleReactionRole(
 	}
 }
 
-export async function startUp() {
-	const datas = await db
-		.select({
-			guildId: scReactionRoles.guild_id,
-			datas: pgAggJsonBuildObject(scReactionRoles, { aggregate: true })
-		})
-		.from(scReactionRoles)
-		.groupBy(scReactionRoles.guild_id);
-	for await (const reactionDocument of datas) {
-		const guild = await DiscordGuildManager.getGuild(reactionDocument.guildId);
-		if (guild.isValid()) {
-			for (const data of reactionDocument.datas) {
-				const message = await guild.message(data.message_id, data.channel_id);
-				if (message) {
-					// toggle for all users the reaction
-					for (const reaction of message.reactions.cache.map((e) => {
-						return e;
-					})) {
-						const rule = data.reactions.find((v) => {
-							return v.emoji.trim() === reaction.emoji.name?.trim();
-						});
-						if (rule) {
-							for (const roleId of rule.roleIds) {
-								const role = await guild.role(roleId);
-								if (role) {
-									const users = await reaction.users.fetch();
-									for (const user of users.map((u) => {
-										return u;
-									})) {
-										const member = await guild.guildMember(user.id as string);
-										if (member) {
-											await reaction.users.remove(member.user.id);
-											await toggleRole(member, role);
+export async function startUpReactionRoles() {
+	await Promise.all(
+		botClient.guilds.cache.map(async (g) => {
+			const guild = await DiscordGuildManager.getGuild(g.id);
+			if (guild.isValid()) {
+				const reactionRoles = guild.config.reactionRoles;
+				for (const data of reactionRoles) {
+					const message = await guild.message(data.message_id, data.channel_id);
+					if (message) {
+						// toggle for all users the reaction
+						for (const reaction of message.reactions.cache.map((e) => {
+							return e;
+						})) {
+							const rule = data.emojies.find((v) => {
+								return v.emoji.trim() === reaction.emoji.name?.trim();
+							});
+							if (rule) {
+								for (const roleId of rule.role_ids) {
+									const role = await guild.role(roleId);
+									if (role) {
+										const users = await reaction.users.fetch();
+										for (const user of users.map((u) => {
+											return u;
+										})) {
+											const member = await guild.guildMember(
+												user.id as string
+											);
+											if (member) {
+												await reaction.users.remove(member.user.id);
+												await toggleRole(member, role);
+											}
 										}
 									}
 								}
 							}
 						}
-					}
 
-					await reapplyReactionRoles(message, data);
+						await reapplyReactionRoles(message, data);
+					}
 				}
 			}
-		}
-	}
+		})
+	);
 }
 
-async function reapplyReactionRoles(
-	message: Message<true>,
-	reactionDocument: typeof scReactionRoles.$inferSelect
-) {
-	// remove and readd reaction
+async function reapplyReactionRoles(message: Message<true>, reactionData: GuildReactionRole) {
+	// remove old reactions
 	for (const reaction of message.reactions.cache.values()) {
 		if (
-			reactionDocument.reactions.find((r) => {
+			reactionData.emojies.find((r) => {
 				return isEqual(r.emoji, reaction.emoji.name);
 			}) === undefined
 		) {
@@ -143,11 +147,14 @@ async function reapplyReactionRoles(
 		}
 	}
 
-	for (const reaction of reactionDocument.reactions) {
-		try {
-			await message.react(reaction.emoji);
-		} catch (e: any) {
-			log('bot-error', e.message);
-		}
-	}
+	// add new reactions
+	await Promise.all(
+		reactionData.emojies.map(async (reaction) => {
+			try {
+				await message.react(reaction.emoji);
+			} catch (e: any) {
+				log('bot-error', e.message);
+			}
+		})
+	);
 }

@@ -1,11 +1,11 @@
 import { env } from '~/env';
 import { log } from '~/utils/logger';
 import { botClient } from './bot';
-import { startUp } from './events/actions/reaction/reactionRole';
+import { startUpReactionRoles } from './events/actions/reaction/reactionRole';
 import { initSlashCommands } from './slashcommands';
 import { initGuilds } from './utils/init';
 
-export async function discordInitBot() {
+export async function initDiscordBot() {
 	log('bot', 'Initializing bot');
 
 	await import('./events/clientReady');
@@ -22,6 +22,8 @@ export async function discordInitBot() {
 	});
 
 	await initSlashCommands();
-	await startUp();
+	await startUpReactionRoles();
 	await initGuilds();
+
+	log('bot', 'Bot fully initialized');
 }
