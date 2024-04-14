@@ -159,7 +159,6 @@
 					detail: 'Command updated successfully',
 					life: 3000
 				});
-				config.value = result as any;
 				await refresh();
 				setData();
 			}
@@ -186,7 +185,6 @@
 				detail: 'Command saved successfully',
 				life: 3000
 			});
-			config.value = result as any;
 			await refresh();
 			setData();
 		}
@@ -297,6 +295,7 @@
 								<div class="flex items-center gap-2">
 									<span class="flex-1">Commands triggers</span>
 									<Button
+										:disabled="commands.length >= 8"
 										icon="pi pi-plus"
 										@click="
 											data.triggers.push({
@@ -307,7 +306,7 @@
 											})
 										" />
 								</div>
-								<div class="mt-2 grid gap-2 md:grid-cols-2 xl:grid-cols-3">
+								<div class="mt-2 grid gap-2 xl:grid-cols-2">
 									<div
 										v-for="item of commands"
 										:key="item.command_id"
@@ -346,11 +345,32 @@
 							</div>
 						</div>
 					</TabPanel>
+
 					<TabPanel :disabled="!data.enable_auto_matching" header="Auto matching rule">
 						<div class="flex flex-col gap-2">
+							<Message severity="info">
+								<p class="p-2">
+									Auto matching rules are used to match the message instead using
+									the command prefix.
+									<br />
+									For Fuzzy search will be use the middle of all weights. For
+									example:
+									<br />
+									if you have 3 rules with 0.5, 0.6, 0.7 the middle will be 0.6.
+								</p>
+
+								<p class="p-2">
+									You can find
+									<a href="https://regexr.com/" target="_blank"
+										>Some more informations about RegExp</a
+									>
+								</p>
+							</Message>
+
 							<div class="flex items-center gap-2">
 								<span class="flex-1">Matching Rules</span>
 								<Button
+									:disabled="rules.length >= 8"
 									label="Fuzzy Rule"
 									icon="pi pi-plus"
 									@click="
@@ -362,6 +382,7 @@
 										})
 									" />
 								<Button
+									:disabled="rules.length >= 8"
 									label="Regex Rule"
 									icon="pi pi-plus"
 									@click="
@@ -417,6 +438,7 @@
 							</div>
 						</div>
 					</TabPanel>
+
 					<TabPanel v-if="config" header="Generel Command Config (global)">
 						<div class="flex flex-col gap-2">
 							<div class="flex flex-col gap-1">
@@ -481,7 +503,7 @@
 						<span class="flex flex-1 items-center gap-3 text-xl font-semibold">
 							<i class="pi pi-pen-to-square h-10 w-10 text-4xl" />
 							<div class="flex flex-1 flex-col">
-								<span class="text-xs">
+								<span class="whitespace-break-spaces text-xs">
 									{{ item.reaction_text }}
 								</span>
 							</div>

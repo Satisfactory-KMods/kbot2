@@ -91,5 +91,4 @@ export async function fuzzySearch(message: Message<true>) {
 			return;
 		}
 	}
-	log('bot', `Fuzzy search: ${message.content}`);
 }

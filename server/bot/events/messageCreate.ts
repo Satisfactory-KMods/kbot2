@@ -5,7 +5,7 @@ import { fuzzySearch, getChatMessageCommand, reactToCommand } from './actions/ch
 
 botClient.on(Events.MessageCreate, async (message) => {
 	if (message.author.bot) return;
-	log('bot', `Message from ${message.author.tag}: ${message.content}`);
+
 	if (message.inGuild()) {
 		await handleInGuild(message);
 	} else {
