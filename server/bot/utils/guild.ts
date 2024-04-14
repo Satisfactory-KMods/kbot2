@@ -9,18 +9,18 @@ import type { Return } from '~/utils/typeUtils';
 import { botClient } from '../bot';
 import { viewGuildConfig } from './../../utils/db/postgres/views/guildConfig';
 
-export async function getFullGuildConfiguration(guildId: string) {
+export async function getFullGuildConfiguration(guildId: string, trx = db) {
 	const [base, chatCommands, reactionRoles] = await Promise.all([
-		db
+		trx
 			.select()
 			.from(viewGuildConfig)
 			.where(and(eq(viewGuildConfig.guild_id, guildId)))
 			.firstOrThrow(),
-		db
+		trx
 			.select()
 			.from(viewGuildChatCommands)
 			.where(and(eq(viewGuildChatCommands.guild_id, guildId))),
-		db
+		trx
 			.select()
 			.from(viewGuildReactionRoles)
 			.where(and(eq(viewGuildReactionRoles.guild_id, guildId)))
@@ -50,9 +50,9 @@ export class DiscordGuildBase<TValid extends boolean = false> {
 		return this._config;
 	}
 
-	public async updateGuildConfiguration(force?: boolean) {
+	public async updateGuildConfiguration(force?: boolean, trx = db) {
 		if (this.isDirty || force) {
-			this._config = await getFullGuildConfiguration(this.guildId);
+			this._config = await getFullGuildConfiguration(this.guildId, trx);
 		}
 	}
 

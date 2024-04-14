@@ -10,7 +10,8 @@ export type ReactionRole = {
 export const scReactionRoles = kbot2Schema.table('discord_guild_reaction_roles_message', {
 	message_id: numeric('message_id').notNull().primaryKey(),
 	...defaultGuildFields,
-	channel_id: numeric('channel_id').notNull()
+	channel_id: numeric('channel_id').notNull(),
+	name: varchar('name', { length: 128 }).notNull().default('')
 });
 
 export const scReactionRolesEmojies = kbot2Schema.table(

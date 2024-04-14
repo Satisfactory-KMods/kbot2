@@ -7,7 +7,6 @@ import type {
 	Role,
 	User
 } from 'discord.js';
-import isEqual from 'lodash/isEqual';
 import { botClient } from '~/server/bot/bot';
 import type { GuildReactionRole } from '~/server/bot/utils/guild';
 import { log } from '~/utils/logger';
@@ -28,17 +27,20 @@ async function toggleRole(
 					})
 				: force;
 
-		hasRole
-			? await member.roles.remove(role).catch((e) => {
-					if (typeof force !== 'undefined') {
-						throw e;
-					}
-				})
-			: await member.roles.add(role).catch((e) => {
-					if (typeof force !== 'undefined') {
-						throw e;
-					}
-				});
+		if (hasRole) {
+			await member.roles.remove(role).catch((e) => {
+				if (typeof force === 'undefined') {
+					throw e;
+				}
+			});
+		} else {
+			await member.roles.add(role).catch((e) => {
+				if (typeof force === 'undefined') {
+					throw e;
+				}
+			});
+		}
+
 		if (!skipMessage) {
 			await member
 				.send(`Role ${role.name} was ${hasRole ? 'removed' : 'added'}`)
@@ -50,6 +52,14 @@ async function toggleRole(
 		);
 	} catch (e: any) {
 		log('bot-error', e.message);
+
+		if (!skipMessage) {
+			await member
+				.send(
+					`Something went wrong while trying to toggle role ${role.name}, \nPlease Report this to developer Kyrium\n\nError: ${e.message}`
+				)
+				.catch(() => {});
+		}
 	}
 }
 
@@ -135,17 +145,12 @@ export async function startUpReactionRoles() {
 	);
 }
 
-async function reapplyReactionRoles(message: Message<true>, reactionData: GuildReactionRole) {
+export async function reapplyReactionRoles(
+	message: Message<true>,
+	reactionData: GuildReactionRole
+) {
 	// remove old reactions
-	for (const reaction of message.reactions.cache.values()) {
-		if (
-			reactionData.emojies.find((r) => {
-				return isEqual(r.emoji, reaction.emoji.name);
-			}) === undefined
-		) {
-			await reaction.remove();
-		}
-	}
+	await message.reactions.removeAll();
 
 	// add new reactions
 	await Promise.all(

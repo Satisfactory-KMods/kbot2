@@ -136,6 +136,7 @@
 		}
 
 		if (edit.value) {
+			busy.value = true;
 			const result = await $$fetch(
 				`/api/server/${params.server}/chat-commands/update/${data.value.command_id}`,
 				{
@@ -151,6 +152,7 @@
 				});
 				return null;
 			});
+			busy.value = false;
 
 			if (result) {
 				toast.add({
@@ -165,6 +167,7 @@
 			return;
 		}
 
+		busy.value = true;
 		const result = await $$fetch(`/api/server/${params.server}/chat-commands`, {
 			method: 'POST',
 			body: data.value
@@ -177,6 +180,7 @@
 			});
 			return null;
 		});
+		busy.value = false;
 
 		if (result) {
 			toast.add({
@@ -195,6 +199,7 @@
 			return;
 		}
 
+		busy.value = true;
 		const result = await $$fetch(`/api/server/${params.server}/config/general`, {
 			method: 'POST',
 			body: {
@@ -209,6 +214,7 @@
 			});
 			return null;
 		});
+		busy.value = false;
 
 		if (result) {
 			toast.add({
@@ -236,6 +242,7 @@
 					return;
 				}
 
+				busy.value = true;
 				const result = await $$fetch(
 					`/api/server/${params.server}/chat-commands/update/${item.command_id}`,
 					{
@@ -250,6 +257,7 @@
 					});
 					return null;
 				});
+				busy.value = false;
 
 				if (result) {
 					toast.add({
@@ -398,7 +406,7 @@
 								<div
 									v-for="item of rules"
 									:key="item.command_id"
-									class="flex gap-1 rounded border bg-surface-50 p-2">
+									class="flex gap-1 rounded border bg-surface-50 p-2 dark:border-surface-800 dark:bg-surface-700">
 									<InputText
 										v-model="item.trigger"
 										placeholder="Trigger text"

@@ -35,7 +35,8 @@ export default defineNuxtConfig({
 	css: [
 		'~/assets/css/tailwind.css',
 		'primevue/resources/themes/lara-dark-blue/theme.css',
-		'primeicons/primeicons.css'
+		'primeicons/primeicons.css',
+		'vue3-emoji-picker/css'
 	],
 	tailwindcss: {
 		cssPath: '~/assets/css/tailwind.css'
