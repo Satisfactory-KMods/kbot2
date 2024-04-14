@@ -17,6 +17,8 @@ export const pgCommandTriggerMatchType = pgEnum('command_trigger_match_type', [
 	'regex'
 ]);
 
+export const TriggerMatchTypes = pgCommandTriggerMatchType.enum;
+
 export const scChatCommands = kbot2Schema.table('discord_guild_chat_commands', {
 	...defaultGuildFields,
 	command_id: uuid('command_id').primaryKey().notNull().defaultRandom(),

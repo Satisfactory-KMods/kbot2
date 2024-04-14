@@ -4,7 +4,7 @@ import { scChatCommands, scChatCommandsTrigger } from '~/server/utils/db/postgre
 import type { ChatCommandData } from './chat-commands.get';
 
 export default defineEventHandler(async (event) => {
-	const { guildId } = await getRouteBaseParams(event);
+	const { guildId, guildData } = await getRouteBaseParams(event);
 	const { triggers, reaction_text, enable_auto_matching } = (await readBody(
 		event
 	)) as ChatCommandData['data'][0];
@@ -27,6 +27,7 @@ export default defineEventHandler(async (event) => {
 				})
 			);
 		}
+		guildData.setDirty();
 	});
 
 	return {

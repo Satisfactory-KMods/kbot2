@@ -3,7 +3,7 @@ import { getRouteBaseParams } from '~/server/bot/utils/routes';
 import { db, scGuildConfiguration } from '~/server/utils/db/postgres/pg';
 
 export default defineEventHandler(async (event) => {
-	const { guildId } = await getRouteBaseParams(event);
+	const { guildId, guildData } = await getRouteBaseParams(event);
 	const {
 		changelog_suggestion_channel_id,
 		changelog_announce_hidden_mods,
@@ -43,5 +43,9 @@ export default defineEventHandler(async (event) => {
 		})
 		.where(eq(scGuildConfiguration.guild_id, guildId))
 		.returning()
-		.firstOrThrow('Failed to update base config data');
+		.firstOrThrow('Failed to update base config data')
+		.then((r) => {
+			guildData.setDirty();
+			return r;
+		});
 });

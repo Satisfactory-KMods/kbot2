@@ -426,7 +426,12 @@
 									placeholder="Trigger text"
 									class="w-full" />
 							</div>
-							<Button :loading="busy" @click="saveSettings()">Save</Button>
+							<Button
+								:loading="busy"
+								:disabled="!settingsValidToSave"
+								@click="saveSettings()"
+								>Save</Button
+							>
 						</div>
 					</TabPanel>
 				</TabView>

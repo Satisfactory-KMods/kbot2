@@ -6,7 +6,7 @@ import { zodUuid } from '~/server/utils/zodSchemas';
 import type { ChatCommandData } from '../../chat-commands.get';
 
 export default defineEventHandler(async (event) => {
-	const { guildId } = await getRouteBaseParams(event);
+	const { guildId, guildData } = await getRouteBaseParams(event);
 	const chatcommandId = zodUuid(getRouterParam(event, 'id'), 'Chat command Id must be a UUID');
 	const { triggers, reaction_text, enable_auto_matching } = (await readBody(event)) as Partial<
 		ChatCommandData['data'][0]
@@ -38,6 +38,7 @@ export default defineEventHandler(async (event) => {
 			)
 			.returning()
 			.firstOrThrow('Failed to update chat command data');
+		guildData.setDirty();
 	});
 	return {
 		success: true

@@ -109,7 +109,7 @@ export const scGuildConfigurationBlacklistedMods = kbot2Schema.table(
 	'discord_guild_configuration_blacklisted_mods',
 	{
 		...defaultGuildFields,
-		mod_reference: numeric('mod_reference').notNull()
+		mod_reference: varchar('mod_reference', { length: 128 }).notNull()
 	},
 	(t) => {
 		return {

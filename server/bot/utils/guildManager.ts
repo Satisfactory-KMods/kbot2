@@ -1,165 +1,16 @@
-import { and, eq, notInArray } from '@kmods/drizzle-pg';
 import {
 	ChannelType,
-	PermissionFlagsBits,
 	type Collection,
-	type Guild,
 	type GuildForumThreadCreateOptions,
 	type MessageCreateOptions,
 	type MessagePayload,
 	type NonThreadGuildBasedChannel
 } from 'discord.js';
-import { log } from '~/utils/logger';
-import { db, scGuild, scGuildAdmins, scGuildConfiguration } from '../../utils/db/postgres/pg';
-import { botClient } from '../bot';
+import { DiscordGuildBase } from './guild';
 
-export class DiscordGuild<TValid extends boolean = false> {
-	public readonly guildId;
-	private guild: TValid extends true ? Guild : Guild | null = null as any;
-	private lastFetch: Date = new Date(0);
-	private fetchInterval: number = 60 * 15 * 1000;
-
-	private constructor(guildId: string) {
-		this.guildId = guildId;
-	}
-
-	private async initializeGuildDatabase() {
-		const exists = await db
-			.select()
-			.from(scGuild)
-			.where(and(eq(scGuild.guild_id, this.guildId)))
-			.first();
-
-		if (!exists) {
-			await db.transaction(async (trx) => {
-				await trx.insert(scGuild).values({
-					guild_id: this.guildId
-				});
-				await trx.insert(scGuildConfiguration).values({
-					guild_id: this.guildId
-				});
-			});
-		}
-	}
-
-	public async updateGuildDatas(fetch = true) {
-		if (fetch) {
-			await this.guild?.fetch();
-			await this.doFetch().catch(() => {
-				log('bot-warn', `Failed to fetch guild data for ${this.guildId}`);
-			});
-		}
-
-		await db.transaction(async (trx) => {
-			if (!this.guild) {
-				return log('bot-warn', `Guild ${this.guildId} not found`);
-			}
-
-			await trx
-				.update(scGuild)
-				.set({
-					name: this.guild.name,
-					owner_id: this.guild.ownerId,
-					active: true,
-					image: this.guild.iconURL({ forceStatic: true }) ?? '',
-					total_members: this.guild.memberCount,
-					guild_created: new Date(this.guild.createdTimestamp)
-				})
-				.where(and(eq(scGuild.guild_id, this.guildId)));
-
-			const usersWithPermission = this.guild.members.cache
-				.filter((member) => {
-					return (
-						member.permissions.has(PermissionFlagsBits.Administrator) &&
-						!member.user.bot
-					);
-				})
-				.map((member) => {
-					return member.id;
-				});
-
-			await db
-				.delete(scGuildAdmins)
-				.where(
-					and(
-						notInArray(scGuildAdmins.user_id, usersWithPermission),
-						eq(scGuildAdmins.guild_id, this.guildId)
-					)
-				);
-			await Promise.all(
-				usersWithPermission.map((userId) => {
-					return trx
-						.insert(scGuildAdmins)
-						.values({
-							guild_id: this.guildId,
-							user_id: userId
-						})
-						.onConflictDoNothing();
-				})
-			);
-
-			log('bot', 'Guild data updated', this.guild.name);
-		});
-	}
-
-	private async initializeGuild() {
-		await this.initializeGuildDatabase();
-
-		this.guild =
-			botClient.guilds.cache.find((guild) => {
-				return guild.id === this.guildId;
-			}) ??
-			((await botClient.guilds.fetch(this.guildId).catch(() => {
-				return null;
-			})) as any);
-
-		if (this.guild) {
-			await this.updateGuildDatas();
-		} else {
-			await db
-				.update(scGuild)
-				.set({ active: false })
-				.where(and(eq(scGuild.guild_id, this.guildId)));
-		}
-	}
-
-	public isValid(): this is DiscordGuild<true> {
+export class DiscordGuild<TValid extends boolean = false> extends DiscordGuildBase<TValid> {
+	override isValid(): this is DiscordGuild<true> {
 		return this.guild !== null;
-	}
-
-	public async doFetch() {
-		if (this.lastFetch.valueOf() + this.fetchInterval <= Date.now() && this.guild) {
-			await Promise.all([
-				this.guild.members.fetch().catch(() => {
-					return null;
-				}),
-				this.guild.roles.fetch().catch(() => {
-					return null;
-				}),
-				this.guild.invites.fetch().catch(() => {
-					return null;
-				}),
-				this.guild.channels.fetch().catch(() => {
-					return null;
-				}),
-				this.guild.bans.fetch().catch(() => {
-					return null;
-				}),
-				this.guild.commands.fetch().catch(() => {
-					return null;
-				}),
-				this.guild.autoModerationRules.fetch().catch(() => {
-					return null;
-				}),
-				this.guild.emojis.fetch().catch(() => {
-					return null;
-				}),
-				this.guild.stickers.fetch().catch(() => {
-					return null;
-				})
-			]);
-			this.lastFetch = new Date();
-		}
 	}
 
 	static async constructGuild(guildId: string): Promise<DiscordGuild> {
@@ -168,20 +19,7 @@ export class DiscordGuild<TValid extends boolean = false> {
 		return GuildClass;
 	}
 
-	public get getGuild() {
-		return this.guild;
-	}
-
-	public async userHasPermission(userId: string): Promise<boolean> {
-		const result = await db
-			.select()
-			.from(scGuildAdmins)
-			.where(and(eq(scGuildAdmins.guild_id, this.guildId), eq(scGuildAdmins.user_id, userId)))
-			.first();
-		return !!result;
-	}
-
-	private getChannel(channelId: string) {
+	protected getChannel(channelId: string) {
 		const guild = this.getGuild;
 		if (guild && channelId) {
 			if (guild.channels.cache.has(channelId)) {
@@ -380,7 +218,7 @@ export class DiscordGuild<TValid extends boolean = false> {
 }
 
 export const DiscordGuildManager = new (class {
-	private guilds = new Map<string, DiscordGuild>();
+	protected guilds = new Map<string, DiscordGuild>();
 
 	public removeGuild(guildId: string): void {
 		if (this.guilds.has(guildId)) {
@@ -394,6 +232,7 @@ export const DiscordGuildManager = new (class {
 			if (fetch) {
 				await guild.doFetch();
 			}
+			await guild.updateGuildConfiguration();
 			return guild;
 		}
 
