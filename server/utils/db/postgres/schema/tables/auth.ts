@@ -1,20 +1,34 @@
-import type { AdapterAccount } from '@auth/core/adapters';
-import { boolean, colTimestamp, integer, primaryKey, text } from '@kmods/drizzle-pg/pg-core';
+import {
+	bigint,
+	bigserial,
+	boolean,
+	colTimestamp,
+	pgEnum,
+	primaryKey,
+	varchar
+} from '@kmods/drizzle-pg/pg-core';
 import { kbot2Schema } from '../pgSchema';
 
+export const pgAdapterAuthTypeEnum = pgEnum('enum_adapter_auth_type', [
+	'oauth',
+	'oidc',
+	'email',
+	'webauthn'
+]);
+
 export const users = kbot2Schema.table('user', {
-	id: text('id').notNull().primaryKey(),
-	name: text('name'),
-	email: text('email').notNull(),
+	id: bigserial('id').notNull().primaryKey(),
+	name: varchar('name', { length: 255 }).notNull(),
+	email: varchar('email', { length: 255 }).notNull(),
 	emailVerified: colTimestamp('emailVerified'),
-	image: text('image'),
+	image: varchar('image', { length: 1024 }),
 	hoster: boolean('hoster').notNull().default(false)
 });
 
 export const accounts = kbot2Schema.table(
 	'account',
 	{
-		userId: text('userId')
+		userId: bigint('userId')
 			.notNull()
 			.references(
 				() => {
@@ -22,16 +36,16 @@ export const accounts = kbot2Schema.table(
 				},
 				{ onDelete: 'cascade' }
 			),
-		type: text('type').$type<AdapterAccount['type']>().notNull(),
-		provider: text('provider').notNull(),
-		providerAccountId: text('providerAccountId').notNull(),
-		refresh_token: text('refresh_token'),
-		access_token: text('access_token'),
-		expires_at: integer('expires_at'),
-		token_type: text('token_type'),
-		scope: text('scope'),
-		id_token: text('id_token'),
-		session_state: text('session_state')
+		type: pgAdapterAuthTypeEnum('type').notNull(),
+		provider: varchar('provider', { length: 1024 }).notNull(),
+		providerAccountId: bigint('providerAccountId').notNull(),
+		refresh_token: varchar('refresh_token', { length: 1024 }),
+		access_token: varchar('access_token', { length: 1024 }),
+		expires_at: colTimestamp('expires_at'),
+		token_type: varchar('token_type', { length: 1024 }),
+		scope: varchar('scope', { length: 1024 }),
+		id_token: varchar('id_token', { length: 1024 }),
+		session_state: varchar('session_state', { length: 1024 })
 	},
 	(account) => {
 		return {
@@ -41,8 +55,8 @@ export const accounts = kbot2Schema.table(
 );
 
 export const sessions = kbot2Schema.table('session', {
-	sessionToken: text('sessionToken').notNull().primaryKey(),
-	userId: text('userId')
+	sessionToken: varchar('sessionToken', { length: 1024 }).notNull().primaryKey(),
+	userId: bigint('userId')
 		.notNull()
 		.references(
 			() => {
@@ -56,8 +70,8 @@ export const sessions = kbot2Schema.table('session', {
 export const verificationTokens = kbot2Schema.table(
 	'verificationToken',
 	{
-		identifier: text('identifier').notNull(),
-		token: text('token').notNull(),
+		identifier: varchar('identifier', { length: 1024 }).notNull(),
+		token: varchar('token', { length: 1024 }).notNull(),
 		expires: colTimestamp('expires').notNull()
 	},
 	(vt) => {
