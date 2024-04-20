@@ -49,6 +49,12 @@ export function useNavigationUrls() {
 						icon: 'pi pi-home'
 					},
 					{
+						label: 'Mod Update Announcements',
+						url: `/guild/${params.server}/mod-announcements`,
+						description: 'Configure announcements for your server and mods.',
+						icon: 'pi pi-share-alt'
+					},
+					{
 						label: 'Reaction Roles',
 						url: `/guild/${params.server}/reaction-roles`,
 						description: 'Configure reaction roles for your server',

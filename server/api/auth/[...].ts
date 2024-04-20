@@ -54,5 +54,5 @@ export default NuxtAuthHandler({
 		strategy: 'database',
 		updateAge: 86400 * 7
 	},
-	adapter: pgDrizzleAdapter()
+	adapter: pgDrizzleAdapter
 });

@@ -3,18 +3,14 @@ import { drizzle } from '@kmods/drizzle-pg/postgres-js';
 import { poolConnection } from './pg';
 import * as views from './views';
 
-// we want to destory the views first before we do the migration to avoid any issues
-export function destoryViews() {
+/**
+ * Destory or create the views for the database
+ * @param destory - should we destory the views
+ * @returns void
+ */
+export function manageViews(destory = false) {
 	return migrateViews({
-		imports: {},
-		service: 'kbot-dev',
-		migrationDb: drizzle(poolConnection, {})
-	});
-}
-
-export function createViews() {
-	return migrateViews({
-		imports: views,
+		imports: destory ? {} : views,
 		service: 'kbot-dev',
 		migrationDb: drizzle(poolConnection, {})
 	});

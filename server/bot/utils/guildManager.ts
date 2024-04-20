@@ -217,7 +217,7 @@ export class DiscordGuild<TValid extends boolean = false> extends DiscordGuildBa
 	}
 }
 
-export const DiscordGuildManager = new (class {
+export const DiscordGuildManager = new (class DiscordGuildManager {
 	protected guilds = new Map<string, DiscordGuild>();
 
 	public removeGuild(guildId: string): void {
