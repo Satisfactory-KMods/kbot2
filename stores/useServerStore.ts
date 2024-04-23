@@ -1,18 +1,61 @@
 import { defineStore } from 'pinia';
-import type { DiscordServerBaseData } from '~/server/api/server/[guildId]/data.get';
 
 export const useServerStore = defineStore('server-store', () => {
-	const data = ref<DiscordServerBaseData>({} as any);
-	const guildId = computed(() => {
+	const data = ref<Return<typeof refreshGuild>>({} as any);
+	const roles = ref<Return<typeof refreshRoles>>([]);
+	const channels = ref<Return<typeof refreshChannels>>([]);
+
+	const guildId: ComputedRef<string> = computed(() => {
 		return String(data.value?.guild_id);
 	});
 
-	async function init(newGuild: string) {
-		const result = await $$fetch(`/api/server/${newGuild}/data`, { method: 'GET' });
+	async function refreshRoles(newGuild?: string) {
+		const id = newGuild ?? guildId.value;
 
-		data.value = result;
+		// fetch roles
+		const result = await $$fetch(`/api/server/${id}/roles`, {
+			method: 'GET',
+			query: {
+				limit: 200,
+				offset: 0
+			}
+		});
+		roles.value = result;
+
 		return result;
 	}
 
-	return { data, guildId, init };
+	async function refreshGuild(newGuild?: string) {
+		const id = newGuild ?? guildId.value;
+
+		// fetch roles
+		const result = await $$fetch(`/api/server/${id}/data`, { method: 'GET' });
+		data.value = result;
+
+		return result;
+	}
+
+	async function refreshChannels(newGuild?: string) {
+		const id = newGuild ?? guildId.value;
+
+		// fetch roles
+		const result = await $$fetch(`/api/server/${id}/channels/${ChannelTypes.all}`, {
+			method: 'GET'
+		});
+		channels.value = result;
+
+		return result;
+	}
+
+	async function init(newGuild: string) {
+		await Promise.all([
+			refreshGuild(newGuild),
+			refreshRoles(newGuild),
+			refreshChannels(newGuild)
+		]);
+
+		return data.value;
+	}
+
+	return { data, refreshGuild, roles, refreshRoles, channels, refreshChannels, init, guildId };
 });

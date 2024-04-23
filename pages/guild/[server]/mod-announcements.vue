@@ -20,6 +20,13 @@
 			method: 'GET'
 		}
 	);
+
+	function onSetFicitUserIds(ids: string[]) {
+		if (!config.value) {
+			return;
+		}
+		config.value.base.ficsit_user_ids = Array.from(new Set(ids));
+	}
 </script>
 
 <template>
@@ -31,13 +38,27 @@
 				}"
 				header="Manage Mod Announcements">
 				<div v-if="config" class="flex flex-col gap-2 p-2">
-					<ToggleButton
-						v-model="config.base.changelog_announce_hidden_mods"
-						on-label="Enabled"
-						off-label="Disabled"
-						on-icon="pi pi-check"
-						off-icon="pi pi-times"
-						class="w-[9rem]" />
+					<div class="flex flex-col gap-1">
+						<span>Ficsit.App User ids</span>
+						<span class="text-xs text-opacity-70"
+							>Ids can be found in the URL of a user profile on Fiscit.App
+							"https://ficsit.app/user/<b>9uvZtCA4cM6H4q</b>"</span
+						>
+						<Chips
+							:model-value="config.base.ficsit_user_ids"
+							class="w-full"
+							@update:model-value="onSetFicitUserIds" />
+					</div>
+
+					<div class="flex items-center gap-2">
+						<ToggleButton
+							v-model="config.base.changelog_announce_hidden_mods"
+							on-label="Enabled"
+							off-label="Disabled"
+							on-icon="pi pi-check"
+							off-icon="pi pi-times" />
+						<span>Announce Mod updates from Hidden mods</span>
+					</div>
 				</div>
 			</Panel>
 		</div>
