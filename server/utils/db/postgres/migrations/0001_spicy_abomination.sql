@@ -1,1 +1,0 @@
-ALTER TABLE "kbot2"."discord_guild" ADD COLUMN "image" varchar(1024) DEFAULT '' NOT NULL;

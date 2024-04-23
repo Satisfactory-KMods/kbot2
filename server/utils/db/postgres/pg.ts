@@ -18,6 +18,10 @@ export const dbState = {
 	migrated: false
 };
 
+/**
+ * Start the database migration and set the state
+ * @returns Promise
+ */
 export function startMigrate() {
 	log('info', 'Starting database migration');
 	if (

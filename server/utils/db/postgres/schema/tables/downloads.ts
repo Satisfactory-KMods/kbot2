@@ -1,9 +1,9 @@
 import {
+	bigint,
 	bigserial,
 	boolean,
 	colTimestamp,
 	index,
-	numeric,
 	text,
 	unique,
 	varchar
@@ -19,7 +19,7 @@ export const scDownloads = kbot2Schema.table(
 		version: varchar('version', { length: 64 }).notNull(),
 		mod_reference: varchar('mod_reference', { length: 128 }).notNull(),
 		patreon: boolean('patreon').notNull().default(false),
-		uploaded_by: numeric('uploaded_by').notNull(),
+		uploaded_by: bigint('uploaded_by').notNull(),
 		uploaded_at: colTimestamp('uploaded_at').notNull().defaultNow(),
 		changelog: text('changelog').notNull()
 	},
