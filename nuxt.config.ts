@@ -24,7 +24,7 @@ export default defineNuxtConfig({
 		options: {
 			unstyled: true
 		},
-		importPT: { from: resolve(__dirname, './presets/wind/') }
+		importPT: { from: resolve(__dirname, './presets/lara/') }
 	},
 	vite: {
 		plugins: [ViteYaml()]

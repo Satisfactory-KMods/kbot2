@@ -5,7 +5,11 @@
 </script>
 
 <template>
-	<Menu :model="items">
+	<Menu
+		:model="items"
+		:pt="{
+			root: ''
+		}">
 		<template #start>
 			<div
 				v-if="data?.user"

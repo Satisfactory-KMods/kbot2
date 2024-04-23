@@ -1,21 +1,14 @@
 <script lang="ts" setup>
-	const confirm = useConfirm();
 	const toast = useToast();
+	const busy = ref(false);
 	const { params } = useParams({
 		values: {
 			server: String()
 		}
 	});
 
-	const { data: config, refresh: refreshConfig } = await useFetch(
+	const { data: config, refresh } = await useFetch(
 		`/api/server/${params.server}/config/general`,
-		{
-			method: 'GET'
-		}
-	);
-
-	const { data: channels, refresh: refreshChannels } = await useFetch(
-		`/api/server/${params.server}/channels/${ChannelTypes.text}`,
 		{
 			method: 'GET'
 		}
@@ -27,16 +20,59 @@
 		}
 		config.value.base.ficsit_user_ids = Array.from(new Set(ids));
 	}
+
+	async function saveSettings() {
+		if (busy.value || !config.value) {
+			return;
+		}
+
+		const {
+			ficsit_user_ids,
+			update_text_channel_id,
+			changelog_announce_hidden_mods,
+			changelog_forum_id,
+			changelog_bug_channel_id,
+			changelog_suggestion_channel_id
+		} = config.value.base;
+
+		busy.value = true;
+		const result = await $$fetch(`/api/server/${params.server}/config/general`, {
+			method: 'POST',
+			body: {
+				ficsit_user_ids,
+				update_text_channel_id,
+				changelog_announce_hidden_mods,
+				changelog_forum_id,
+				changelog_bug_channel_id,
+				changelog_suggestion_channel_id
+			}
+		}).catch((e: any) => {
+			toast.add({
+				severity: 'error',
+				summary: 'Error',
+				detail: `Failed to save settings: ${e.message}`,
+				life: 3000
+			});
+			return null;
+		});
+		busy.value = false;
+
+		if (result) {
+			toast.add({
+				severity: 'success',
+				summary: 'Success',
+				detail: 'Settings saved successfully',
+				life: 3000
+			});
+			await refresh();
+		}
+	}
 </script>
 
 <template>
 	<div>
 		<div class="md:px-2">
-			<Panel
-				:pt="{
-					content: 'p-0'
-				}"
-				header="Manage Mod Announcements">
+			<Panel header="Manage Mod Announcements">
 				<div v-if="config" class="flex flex-col gap-2 p-2">
 					<div class="flex flex-col gap-1">
 						<span>Ficsit.App User ids</span>
@@ -59,6 +95,40 @@
 							off-icon="pi pi-times" />
 						<span>Announce Mod updates from Hidden mods</span>
 					</div>
+
+					<div class="flex flex-col gap-1">
+						<span>Channel for Changelogs</span>
+						<CommonChannelSelection
+							v-model="config.base.update_text_channel_id"
+							no-edit
+							:channel-types="[ChannelTypes.text, ChannelTypes.forum]" />
+					</div>
+
+					<div class="flex flex-col gap-1">
+						<span>Channel for Changelogs <b>(only as Forum)</b></span>
+						<CommonChannelSelection
+							v-model="config.base.changelog_forum_id"
+							no-edit
+							:channel-types="[ChannelTypes.forum]" />
+					</div>
+
+					<div class="flex flex-col gap-1">
+						<span>Channel for Suggestions</span>
+						<CommonChannelSelection
+							v-model="config.base.changelog_suggestion_channel_id"
+							no-edit
+							:channel-types="[ChannelTypes.text, ChannelTypes.forum]" />
+					</div>
+
+					<div class="flex flex-col gap-1">
+						<span>Channel for Bugreports</span>
+						<CommonChannelSelection
+							v-model="config.base.changelog_bug_channel_id"
+							no-edit
+							:channel-types="[ChannelTypes.text, ChannelTypes.forum]" />
+					</div>
+
+					<Button :loading="busy" @click="saveSettings()">Save</Button>
 				</div>
 			</Panel>
 		</div>

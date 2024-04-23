@@ -127,7 +127,7 @@
 		if (!config.value) {
 			return false;
 		}
-		return config.value.chat_command_prefix.trim().length === 1;
+		return config.value.base.chat_command_prefix.trim().length === 1;
 	});
 
 	async function save() {
@@ -195,7 +195,7 @@
 	}
 
 	async function saveSettings() {
-		if (!settingsValidToSave.value || busy.value) {
+		if (!settingsValidToSave.value || busy.value || !config.value) {
 			return;
 		}
 
@@ -203,7 +203,7 @@
 		const result = await $$fetch(`/api/server/${params.server}/config/general`, {
 			method: 'POST',
 			body: {
-				chat_command_prefix: config.value!.chat_command_prefix
+				chat_command_prefix: config.value.base.chat_command_prefix
 			}
 		}).catch((e: any) => {
 			toast.add({
@@ -223,7 +223,6 @@
 				detail: 'Settings saved successfully',
 				life: 3000
 			});
-			config.value = result as any;
 			await refresh();
 		}
 	}
@@ -276,11 +275,7 @@
 <template>
 	<div>
 		<div class="md:px-2">
-			<Panel
-				:pt="{
-					content: 'p-0'
-				}"
-				:header="edit ? 'Edit' : 'Create'">
+			<Panel :header="edit ? 'Edit' : 'Create'">
 				<TabView>
 					<TabPanel header="Generel Config">
 						<div class="flex flex-col gap-2">
@@ -452,7 +447,7 @@
 							<div class="flex flex-col gap-1">
 								<span class="flex-1">Command Prefix</span>
 								<InputText
-									v-model="config.chat_command_prefix"
+									v-model="config.base.chat_command_prefix"
 									placeholder="Trigger text"
 									class="w-full" />
 							</div>
