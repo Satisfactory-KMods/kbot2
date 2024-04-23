@@ -1,11 +1,11 @@
 import {
+	bigserial,
 	boolean,
 	colTimestamp,
 	index,
 	numeric,
 	text,
 	unique,
-	uuid,
 	varchar
 } from '@kmods/drizzle-pg/pg-core';
 import { kbot2Schema } from '../pgSchema';
@@ -15,7 +15,7 @@ export const scDownloads = kbot2Schema.table(
 	'downloads',
 	{
 		...defaultGuildFields,
-		id: uuid('id').primaryKey().notNull().defaultRandom(),
+		id: bigserial('id').primaryKey().notNull(),
 		version: varchar('version', { length: 64 }).notNull(),
 		mod_reference: varchar('mod_reference', { length: 128 }).notNull(),
 		patreon: boolean('patreon').notNull().default(false),

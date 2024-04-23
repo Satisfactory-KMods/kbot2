@@ -1,11 +1,12 @@
 import {
+	bigint,
+	bigserial,
 	boolean,
 	index,
 	pgEnum,
 	primaryKey,
 	real,
 	text,
-	uuid,
 	varchar
 } from '@kmods/drizzle-pg/pg-core';
 import { kbot2Schema } from '../pgSchema';
@@ -21,7 +22,7 @@ export const TriggerMatchTypes = pgCommandTriggerMatchType.enum;
 
 export const scChatCommands = kbot2Schema.table('discord_guild_chat_commands', {
 	...defaultGuildFields,
-	command_id: uuid('command_id').primaryKey().notNull().defaultRandom(),
+	command_id: bigserial('command_id').primaryKey().notNull(),
 	reaction_text: text('reaction_text').notNull().default(''),
 	enable_auto_matching: boolean('enable_auto_matching').notNull().default(true)
 });
@@ -29,9 +30,8 @@ export const scChatCommands = kbot2Schema.table('discord_guild_chat_commands', {
 export const scChatCommandsTrigger = kbot2Schema.table(
 	'discord_guild_chat_commands_trigger',
 	{
-		command_id: uuid('command_id')
+		command_id: bigint('command_id', { mode: 'string' })
 			.notNull()
-			.defaultRandom()
 			.references(
 				() => {
 					return scChatCommands.command_id;

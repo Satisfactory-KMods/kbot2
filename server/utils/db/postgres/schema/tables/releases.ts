@@ -1,4 +1,4 @@
-import { boolean, colDate, index, uuid, varchar } from '@kmods/drizzle-pg/pg-core';
+import { bigserial, boolean, colDate, index, varchar } from '@kmods/drizzle-pg/pg-core';
 import { kbot2Schema } from '../pgSchema';
 import { defaultGuildFields } from './guilds';
 
@@ -6,7 +6,7 @@ export const scReleases = kbot2Schema.table(
 	'discord_guild_releases',
 	{
 		...defaultGuildFields,
-		file: uuid('file').notNull().defaultRandom().primaryKey(),
+		file: bigserial('file').notNull().primaryKey(),
 		patreon: boolean('patreon').notNull().default(false),
 		expires: colDate('expires'),
 		mod_reference: varchar('mod_reference', { length: 128 }).notNull()
