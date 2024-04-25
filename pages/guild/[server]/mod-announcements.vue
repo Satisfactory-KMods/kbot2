@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 	const toast = useToast();
 	const busy = ref(false);
-	const { params } = useParams({
+	const params = useParams({
 		values: {
 			server: String()
 		}

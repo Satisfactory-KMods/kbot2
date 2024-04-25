@@ -4,7 +4,7 @@ export function useNavigationUrls() {
 	const route = useRoute();
 	const config = useRuntimeConfig().public;
 
-	const { params } = useParams({
+	const params = useParams({
 		values: {
 			server: String()
 		},

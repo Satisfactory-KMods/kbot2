@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 	import type { PropType } from 'vue';
 
-	const { params } = useParams({
+	const params = useParams({
 		values: {
 			server: String()
 		}

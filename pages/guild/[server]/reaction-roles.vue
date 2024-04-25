@@ -8,7 +8,7 @@
 	const darkMode = useDarkMode();
 	const confirm = useConfirm();
 	const toast = useToast();
-	const { params } = useParams({
+	const params = useParams({
 		values: {
 			server: String()
 		}
@@ -19,7 +19,7 @@
 		op.value.toggle(event);
 	}
 
-	const { params: searchParams } = useSearchParams({
+	const searchParams = useSearchParams({
 		values: {
 			limit: String(20),
 			offset: String(0)

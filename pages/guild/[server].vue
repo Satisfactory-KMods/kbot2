@@ -3,7 +3,7 @@
 	const visible = ref(false);
 	const store = useServerStore();
 
-	const { params } = useParams({
+	const params = useParams({
 		values: {
 			server: String()
 		}
@@ -29,6 +29,17 @@
 	watch(status, (newStatus) => {
 		if (newStatus === 'authenticated') {
 			signIn('discord');
+		}
+	});
+
+	const params2 = useSearchParams({
+		values: {
+			test: String(20)
+		},
+		customParser: (params) => {
+			return {
+				test: Number(params.test)
+			};
 		}
 	});
 </script>
