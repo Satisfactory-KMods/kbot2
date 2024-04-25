@@ -31,17 +31,6 @@
 			signIn('discord');
 		}
 	});
-
-	const params2 = useSearchParams({
-		values: {
-			test: String(20)
-		},
-		customParser: (params) => {
-			return {
-				test: Number(params.test)
-			};
-		}
-	});
 </script>
 
 <template>

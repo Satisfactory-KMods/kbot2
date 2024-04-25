@@ -24,9 +24,9 @@ export function FallBack<T>(a: T, b: NoInfer<T>): T {
 	return EmptyOrNull(a) ? b : a;
 }
 
-export type ExtendableParams<T> = Simplify<
+export type ExtendableParams<T, TTypes = string> = Simplify<
 	T & {
-		[key: string]: string;
+		[key: string]: TTypes;
 	}
 >;
 
@@ -99,6 +99,45 @@ function createQueryHandler<TType extends 'params' | 'query'>(type: TType) {
 	};
 }
 
+function createQueryHandlerWithSetter<TType extends 'params' | 'query'>(type: TType) {
+	return function handler<
+		T extends RouteParamsRaw = Record<string, string>,
+		CustomParser extends object | undefined = undefined
+	>({
+		values,
+		event = () => {},
+		customParser
+	}: {
+		values?: T;
+		event?: () => void;
+		customParser?: (params: NoInfer<T>) => CustomParser;
+	} = {}) {
+		const params = createQueryHandler(type)({ values, event, customParser });
+
+		function setParams(
+			value: Partial<
+				NoInfer<
+					ExtendableParams<
+						CustomParser extends undefined ? T : CustomParser,
+						string | number | boolean
+					>
+				>
+			>
+		) {
+			Object.assign(params, value);
+		}
+
+		function clearParms() {
+			Object.keys(params).forEach((key) => {
+				// @ts-ignore
+				delete params[key];
+			});
+		}
+
+		return { params, reffer: toRef(params), setParams, clearParms };
+	};
+}
+
 /**
  * Reactively watch the params of the current route
  * @param values default params to set
@@ -117,6 +156,7 @@ function createQueryHandler<TType extends 'params' | 'query'>(type: TType) {
  * ```
  */
 export const useParams = createQueryHandler('params');
+export const useParamsSetter = createQueryHandlerWithSetter('params');
 
 /**
  * Reactively watch the params of the current route
@@ -136,3 +176,4 @@ export const useParams = createQueryHandler('params');
  * ```
  */
 export const useSearchParams = createQueryHandler('query');
+export const useSearchParamsSetter = createQueryHandlerWithSetter('query');
