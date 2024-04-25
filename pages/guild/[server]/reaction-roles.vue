@@ -19,7 +19,7 @@
 		op.value.toggle(event);
 	}
 
-	const { reffer: searchParams } = useSearchParams({
+	const { params: searchParams } = useSearchParams({
 		values: {
 			limit: String(20),
 			offset: String(0)

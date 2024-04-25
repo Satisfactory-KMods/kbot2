@@ -1,11 +1,28 @@
 import type { RouteParamsRaw } from '#vue-router';
-import type { Simplify } from '@kmods/drizzle-pg/utils';
 import cloneDeep from 'lodash/cloneDeep';
 import isEqual from 'lodash/isEqual';
 
 export type MergeObjectTypes<T, U> = Simplify<{
 	[K in keyof T]: K extends keyof U ? T[K] | U[K] : T[K];
 }>;
+
+export function EmptyOrNull(value: unknown): boolean {
+	return value === null || value === undefined || value === '';
+}
+
+export function SafeNumber<T = number>(value: unknown, fallback = -1): T {
+	const result = Number(value);
+	if (Number.isNaN(result as any) || EmptyOrNull(value)) return fallback as any;
+	return result as any;
+}
+
+export function SafeString<T = string>(value: unknown, fallback = ''): T {
+	return (EmptyOrNull(value) ? fallback : String(value)) as any;
+}
+
+export function FallBack<T>(a: T, b: NoInfer<T>): T {
+	return EmptyOrNull(a) ? b : a;
+}
 
 function createQueryHandler(type: 'params' | 'query') {
 	return function handler<
@@ -22,38 +39,45 @@ function createQueryHandler(type: 'params' | 'query') {
 		customParser?: (params: T) => CustomParser;
 		disabledWatchRouting?: boolean;
 	}) {
-		function applyParser(params: any): any {
-			if (customParser) {
-				return customParser(params);
-			}
-			return params;
-		}
-
 		const route = useRoute();
 		const router = useRouter();
-		const params = reactive<CustomParser extends undefined ? T : CustomParser>(
-			applyParser({ ...applyParser(values), ...(cloneDeep(route[type]) as any) })
-		);
-		const reffer = toRef(params);
 
-		watch(
-			() => {
-				return reffer.value;
-			},
-			() => {
-				setParams(reffer.value as any, true, false, disabledWatchRouting);
-			},
-			{
-				deep: true,
-				immediate: true
+		function applyParser(params: any): any {
+			const newParams = cloneDeep(customParser ? customParser(params) : params);
+			if (customParser) log('info', 'applyParser', { newParams, params, customParser });
+
+			const keys = Object.keys(values);
+
+			for (const key in newParams) {
+				if (!keys.includes(key)) {
+					delete newParams[key];
+				}
 			}
+
+			return newParams;
+		}
+
+		const params = reactive<CustomParser extends undefined ? T : CustomParser>(
+			applyParser({ ...values, ...(cloneDeep(route[type]) as any) })
 		);
+
+		const _params = computed<CustomParser extends undefined ? T : CustomParser>({
+			get() {
+				return params as any;
+			},
+			set(value: any) {
+				setParamsNoParser(value, true, false, disabledWatchRouting);
+			}
+		});
 
 		watch(
 			() => {
-				return route[type];
+				return [route.query, route.params];
 			},
-			async (nv, ov) => {
+			([cq, cp], [oq, op]) => {
+				const ov = type === 'params' ? op : oq;
+				const nv = type === 'params' ? cp : cq;
+
 				let dirty = false;
 
 				if (!ov || !nv) {
@@ -71,11 +95,10 @@ function createQueryHandler(type: 'params' | 'query') {
 
 				if (!dirty || process.server) return;
 
-				await nextTick();
 				refreshParams();
 				event?.();
 			},
-			{ immediate: true, deep: true }
+			{ deep: true }
 		);
 
 		function refreshParams() {
@@ -83,10 +106,9 @@ function createQueryHandler(type: 'params' | 'query') {
 			const defaultParsed = applyParser(values);
 			for (const key in values) {
 				// @ts-ignore
-				params[key] = (!newParams[key] ? defaultParsed[key] : newParams[key]) as any;
+				params[key] = FallBack(newParams[key], defaultParsed[key]);
 			}
 		}
-		refreshParams();
 
 		function updateRoute(replace = false, resetQuery = false, noRouting = false) {
 			const stritifyParams = Object.entries({ ...route[type], ...params }).reduce(
@@ -96,6 +118,7 @@ function createQueryHandler(type: 'params' | 'query') {
 				},
 				{} as any
 			);
+
 			const applyParams =
 				type === 'params'
 					? {
@@ -115,6 +138,16 @@ function createQueryHandler(type: 'params' | 'query') {
 			router.push(applyParams);
 		}
 
+		function setParamsNoParser(
+			newParams: Partial<MergeObjectTypes<T, CustomParser>>,
+			replace = false,
+			resetQuery = false,
+			noRouting = false
+		) {
+			Object.assign(params, newParams);
+			updateRoute(replace, resetQuery, noRouting);
+		}
+
 		function setParams(
 			newParams: Partial<MergeObjectTypes<T, CustomParser>>,
 			replace = false,
@@ -131,11 +164,11 @@ function createQueryHandler(type: 'params' | 'query') {
 		}
 
 		return {
-			params: readonly(params),
-			reffer,
+			params: toReactive(_params),
 			hasParam,
 			updateRoute,
 			setParams,
+			setParamsNoParser,
 			refreshParams
 		};
 	};
