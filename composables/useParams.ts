@@ -41,8 +41,7 @@ function createQueryHandler<TType extends 'params' | 'query'>(type: TType) {
 	}: {
 		values?: T;
 		event?: () => void;
-		customParser?: (params: T) => CustomParser;
-		disabledWatchRouting?: boolean;
+		customParser?: (params: NoInfer<T>) => CustomParser;
 	} = {}) {
 		const route = useRoute();
 		const router = useRouter();
