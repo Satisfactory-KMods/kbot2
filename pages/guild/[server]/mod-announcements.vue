@@ -39,7 +39,6 @@
 		const result = await $$fetch(`/api/server/${params.server}/config/general`, {
 			method: 'POST',
 			body: {
-				ficsit_user_ids,
 				update_text_channel_id,
 				changelog_announce_hidden_mods,
 				changelog_forum_id,
@@ -55,17 +54,31 @@
 			});
 			return null;
 		});
+
+		const result_users = await $$fetch(`/api/server/${params.server}/config/ficsit-users`, {
+			method: 'POST',
+			body: ficsit_user_ids
+		}).catch((e: any) => {
+			toast.add({
+				severity: 'error',
+				summary: 'Error',
+				detail: `Failed to save settings: ${e.message}`,
+				life: 3000
+			});
+			return null;
+		});
 		busy.value = false;
 
-		if (result) {
+		if (result && result_users) {
 			toast.add({
 				severity: 'success',
 				summary: 'Success',
 				detail: 'Settings saved successfully',
 				life: 3000
 			});
-			await refresh();
 		}
+
+		await refresh();
 	}
 </script>
 

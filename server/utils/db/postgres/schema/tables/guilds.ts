@@ -123,7 +123,7 @@ export const scGuildConfigurationFicsitUserIds = kbot2Schema.table(
 	'discord_guild_configuration_ficsit_user_ids',
 	{
 		...defaultGuildFields,
-		ficsit_user_id: bigint('ficsit_user_id').notNull()
+		ficsit_user_id: varchar('ficsit_user_id', { length: 32 }).notNull()
 	},
 	(t) => {
 		return {

@@ -30,6 +30,17 @@ export type ExtendableParams<T, TTypes = string> = Simplify<
 	}
 >;
 
+type ParamsOptions<
+	T extends RouteParamsRaw = Record<string, string>,
+	CustomParser extends object | undefined = undefined
+> = {
+	values?: T;
+	event?: () => void;
+	customParser?: (params: NoInfer<T>) => CustomParser;
+	routeMode?: 'replace' | 'push';
+	reactiveRoute?: boolean;
+};
+
 function createQueryHandler<TType extends 'params' | 'query'>(type: TType) {
 	return function handler<
 		T extends RouteParamsRaw = Record<string, string>,
@@ -37,14 +48,17 @@ function createQueryHandler<TType extends 'params' | 'query'>(type: TType) {
 	>({
 		values,
 		event = () => {},
-		customParser
-	}: {
-		values?: T;
-		event?: () => void;
-		customParser?: (params: NoInfer<T>) => CustomParser;
-	} = {}) {
+		customParser,
+		reactiveRoute = true,
+		routeMode
+	}: ParamsOptions<T, CustomParser> = {}) {
 		const route = useRoute();
 		const router = useRouter();
+
+		function getRouteMode(): 'replace' | 'push' {
+			if (typeof routeMode === 'string') return routeMode;
+			return type === 'params' ? 'push' : 'replace';
+		}
 
 		function applyParser(params: any): any {
 			return cloneDeep(customParser ? customParser(params) : params);
@@ -64,6 +78,7 @@ function createQueryHandler<TType extends 'params' | 'query'>(type: TType) {
 				return params;
 			},
 			(to) => {
+				if (!reactiveRoute) return;
 				const applyParams =
 					type === 'params'
 						? {
@@ -77,7 +92,7 @@ function createQueryHandler<TType extends 'params' | 'query'>(type: TType) {
 								hash: route.hash
 							};
 
-				router.replace(applyParams);
+				router[getRouteMode()](applyParams);
 				event();
 			},
 			{ deep: true }
@@ -103,16 +118,8 @@ function createQueryHandlerWithSetter<TType extends 'params' | 'query'>(type: TT
 	return function handler<
 		T extends RouteParamsRaw = Record<string, string>,
 		CustomParser extends object | undefined = undefined
-	>({
-		values,
-		event = () => {},
-		customParser
-	}: {
-		values?: T;
-		event?: () => void;
-		customParser?: (params: NoInfer<T>) => CustomParser;
-	} = {}) {
-		const params = createQueryHandler(type)({ values, event, customParser });
+	>(options: ParamsOptions<T, CustomParser> = {}) {
+		const params = createQueryHandler(type)(options);
 
 		function setParams(
 			value: Partial<
@@ -144,18 +151,42 @@ function createQueryHandlerWithSetter<TType extends 'params' | 'query'>(type: TT
  * @param event event to call when the params are updated
  * @return params and event as ref z
  * @example ```ts
- * const { params, refs, onParamsUpdated } = useParams({
- *      values: { search: '' },
+ * --> params = { page: number} because of customParser convert the page to number
+ * const params = useParams({
+ *      values: { page: '0' },
  *      event: () => {
  *          console.log('params updated', params);
- *          fetch(params.value.search);
- *      }
+ *      },
+ * 		customParser: ({page}) => ({
+ * 			page: SafeNumber(page, 1)
+ * 		}),
  * });
  *
- * <input class="form-control" v-model="refs.search" />
+ * <input class="form-control" v-model="params.page" />
  * ```
  */
 export const useParams = createQueryHandler('params');
+
+/**
+ * Reactively watch the params of the current route
+ * @param values default params to set
+ * @param event event to call when the params are updated
+ * @return params and event as ref z
+ * @example ```ts
+ * --> params = { page: number} because of customParser convert the page to number
+ * const { params } = useParamsSetter({
+ *      values: { page: '0' },
+ *      event: () => {
+ *          console.log('params updated', params);
+ *      },
+ * 		customParser: ({page}) => ({
+ * 			page: SafeNumber(page, 1)
+ * 		}),
+ * });
+ *
+ * <input class="form-control" v-model="params.page" />
+ * ```
+ */
 export const useParamsSetter = createQueryHandlerWithSetter('params');
 
 /**
@@ -164,16 +195,40 @@ export const useParamsSetter = createQueryHandlerWithSetter('params');
  * @param event event to call when the params are updated
  * @return params and event as ref z
  * @example ```ts
- * const { params, refs, onParamsUpdated } = useSearchParams({
- *      values: { search: '' },
+ * --> params = { page: number} because of customParser convert the page to number
+ * const params = useSearchParams({
+ *      values: { page: '0' },
  *      event: () => {
  *          console.log('params updated', params);
- *          fetch(params.value.search);
- *      }
+ *      },
+ * 		customParser: ({page}) => ({
+ * 			page: SafeNumber(page, 1)
+ * 		}),
  * });
  *
- * <input class="form-control" v-model="refs.search" />
+ * <input class="form-control" v-model="params.page" />
  * ```
  */
 export const useSearchParams = createQueryHandler('query');
+
+/**
+ * Reactively watch the params of the current route
+ * @param values default params to set
+ * @param event event to call when the params are updated
+ * @return params and event as ref z
+ * @example ```ts
+ * --> params = { page: number} because of customParser convert the page to number
+ * const { params } = useSearchParamsSetter({
+ *      values: { page: '0' },
+ *      event: () => {
+ *          console.log('params updated', params);
+ *      },
+ * 		customParser: ({page}) => ({
+ * 			page: SafeNumber(page, 1)
+ * 		}),
+ * });
+ *
+ * <input class="form-control" v-model="params.page" />
+ * ```
+ */
 export const useSearchParamsSetter = createQueryHandlerWithSetter('query');

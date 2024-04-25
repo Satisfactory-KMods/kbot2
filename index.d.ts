@@ -1,3 +1,4 @@
+import type { Result } from 'h3-formidable';
 import type { DefaultSession } from 'next-auth';
 
 // ts global for yaml
@@ -33,6 +34,12 @@ declare module 'nuxt/schema' {
 		patreonUrl: string;
 		githubRepo: string;
 		discordSupport: string;
+	}
+}
+
+declare module 'h3' {
+	interface H3EventContext {
+		formidable: Result;
 	}
 }
 
