@@ -2,6 +2,7 @@ import { and, eq } from '@kmods/drizzle-pg';
 import { getRouteBaseParams } from '~/server/bot/utils/routes';
 import { db } from '~/server/utils/db/postgres/pg';
 import { scChatCommands, scChatCommandsTrigger } from '~/server/utils/db/postgres/schema';
+import { zodNumeric } from '~/server/utils/zodSchemas';
 import type { ChatCommandData } from '../../chat-commands.get';
 
 export default defineEventHandler(async (event) => {

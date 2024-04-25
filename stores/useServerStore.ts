@@ -4,12 +4,14 @@ export const useServerStore = defineStore('server-store', () => {
 	const data = ref<Return<typeof refreshGuild>>({} as any);
 	const roles = ref<Return<typeof refreshRoles>>([]);
 	const channels = ref<Return<typeof refreshChannels>>([]);
+	const loading = ref(false);
 
 	const guildId: ComputedRef<string> = computed(() => {
 		return String(data.value?.guild_id);
 	});
 
 	async function refreshRoles(newGuild?: string) {
+		loading.value = true;
 		const id = newGuild ?? guildId.value;
 
 		// fetch roles
@@ -19,6 +21,8 @@ export const useServerStore = defineStore('server-store', () => {
 				limit: 200,
 				offset: 0
 			}
+		}).finally(() => {
+			loading.value = false;
 		});
 		roles.value = result;
 
@@ -26,21 +30,27 @@ export const useServerStore = defineStore('server-store', () => {
 	}
 
 	async function refreshGuild(newGuild?: string) {
+		loading.value = true;
 		const id = newGuild ?? guildId.value;
 
 		// fetch roles
-		const result = await $$fetch(`/api/server/${id}/data`, { method: 'GET' });
+		const result = await $$fetch(`/api/server/${id}/data`, { method: 'GET' }).finally(() => {
+			loading.value = false;
+		});
 		data.value = result;
 
 		return result;
 	}
 
 	async function refreshChannels(newGuild?: string) {
+		loading.value = true;
 		const id = newGuild ?? guildId.value;
 
 		// fetch roles
 		const result = await $$fetch(`/api/server/${id}/channels/${ChannelTypes.all}`, {
 			method: 'GET'
+		}).finally(() => {
+			loading.value = false;
 		});
 		channels.value = result;
 
@@ -57,5 +67,15 @@ export const useServerStore = defineStore('server-store', () => {
 		return data.value;
 	}
 
-	return { data, refreshGuild, roles, refreshRoles, channels, refreshChannels, init, guildId };
+	return {
+		data,
+		refreshGuild,
+		roles,
+		refreshRoles,
+		channels,
+		refreshChannels,
+		init,
+		guildId,
+		loading
+	};
 });

@@ -73,51 +73,12 @@
 		}
 	);
 
-	const {
-		data: channels,
-		refresh: refreshChannels,
-		pending: channelsPending
-	} = await useFetch(`/api/server/${params.server}/channels/${ChannelTypes.text}`, {
-		method: 'GET',
-		query: searchParams
-	});
-
-	const {
-		data: lastMessages,
-		refresh: refreshMessages,
-		pending: messagePending
-	} = await useAsyncData(
-		async () => {
-			if (data.value.channel_id) {
-				// @ts-ignore
-				return await $$fetch(
-					`/api/server/${params.server}/channel/${data.value.channel_id}/last-messages`,
-					{
-						method: 'GET',
-						query: {
-							limit: 10
-						}
-					}
-				);
-			}
-			return [];
-		},
-		{
-			watch: [
-				() => {
-					return data.value.channel_id;
-				}
-			]
-		}
-	);
-
 	watch(
 		() => {
 			return data.value.channel_id;
 		},
 		() => {
 			data.value.message_id = '';
-			lastMessages.value = [];
 		}
 	);
 
@@ -250,87 +211,21 @@
 <template>
 	<div>
 		<div class="md:px-2">
-			<Panel
-				:pt="{
-					content: 'p-0'
-				}"
-				:header="edit ? 'Edit' : 'Create'">
+			<Panel :header="edit ? 'Edit' : 'Create'">
 				<div class="flex flex-col gap-2 p-2">
 					<InputText v-model="data.name" placeholder="Internal Name" class="w-full" />
 
-					<div class="flex gap-2">
-						<Dropdown
-							v-model="data.channel_id"
-							:disabled="!!edit"
-							:options="(channels ?? []).map((r) => r.id)"
-							placeholder="Select a Channel"
-							class="w-full">
-							<template #value="slotProps">
-								<div v-if="slotProps.value" class="flex items-center">
-									{{
-										(channels ?? []).find((r) => r.id === slotProps.value)?.name
-									}}
-								</div>
-								<span v-else>
-									{{ slotProps.placeholder }}
-								</span>
-							</template>
-							<template #option="slotProps">
-								<div class="flex items-center">
-									{{
-										(channels ?? []).find((r) => r.id === slotProps.option)
-											?.name
-									}}
-								</div>
-							</template>
-						</Dropdown>
+					<CommonChannelSelection
+						v-model="data.channel_id"
+						no-edit
+						:channel-types="ChannelTypes.text"
+						:disabled="!!edit" />
 
-						<Button
-							:disabled="!!edit"
-							size="small"
-							type="button"
-							icon="pi pi-refresh"
-							label="Refresh"
-							:loading="channelsPending"
-							@click="refreshChannels()" />
-					</div>
-
-					<div v-if="!!data.channel_id" class="flex gap-2">
-						<Dropdown
-							v-model="data.message_id"
-							:disabled="!!edit"
-							editable
-							:options="(lastMessages ?? []).map((r) => r.id)"
-							placeholder="Select a Message or type a Message Id"
-							class="w-full">
-							<template #value="slotProps">
-								<div v-if="!!data.message_id" class="flex items-center">
-									{{ data.message_id }}
-								</div>
-								<span v-else>
-									{{ slotProps.placeholder }}
-								</span>
-							</template>
-							<template #option="slotProps">
-								<div class="flex items-center whitespace-break-spaces">
-									({{ slotProps.option }})
-									{{
-										(lastMessages ?? []).find((r) => r.id === slotProps.option)
-											?.content
-									}}
-								</div>
-							</template>
-						</Dropdown>
-
-						<Button
-							:disabled="!!edit"
-							size="small"
-							type="button"
-							icon="pi pi-refresh"
-							label="Refresh"
-							:loading="messagePending"
-							@click="refreshMessages()" />
-					</div>
+					<CommonMessageSelection
+						v-if="!!data.channel_id"
+						v-model="data.message_id"
+						:channel-id="data.channel_id"
+						:disabled="!!edit" />
 
 					<div class="flex items-center gap-2">
 						<span class="flex-1">Emojies and Roles</span>
@@ -342,7 +237,9 @@
 							label="Refresh Roles"
 							:loading="rolesPending"
 							@click="refreshRoles()" />
+
 						<Button
+							size="small"
 							:disabled="data.emojies.length >= 8"
 							label="Add new Emoji"
 							icon="pi pi-plus"

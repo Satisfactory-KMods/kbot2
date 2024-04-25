@@ -1,5 +1,4 @@
 import {
-	bigint,
 	bigserial,
 	boolean,
 	index,
@@ -30,7 +29,7 @@ export const scChatCommands = kbot2Schema.table('discord_guild_chat_commands', {
 export const scChatCommandsTrigger = kbot2Schema.table(
 	'discord_guild_chat_commands_trigger',
 	{
-		command_id: bigint('command_id')
+		command_id: bigserial('command_id')
 			.notNull()
 			.references(
 				() => {
