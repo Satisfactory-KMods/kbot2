@@ -1,12 +1,13 @@
-import {
-	ChannelType,
-	type Collection,
-	type GuildForumThreadCreateOptions,
-	type MessageCreateOptions,
-	type MessagePayload,
-	type NonThreadGuildBasedChannel
+import type {
+	Collection,
+	GuildForumThreadCreateOptions,
+	GuildForumThreadMessageCreateOptions,
+	MessageCreateOptions,
+	NonThreadGuildBasedChannel
 } from 'discord.js';
+import { ChannelType } from 'discord.js';
 import { DiscordGuildBase } from './guild';
+import { splitMessageContent } from './messageContent';
 
 export class DiscordGuild<TValid extends boolean = false> extends DiscordGuildBase<TValid> {
 	override isValid(): this is DiscordGuild<true> {
@@ -207,10 +208,36 @@ export class DiscordGuild<TValid extends boolean = false> extends DiscordGuildBa
 
 	public async sendMessageInChannel(opt: {
 		channelId: string;
-		message: string | MessagePayload | MessageCreateOptions;
+		message: string | MessageCreateOptions;
 	}): Promise<boolean> {
 		const channel = await this.textChannel(opt.channelId);
 		if (channel) {
+			let content: string;
+			if (typeof opt.message === 'string') {
+				content = opt.message;
+			} else {
+				content = opt.message.content ?? '';
+			}
+
+			const msgContent = splitMessageContent(content);
+
+			for (let i = 0; i < msgContent.length; i++) {
+				let sendContent: MessageCreateOptions;
+				if (typeof opt.message === 'string' || i < msgContent.length - 1) {
+					sendContent = {
+						content: msgContent[i]
+					};
+				} else {
+					sendContent = {
+						...opt.message,
+						content: msgContent[i]
+					};
+				}
+				await channel.send(sendContent).catch(() => {
+					return null;
+				});
+			}
+
 			return !!(await channel.send(opt.message).catch(() => {
 				return null;
 			}));
@@ -220,13 +247,39 @@ export class DiscordGuild<TValid extends boolean = false> extends DiscordGuildBa
 
 	public async sendForumThread(opt: {
 		channelId: string;
-		thread: GuildForumThreadCreateOptions;
+		thread: GuildForumThreadCreateOptions & {
+			message: GuildForumThreadMessageCreateOptions;
+		};
 	}): Promise<boolean> {
 		const channel = await this.forumChannel(opt.channelId);
 		if (channel && channel.isThreadOnly()) {
-			return !!(await channel.threads.create(opt.thread).catch(() => {
-				return null;
-			}));
+			const content: string = String(opt.thread.message.content ?? '');
+			const msgContent = splitMessageContent(content);
+			const first = msgContent.shift();
+
+			const thread = await channel.threads
+				.create({
+					...opt.thread,
+					message: {
+						...opt.thread.message,
+						content: first
+					}
+				})
+				.catch(() => {
+					return null;
+				});
+
+			if (!thread) {
+				return false;
+			}
+
+			for (const content of msgContent) {
+				await thread.send(content).catch(() => {
+					return null;
+				});
+			}
+
+			return !!thread;
 		}
 		return false;
 	}

@@ -1,11 +1,13 @@
 import { readFiles } from 'h3-formidable';
 import { join } from 'path';
+import { env } from '~/env';
+import { createEmbed } from '~/server/bot/utils/embed';
 import { getRouteBaseParams } from '~/server/bot/utils/routes';
-import { db, scDownloadFiles, scDownloads } from '~/server/utils/db/postgres/pg';
+import { db, scDownloadFiles, scDownloads, scModCache } from '~/server/utils/db/postgres/pg';
 import { log } from '~/utils/logger';
 
 export default defineEventHandler(async (event) => {
-	const { user, guildId } = await getRouteBaseParams(event);
+	const { user, guildId, guildData } = await getRouteBaseParams(event);
 
 	const { fields, files } = await readFiles(event, {
 		maxFileSize: 5e9
@@ -17,9 +19,11 @@ export default defineEventHandler(async (event) => {
 
 	const { mod_reference, version, changelog, patreon = true } = fields as Record<string, any>;
 
+	const mod = await db.select().from(scModCache).firstOrThrow('Failed to get mod from ref');
+
 	let dirty = false;
 	let base = join(process.cwd(), 'uploads', guildId);
-	await db
+	const result = await db
 		.transaction(async (trx) => {
 			const { id } = await trx
 				.insert(scDownloads)
@@ -59,6 +63,8 @@ export default defineEventHandler(async (event) => {
 				await FileAdapter.move(file.filepath, join(base, f.id));
 				dirty = true;
 			}
+
+			return id;
 		})
 		.catch(async (e) => {
 			if (dirty) {
@@ -79,6 +85,63 @@ export default defineEventHandler(async (event) => {
 	for (const file of files.files ?? []) {
 		await FileAdapter.remove(file.filepath).catch((e) => {
 			return log('error', e);
+		});
+	}
+
+	const name = `${mod.name} - v.${version}`.substring(0, 99);
+	const config = guildData.config;
+
+	const pingString = `${(patreon ? config.base.patreon_ping_roles : config.base.public_ping_roles)
+		.map((id) => {
+			return `<@&${id}>`;
+		})
+		.join(', ')}\n`;
+
+	const embed = createEmbed({
+		author: {
+			name: mod.name,
+			iconURL: mod.logo
+		},
+		thumbnail: mod.logo,
+		title: 'Download now!',
+		url: `${env.auth.url}/download/${guildId}/files/${result}`
+	});
+
+	if (patreon) {
+		await guildData.sendMessageInChannel({
+			channelId: pingString + config.base.patreon_announcement_channel_id,
+			message: {
+				content: config.base.patreon_release_text,
+				embeds: embed ? [embed] : undefined
+			}
+		});
+
+		await guildData.sendForumThread({
+			channelId: config.base.patreon_changelog_forum,
+			thread: {
+				name,
+				message: {
+					content: changelog
+				}
+			}
+		});
+	} else {
+		await guildData.sendMessageInChannel({
+			channelId: pingString + config.base.public_announcement_channel_id,
+			message: {
+				content: config.base.public_release_text,
+				embeds: embed ? [embed] : undefined
+			}
+		});
+
+		await guildData.sendForumThread({
+			channelId: config.base.public_changelog_forum,
+			thread: {
+				name,
+				message: {
+					content: changelog
+				}
+			}
 		});
 	}
 

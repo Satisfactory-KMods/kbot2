@@ -1,6 +1,6 @@
 import { and, count, eq } from '@kmods/drizzle-pg';
-import { getColumns, pgAggJsonBuildObject } from '@kmods/drizzle-pg/pg-core';
-import { db, scDownloadFiles, scDownloads } from '~/server/utils/db/postgres/pg';
+import { getColumns, pgAggJsonBuildObject, pgAnyValue } from '@kmods/drizzle-pg/pg-core';
+import { db, scDownloadFiles, scDownloads, scModCache } from '~/server/utils/db/postgres/pg';
 
 export async function getDownloadsForGuildAndType(
 	guildId: string,
@@ -15,14 +15,22 @@ export async function getDownloadsForGuildAndType(
 		.from(scDownloads)
 		.where(and(eq(scDownloads.guild_id, guildId), eq(scDownloads.patreon, type)))
 		.firstOrThrow('Failed to get total downloads');
+
+	const cols = getColumns(scDownloads);
+
 	return db
 		.select({
-			...getColumns(scDownloads),
+			...(Object.keys(cols).reduce((acc, key) => {
+				// @ts-ignore
+				acc[key] = pgAnyValue(cols[key]);
+				return acc;
+			}, {} as any) as typeof cols),
 			files: pgAggJsonBuildObject(scDownloadFiles, { aggregate: true })
 		})
 		.from(scDownloads)
 		.innerJoin(scDownloadFiles, eq(scDownloads.id, scDownloadFiles.download_id))
 		.where(and(eq(scDownloads.guild_id, guildId), eq(scDownloads.patreon, type)))
+		.groupBy(scDownloads.id, scDownloads.guild_id)
 		.limit(limit)
 		.offset(offset)
 		.then((downloads) => {
@@ -42,14 +50,23 @@ export async function getDownloadsForGuild(guildId: string, limit: number, offse
 		.where(and(eq(scDownloads.guild_id, guildId)))
 		.firstOrThrow('Failed to get total downloads');
 
+	const cols = getColumns(scDownloads);
+
 	return db
 		.select({
-			...getColumns(scDownloads),
-			files: pgAggJsonBuildObject(scDownloadFiles, { aggregate: true })
+			...(Object.keys(cols).reduce((acc, key) => {
+				// @ts-ignore
+				acc[key] = pgAnyValue(cols[key]);
+				return acc;
+			}, {} as any) as typeof cols),
+			files: pgAggJsonBuildObject(scDownloadFiles, { aggregate: true }),
+			mod: pgAggJsonBuildObject(scDownloadFiles, { aggregate: true, index: 0 })
 		})
 		.from(scDownloads)
 		.innerJoin(scDownloadFiles, eq(scDownloads.id, scDownloadFiles.download_id))
+		.leftJoin(scModCache, ['mod_reference'])
 		.where(and(eq(scDownloads.guild_id, guildId)))
+		.groupBy(scDownloads.id, scDownloads.guild_id)
 		.limit(limit)
 		.offset(offset)
 		.then((downloads) => {

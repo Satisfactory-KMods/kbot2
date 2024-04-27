@@ -5,6 +5,7 @@ import {
 	colTimestamp,
 	pgEnum,
 	primaryKey,
+	uniqueIndex,
 	varchar
 } from '@kmods/drizzle-pg/pg-core';
 import { kbot2Schema } from '../pgSchema';
@@ -49,7 +50,8 @@ export const accounts = kbot2Schema.table(
 	},
 	(account) => {
 		return {
-			compoundKey: primaryKey({ columns: [account.provider, account.providerAccountId] })
+			compoundKey: primaryKey({ columns: [account.provider, account.providerAccountId] }),
+			uniqueProviderId: uniqueIndex().on(account.providerAccountId)
 		};
 	}
 );
