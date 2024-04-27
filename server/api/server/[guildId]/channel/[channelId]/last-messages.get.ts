@@ -1,22 +1,11 @@
-import { z } from 'zod';
-import { getRouteBaseParams } from '~/server/bot/utils/routes';
+import { getLimitOffset, getRouteBaseParams } from '~/server/bot/utils/routes';
 
 export default defineEventHandler(async (event) => {
 	const { guildData } = await getRouteBaseParams(event);
 	const channelId = zodNumeric(getRouterParam(event, 'channelId'), 'Channel Id must be numeric');
-	const limit = z
-		.string()
-		.transform((v) => {
-			const num = parseInt(v);
-			if (isNaN(num)) {
-				throw new TypeError('Invalid limit');
-			}
-			if (num <= 0 || num > 100) {
-				throw new Error('Invalid limit must be between 1 and 100');
-			}
-			return num;
-		})
-		.parse(getQuery(event).limit ?? '10');
+	const { limit } = getLimitOffset(event, {
+		defaultLimit: 10
+	});
 
 	const channel = await guildData.textChannel(channelId);
 	if (!channel) {

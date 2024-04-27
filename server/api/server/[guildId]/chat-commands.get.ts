@@ -1,7 +1,6 @@
 import { count, eq } from '@kmods/drizzle-pg';
 import { getColumns, pgAggJsonBuildObject, pgAnyValue } from '@kmods/drizzle-pg/pg-core';
-import { z } from 'zod';
-import { getRouteBaseParams } from '~/server/bot/utils/routes';
+import { getLimitOffset, getRouteBaseParams } from '~/server/bot/utils/routes';
 import { db, scChatCommands, scChatCommandsTrigger } from '~/server/utils/db/postgres/pg';
 import type { Return } from '~/utils/typeUtils';
 
@@ -48,33 +47,7 @@ export type ChatCommandData = Return<typeof getChatCommandsForGuildId>;
 
 export default defineEventHandler(async (event) => {
 	const { guildId } = await getRouteBaseParams(event);
-
-	const limit = z
-		.string()
-		.transform((v) => {
-			const num = parseInt(v);
-			if (isNaN(num)) {
-				throw new TypeError('Invalid limit');
-			}
-			if (num <= 0 || num > 100) {
-				throw new Error('Invalid limit must be between 1 and 100');
-			}
-			return num;
-		})
-		.parse(getQuery(event).limit ?? '20');
-	const offset = z
-		.string()
-		.transform((v) => {
-			const num = parseInt(v);
-			if (isNaN(num)) {
-				throw new TypeError('Invalid offset');
-			}
-			if (num < 0) {
-				throw new Error('Invalid offset must bigger or equals than 0');
-			}
-			return num;
-		})
-		.parse(getQuery(event).offset ?? '0');
+	const { limit, offset } = getLimitOffset(event);
 
 	return await getChatCommandsForGuildId(guildId, limit, offset);
 });

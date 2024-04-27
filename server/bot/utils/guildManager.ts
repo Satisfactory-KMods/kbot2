@@ -19,6 +19,21 @@ export class DiscordGuild<TValid extends boolean = false> extends DiscordGuildBa
 		return GuildClass;
 	}
 
+	public async isPatreon(userId: string): Promise<boolean> {
+		const guild = this.getGuild;
+		if (guild) {
+			const member = await guild.members.fetch(userId).catch(() => {
+				return null;
+			});
+			if (member) {
+				return member.roles.cache.some((role) => {
+					return this.config?.base?.patreon_ping_roles?.includes(role.id) ?? false;
+				});
+			}
+		}
+		return false;
+	}
+
 	protected getChannel(channelId: string) {
 		const guild = this.getGuild;
 		if (guild && channelId) {
