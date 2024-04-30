@@ -284,7 +284,7 @@
 								<Textarea
 									:id="reactionTextId"
 									v-model="data.reaction_text"
-									class="w-full" />
+									class="min-h-64 w-full" />
 							</div>
 
 							<div class="flex items-center gap-2">

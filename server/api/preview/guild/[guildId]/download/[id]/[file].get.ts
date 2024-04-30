@@ -1,14 +1,13 @@
 import { and, eq } from '@kmods/drizzle-pg';
 import { getColumns } from '@kmods/drizzle-pg/pg-core';
 import { join } from 'path';
-import { z } from 'zod';
 import { getRouteBaseParams } from '~/server/bot/utils/routes';
 import { db, scDownloadFiles, scDownloads } from '~/server/utils/db/postgres/pg';
 
 export default defineEventHandler(async (event) => {
 	const { guildId, guildData, user } = await getRouteBaseParams(event, true);
 	const id = zodNumeric(getRouterParam(event, 'id'), 'Preview Id must be numeric');
-	const file = z.string().parse(getRouterParam(event, 'id'));
+	const file = zodNumeric(getRouterParam(event, 'file'), 'File Id must be numeric');
 
 	const data = await db
 		.select({

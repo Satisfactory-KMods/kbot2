@@ -8,6 +8,7 @@ import type {
 import { ChannelType } from 'discord.js';
 import { DiscordGuildBase } from './guild';
 import { splitMessageContent } from './messageContent';
+import { hasPermissionForGuild } from './permissions';
 
 export class DiscordGuild<TValid extends boolean = false> extends DiscordGuildBase<TValid> {
 	override isValid(): this is DiscordGuild<true> {
@@ -20,6 +21,17 @@ export class DiscordGuild<TValid extends boolean = false> extends DiscordGuildBa
 		return GuildClass;
 	}
 
+	public async isMember(userId: string): Promise<boolean> {
+		const guild = this.getGuild;
+		if (guild) {
+			return (
+				guild.members.cache.has(userId) ||
+				!!(await hasPermissionForGuild(this.guildId, userId))
+			);
+		}
+		return false;
+	}
+
 	public async isPatreon(userId: string): Promise<boolean> {
 		const guild = this.getGuild;
 		if (guild) {
@@ -27,9 +39,16 @@ export class DiscordGuild<TValid extends boolean = false> extends DiscordGuildBa
 				return null;
 			});
 			if (member) {
-				return member.roles.cache.some((role) => {
+				const hasRole = member.roles.cache.some((role) => {
 					return this.config?.base?.patreon_ping_roles?.includes(role.id) ?? false;
 				});
+				if (!hasRole) {
+					if (await hasPermissionForGuild(this.guildId, userId)) {
+						return true;
+					}
+				}
+
+				return hasRole;
 			}
 		}
 		return false;
@@ -250,7 +269,7 @@ export class DiscordGuild<TValid extends boolean = false> extends DiscordGuildBa
 		thread: GuildForumThreadCreateOptions & {
 			message: GuildForumThreadMessageCreateOptions;
 		};
-	}): Promise<boolean> {
+	}) {
 		const channel = await this.forumChannel(opt.channelId);
 		if (channel && channel.isThreadOnly()) {
 			const content: string = String(opt.thread.message.content ?? '');
@@ -279,7 +298,7 @@ export class DiscordGuild<TValid extends boolean = false> extends DiscordGuildBa
 				});
 			}
 
-			return !!thread;
+			return thread;
 		}
 		return false;
 	}

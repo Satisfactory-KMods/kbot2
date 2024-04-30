@@ -4,11 +4,33 @@ export const useServerStore = defineStore('server-store', () => {
 	const data = ref<Return<typeof refreshGuild>>({} as any);
 	const roles = ref<Return<typeof refreshRoles>>([]);
 	const channels = ref<Return<typeof refreshChannels>>([]);
+	const mods = ref<Return<typeof refreshMods>>({
+		total: 0,
+		mods: []
+	});
 	const loading = ref(false);
 
 	const guildId: ComputedRef<string> = computed(() => {
 		return String(data.value?.guild_id);
 	});
+
+	async function refreshMods() {
+		loading.value = true;
+
+		// fetch roles
+		const result = await $$fetch('/api/mods/all', {
+			method: 'GET',
+			query: {
+				limit: 200,
+				offset: 0
+			}
+		}).finally(() => {
+			loading.value = false;
+		});
+		mods.value = result;
+
+		return result;
+	}
 
 	async function refreshRoles(newGuild?: string) {
 		loading.value = true;
@@ -61,7 +83,8 @@ export const useServerStore = defineStore('server-store', () => {
 		await Promise.all([
 			refreshGuild(newGuild),
 			refreshRoles(newGuild),
-			refreshChannels(newGuild)
+			refreshChannels(newGuild),
+			refreshMods()
 		]);
 
 		return data.value;
@@ -74,6 +97,8 @@ export const useServerStore = defineStore('server-store', () => {
 		refreshRoles,
 		channels,
 		refreshChannels,
+		mods,
+		refreshMods,
 		init,
 		guildId,
 		loading

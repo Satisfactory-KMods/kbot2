@@ -108,15 +108,7 @@ export default defineEventHandler(async (event) => {
 	});
 
 	if (patreon) {
-		await guildData.sendMessageInChannel({
-			channelId: pingString + config.base.patreon_announcement_channel_id,
-			message: {
-				content: config.base.patreon_release_text,
-				embeds: embed ? [embed] : undefined
-			}
-		});
-
-		await guildData.sendForumThread({
+		const changelogThread = await guildData.sendForumThread({
 			channelId: config.base.patreon_changelog_forum,
 			thread: {
 				name,
@@ -125,22 +117,36 @@ export default defineEventHandler(async (event) => {
 				}
 			}
 		});
-	} else {
+
 		await guildData.sendMessageInChannel({
-			channelId: pingString + config.base.public_announcement_channel_id,
+			channelId: config.base.patreon_announcement_channel_id,
 			message: {
-				content: config.base.public_release_text,
+				content: (pingString + config.base.patreon_release_text).replaceAll(
+					'{changelog}',
+					changelogThread ? `<#${changelogThread.id}>` : 'No Changelog Thread'
+				),
 				embeds: embed ? [embed] : undefined
 			}
 		});
-
-		await guildData.sendForumThread({
+	} else {
+		const changelogThread = await guildData.sendForumThread({
 			channelId: config.base.public_changelog_forum,
 			thread: {
 				name,
 				message: {
 					content: changelog
 				}
+			}
+		});
+
+		await guildData.sendMessageInChannel({
+			channelId: config.base.public_announcement_channel_id,
+			message: {
+				content: (pingString + config.base.public_release_text).replaceAll(
+					'{changelog}',
+					changelogThread ? `<#${changelogThread.id}>` : 'No Changelog Thread'
+				),
+				embeds: embed ? [embed] : undefined
 			}
 		});
 	}

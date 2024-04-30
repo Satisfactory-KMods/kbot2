@@ -41,13 +41,18 @@ export async function getDownloadsForGuildAndType(
 		});
 }
 
-export async function getDownloadsForGuild(guildId: string, limit: number, offset: number) {
+export async function getDownloadsForGuild(
+	guildId: string,
+	limit: number,
+	offset: number,
+	patreon: boolean
+) {
 	const { total } = await db
 		.select({
 			total: count()
 		})
 		.from(scDownloads)
-		.where(and(eq(scDownloads.guild_id, guildId)))
+		.where(and(eq(scDownloads.guild_id, guildId), eq(scDownloads.patreon, patreon)))
 		.firstOrThrow('Failed to get total downloads');
 
 	const cols = getColumns(scDownloads);
@@ -60,12 +65,12 @@ export async function getDownloadsForGuild(guildId: string, limit: number, offse
 				return acc;
 			}, {} as any) as typeof cols),
 			files: pgAggJsonBuildObject(scDownloadFiles, { aggregate: true }),
-			mod: pgAggJsonBuildObject(scDownloadFiles, { aggregate: true, index: 0 })
+			mod: pgAggJsonBuildObject(scModCache, { aggregate: true, index: 0 })
 		})
 		.from(scDownloads)
 		.innerJoin(scDownloadFiles, eq(scDownloads.id, scDownloadFiles.download_id))
 		.leftJoin(scModCache, ['mod_reference'])
-		.where(and(eq(scDownloads.guild_id, guildId)))
+		.where(and(eq(scDownloads.guild_id, guildId), eq(scDownloads.patreon, patreon)))
 		.groupBy(scDownloads.id, scDownloads.guild_id)
 		.limit(limit)
 		.offset(offset)
