@@ -2,6 +2,7 @@ import type {
 	Collection,
 	GuildForumThreadCreateOptions,
 	GuildForumThreadMessageCreateOptions,
+	Message,
 	MessageCreateOptions,
 	NonThreadGuildBasedChannel
 } from 'discord.js';
@@ -228,7 +229,8 @@ export class DiscordGuild<TValid extends boolean = false> extends DiscordGuildBa
 	public async sendMessageInChannel(opt: {
 		channelId: string;
 		message: string | MessageCreateOptions;
-	}): Promise<boolean> {
+	}) {
+		const messages: Message<true>[] = [];
 		const channel = await this.textChannel(opt.channelId);
 		if (channel) {
 			let content: string;
@@ -252,16 +254,18 @@ export class DiscordGuild<TValid extends boolean = false> extends DiscordGuildBa
 						content: msgContent[i]
 					};
 				}
-				await channel.send(sendContent).catch(() => {
+				const msg = await channel.send(sendContent).catch(() => {
 					return null;
 				});
-			}
 
-			return !!(await channel.send(opt.message).catch(() => {
-				return null;
-			}));
+				if (!msg) {
+					throw new Error('Failed to send message');
+				}
+
+				messages.push(msg);
+			}
 		}
-		return false;
+		return messages;
 	}
 
 	public async sendForumThread(opt: {
@@ -289,7 +293,7 @@ export class DiscordGuild<TValid extends boolean = false> extends DiscordGuildBa
 				});
 
 			if (!thread) {
-				return false;
+				return null;
 			}
 
 			for (const content of msgContent) {
@@ -300,7 +304,7 @@ export class DiscordGuild<TValid extends boolean = false> extends DiscordGuildBa
 
 			return thread;
 		}
-		return false;
+		return null;
 	}
 }
 

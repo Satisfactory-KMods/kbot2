@@ -2,6 +2,7 @@ import { defineStore } from 'pinia';
 
 export const useServerStore = defineStore('server-store', () => {
 	const data = ref<Return<typeof refreshGuild>>({} as any);
+	const config = ref<Return<typeof refreshConfig>>({} as any);
 	const roles = ref<Return<typeof refreshRoles>>([]);
 	const channels = ref<Return<typeof refreshChannels>>([]);
 	const mods = ref<Return<typeof refreshMods>>({
@@ -14,15 +15,31 @@ export const useServerStore = defineStore('server-store', () => {
 		return String(data.value?.guild_id);
 	});
 
+	async function refreshConfig(newGuild?: string) {
+		loading.value = true;
+		const id = newGuild ?? guildId.value;
+
+		// fetch roles
+		const result = await $$fetch(`/api/server/${id}/config/general`, {
+			method: 'GET'
+		}).finally(async () => {
+			await refreshMods().catch(() => {});
+			loading.value = false;
+		});
+		config.value = result;
+
+		return result;
+	}
+
 	async function refreshMods() {
 		loading.value = true;
 
 		// fetch roles
-		const result = await $$fetch('/api/mods/all', {
+		const result = await $$fetch('/api/mods/byusers', {
 			method: 'GET',
 			query: {
-				limit: 200,
-				offset: 0
+				userIds: config.value.base.ficsit_user_ids,
+				showHidden: true
 			}
 		}).finally(() => {
 			loading.value = false;
@@ -84,7 +101,7 @@ export const useServerStore = defineStore('server-store', () => {
 			refreshGuild(newGuild),
 			refreshRoles(newGuild),
 			refreshChannels(newGuild),
-			refreshMods()
+			refreshConfig(newGuild)
 		]);
 
 		return data.value;
@@ -98,7 +115,8 @@ export const useServerStore = defineStore('server-store', () => {
 		channels,
 		refreshChannels,
 		mods,
-		refreshMods,
+		config,
+		refreshMods: refreshConfig,
 		init,
 		guildId,
 		loading

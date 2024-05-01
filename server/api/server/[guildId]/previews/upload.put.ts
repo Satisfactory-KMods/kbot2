@@ -1,9 +1,11 @@
+import { eq } from '@kmods/drizzle-pg';
 import { readFiles } from 'h3-formidable';
 import { join } from 'path';
 import { env } from '~/env';
 import { createEmbed } from '~/server/bot/utils/embed';
 import { getRouteBaseParams } from '~/server/bot/utils/routes';
 import { db, scDownloadFiles, scDownloads, scModCache } from '~/server/utils/db/postgres/pg';
+import { parseFormidable } from '~/server/utils/form';
 import { log } from '~/utils/logger';
 
 export default defineEventHandler(async (event) => {
@@ -17,9 +19,23 @@ export default defineEventHandler(async (event) => {
 		throw createError('No files uploaded');
 	}
 
-	const { mod_reference, version, changelog, patreon = true } = fields as Record<string, any>;
+	const {
+		mod_reference,
+		version,
+		changelog,
+		patreon = true
+	} = parseFormidable<{
+		mod_reference: string;
+		version: string;
+		changelog: string;
+		patreon?: boolean;
+	}>(fields);
 
-	const mod = await db.select().from(scModCache).firstOrThrow('Failed to get mod from ref');
+	const mod = await db
+		.select()
+		.from(scModCache)
+		.where(eq(scModCache.mod_reference, mod_reference))
+		.firstOrThrow('Failed to get mod from ref');
 
 	let dirty = false;
 	let base = join(process.cwd(), 'uploads', guildId);
@@ -40,6 +56,7 @@ export default defineEventHandler(async (event) => {
 				})
 				.firstOrThrow('Failed to insert download');
 
+			base = join(base, id);
 			for (const file of files.files ?? []) {
 				const name = file.originalFilename;
 				const mime = file.mimetype;
@@ -48,7 +65,6 @@ export default defineEventHandler(async (event) => {
 				if (!name || !mime || !size) {
 					throw createError('Invalid file');
 				}
-				base = join(base, id);
 
 				const f = await trx
 					.insert(scDownloadFiles)
@@ -99,7 +115,7 @@ export default defineEventHandler(async (event) => {
 
 	const embed = createEmbed({
 		author: {
-			name: mod.name,
+			name,
 			iconURL: mod.logo
 		},
 		thumbnail: mod.logo,

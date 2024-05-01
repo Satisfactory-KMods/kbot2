@@ -45,10 +45,7 @@
 	);
 
 	const query = computed(() => {
-		return {
-			...searchParams,
-			type: uploadForm.patreon ? 'patreon' : 'public'
-		};
+		return searchParams
 	});
 
 	const { data: existings, refresh: refreshExistings } = await useFetch(
