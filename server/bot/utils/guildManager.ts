@@ -6,7 +6,7 @@ import type {
 	MessageCreateOptions,
 	NonThreadGuildBasedChannel
 } from 'discord.js';
-import { ChannelType } from 'discord.js';
+import { ChannelType, PermissionFlagsBits } from 'discord.js';
 import { DiscordGuildBase } from './guild';
 import { splitMessageContent } from './messageContent';
 import { hasPermissionForGuild } from './permissions';
@@ -33,6 +33,46 @@ export class DiscordGuild<TValid extends boolean = false> extends DiscordGuildBa
 		return false;
 	}
 
+	public async getAdmins(useCache = true): Promise<string[]> {
+		const guild = this.getGuild;
+		if (guild) {
+			const admins = Array.from(
+				(useCache
+					? guild.roles.cache
+					: await guild.roles.fetch().catch(() => {
+							return [];
+						})
+				).values()
+			).filter((role) => {
+				return role.permissions.has(PermissionFlagsBits.Administrator);
+			});
+
+			if (admins) {
+				return admins.reduce<string[]>((acc, role) => {
+					return acc.concat(
+						role.members.map((member) => {
+							return member.id;
+						})
+					);
+				}, []);
+			}
+		}
+		return [];
+	}
+
+	public async isAdmin(userId: string): Promise<boolean> {
+		const guild = this.getGuild;
+		if (guild) {
+			const member = await guild.members.fetch(userId).catch(() => {
+				return null;
+			});
+			if (member) {
+				return member.permissions.has(PermissionFlagsBits.Administrator);
+			}
+		}
+		return false;
+	}
+
 	public async isPatreon(userId: string): Promise<boolean> {
 		const guild = this.getGuild;
 		if (guild) {
@@ -44,7 +84,7 @@ export class DiscordGuild<TValid extends boolean = false> extends DiscordGuildBa
 					return this.config?.base?.patreon_ping_roles?.includes(role.id) ?? false;
 				});
 				if (!hasRole) {
-					if (await hasPermissionForGuild(this.guildId, userId)) {
+					if (await this.isAdmin(userId)) {
 						return true;
 					}
 				}

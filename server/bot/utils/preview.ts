@@ -25,10 +25,12 @@ export async function getDownloadsForGuildAndType(
 				acc[key] = pgAnyValue(cols[key]);
 				return acc;
 			}, {} as any) as typeof cols),
-			files: pgAggJsonBuildObject(scDownloadFiles, { aggregate: true })
+			files: pgAggJsonBuildObject(scDownloadFiles, { aggregate: true }),
+			mod: pgAggJsonBuildObject(scModCache, { aggregate: true, index: 0 })
 		})
 		.from(scDownloads)
 		.innerJoin(scDownloadFiles, eq(scDownloads.id, scDownloadFiles.download_id))
+		.innerJoin(scModCache, ['mod_reference'])
 		.where(and(eq(scDownloads.guild_id, guildId), eq(scDownloads.patreon, type)))
 		.groupBy(scDownloads.id, scDownloads.guild_id)
 		.limit(limit)

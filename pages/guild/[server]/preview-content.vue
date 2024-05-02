@@ -1,13 +1,15 @@
 <script lang="ts" setup>
 	import axios from 'axios';
 	import moment from 'moment-timezone';
+	import { useFormatSize } from '~/composables/useFormatSize';
+
 	const params = useParams({
 		values: {
 			server: String()
 		}
 	});
 
-	const primevue = usePrimeVue();
+	const formatSize = useFormatSize();
 
 	const searchParams = useSearchParams({
 		values: {
@@ -45,7 +47,7 @@
 	);
 
 	const query = computed(() => {
-		return searchParams
+		return searchParams;
 	});
 
 	const { data: existings, refresh: refreshExistings } = await useFetch(
@@ -62,21 +64,6 @@
 			method: 'GET'
 		}
 	);
-
-	function formatSize(bytes: number) {
-		const k = 1024;
-		const dm = 3;
-		const sizes = primevue.config.locale!.fileSizeTypes;
-
-		if (bytes === 0) {
-			return `0 ${sizes[0]}`;
-		}
-
-		const i = Math.floor(Math.log(bytes) / Math.log(k));
-		const formattedSize = parseFloat((bytes / Math.pow(k, i)).toFixed(dm));
-
-		return `${formattedSize} ${sizes[i]}`;
-	}
 
 	async function uploader() {
 		if (loading.value) {

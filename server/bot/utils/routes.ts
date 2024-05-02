@@ -5,6 +5,7 @@ import { hasPermissionForGuild } from './permissions';
 export async function getRouteBaseParams(event: any, skipPermissionCheck?: boolean) {
 	const { user } = await getServerSessionChecked(event);
 	const guildId = zodNumeric(getRouterParam(event, 'guildId'), 'Server Id must be numeric');
+	
 	if (!skipPermissionCheck) {
 		await hasPermissionForGuild(guildId, user.discordId);
 	}

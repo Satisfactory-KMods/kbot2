@@ -47,7 +47,6 @@
 					content: 'p-6'
 				}"
 				class="w-full justify-end rounded-none md:rounded-lg">
-				<template #title> </template>
 				<template #content>
 					<Message v-if="!data?.length" :closable="false">
 						<div class="block">
