@@ -29,7 +29,7 @@ export const defaultGuildFields = {
 } as const;
 
 export const scGuild = kbot2Schema.table('discord_guild', {
-	guild_id: bigint('guild_id').primaryKey().notNull(),
+	guild_id: bigint('guild_id', { mode: 'string' }).primaryKey().notNull(),
 	total_members: integer('total_members').notNull().default(0),
 	guild_created: colTimestamp('guild_created').notNull().defaultNow(),
 	image: varchar('image', { length: 1024 }).notNull().default(''),

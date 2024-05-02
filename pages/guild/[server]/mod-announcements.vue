@@ -32,6 +32,7 @@
 			changelog_announce_hidden_mods,
 			changelog_forum_id,
 			changelog_bug_channel_id,
+			default_ping_role,
 			changelog_suggestion_channel_id
 		} = config.value.base;
 
@@ -39,6 +40,7 @@
 		const result = await $$fetch(`/api/server/${params.server}/config/general`, {
 			method: 'POST',
 			body: {
+				default_ping_role,
 				update_text_channel_id,
 				changelog_announce_hidden_mods,
 				changelog_forum_id,
@@ -110,11 +112,11 @@
 					</div>
 
 					<div class="flex flex-col gap-1">
-						<span>Channel for Changelogs</span>
+						<span>Channel for Announcements</span>
 						<CommonChannelSelection
 							v-model="config.base.update_text_channel_id"
 							no-edit
-							:channel-types="[ChannelTypes.text, ChannelTypes.forum]" />
+							:channel-types="[ChannelTypes.text]" />
 					</div>
 
 					<div class="flex flex-col gap-1">
@@ -139,6 +141,11 @@
 							v-model="config.base.changelog_bug_channel_id"
 							no-edit
 							:channel-types="[ChannelTypes.text, ChannelTypes.forum]" />
+					</div>
+
+					<div class="flex flex-col gap-1">
+						<span>Ping Role</span>
+						<CommonRoleSelectionSingle v-model="config.base.default_ping_role" />
 					</div>
 
 					<Button :loading="busy" @click="saveSettings()">Save</Button>

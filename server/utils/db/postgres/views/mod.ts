@@ -36,12 +36,12 @@ export const viewMods = ficsitAppSchema.view('view_mods').as((db) => {
 			).as('last_version'),
 			authors: pgCase(
 				isNull(pgAnyValue(scModAuthors.mod_id)),
-				sql<InferDynamic<typeof scModAuthors>>`'[]'::json`,
+				sql<InferDynamic<typeof scModAuthors>[]>`'[]'::json`,
 				pgAggJsonBuildObject(scModAuthors, { aggregate: true })
 			).as('authors'),
 			versions: pgCase(
 				isNull(pgAnyValue(scModVersions.mod_id)),
-				sql<InferDynamic<typeof scModVersions>>`'[]'::json`,
+				sql<InferDynamic<typeof scModVersions>[]>`'[]'::json`,
 				pgAggJsonBuildObject(scModVersions, { aggregate: true })
 			).as('versions')
 		})

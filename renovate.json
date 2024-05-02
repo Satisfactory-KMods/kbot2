@@ -9,5 +9,14 @@
 		":prConcurrentLimitNone"
 	],
 	"baseBranches": ["dev", "next"],
-	"ignoreDeps": ["@nuxt/image", "sharp", "typescript", "eslint", "next-auth"]
+	"ignoreDeps": [
+		"@nuxt/image",
+		"@typescript-eslint/eslint-plugin",
+		"slint-plugin-unused-imports",
+		"@typescript-eslint/parser",
+		"sharp",
+		"typescript",
+		"eslint",
+		"next-auth"
+	]
 }

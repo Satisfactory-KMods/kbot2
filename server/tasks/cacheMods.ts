@@ -4,6 +4,7 @@ import { schedule } from 'node-cron';
 import { env } from '~/env';
 import { log } from '~/utils/logger';
 import { db, scModAuthors, scModCache, scModVersions } from '../utils/db/postgres/pg';
+import { checkForModUpdates } from './cacheMods_checkForUpdates';
 
 const client = new GraphQLClient(env.ficsit.url, { headers: {} });
 function getQueryChunk(offset: number) {
@@ -136,6 +137,7 @@ async function exec() {
 			log('tasks-error', e.message);
 		}
 	}
+	await checkForModUpdates();
 }
 
 export function installModTask(cron: string, runOnInit?: boolean) {
