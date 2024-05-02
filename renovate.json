@@ -1,17 +1,22 @@
 {
-  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": [
-    "config:base",
-    "docker:pinDigests",
-    "group:allNonMajor",
-    ":semanticCommits",
-    ":prHourlyLimitNone",
-    ":prConcurrentLimitNone"
-  ],
-  "baseBranches": ["dev", "next"],
-  "ignoreDeps": [
-    "@nuxt/image",
-    "sharp",
-    "next-auth"
-  ]
+	"$schema": "https://docs.renovatebot.com/renovate-schema.json",
+	"extends": [
+		"config:base",
+		"docker:pinDigests",
+		"group:allNonMajor",
+		":semanticCommits",
+		":prHourlyLimitNone",
+		":prConcurrentLimitNone"
+	],
+	"baseBranches": ["dev"],
+	"ignoreDeps": [
+		"@nuxt/image",
+		"@typescript-eslint/eslint-plugin",
+		"slint-plugin-unused-imports",
+		"@typescript-eslint/parser",
+		"sharp",
+		"typescript",
+		"eslint",
+		"next-auth"
+	]
 }
