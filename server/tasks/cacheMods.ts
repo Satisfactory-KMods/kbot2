@@ -6,7 +6,6 @@ import { log } from '~/utils/logger';
 import { db, scModAuthors, scModCache, scModVersions } from '../utils/db/postgres/pg';
 import { checkForModUpdates } from './cacheMods_checkForUpdates';
 
-const client = new GraphQLClient(env.ficsit.url, { headers: {} });
 function getQueryChunk(offset: number) {
 	return gql`
         query {
@@ -43,6 +42,8 @@ async function exec() {
 		log('tasks', 'Start Update Mods!');
 		while (!maxReached) {
 			try {
+				log('tasks', 'Fetching Mods...', env.ficsit.url, [total, offset]);
+				const client = new GraphQLClient(env.ficsit.url, { headers: {} });
 				const { getMods } = (await client.request(getQueryChunk(offset))) as any;
 				const { mods, count } = getMods;
 				total = count;
