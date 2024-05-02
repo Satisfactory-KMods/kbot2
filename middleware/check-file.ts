@@ -21,7 +21,7 @@ export default defineNuxtRouteMiddleware(async (to) => {
 		});
 	});
 
-	if (!isNuxtError(file) && !file.patreon) {
+	if (!isNuxtError(file) && !file.download.patreon) {
 		return;
 	} else if (isNuxtError(file)) {
 		return file;
