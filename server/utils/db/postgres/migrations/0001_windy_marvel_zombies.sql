@@ -1,0 +1,1 @@
+ALTER TABLE "kbot2"."discord_guild_configuration_ficsit_user_ids" ALTER COLUMN "ficsit_user_id" SET DATA TYPE varchar(32);

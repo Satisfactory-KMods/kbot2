@@ -1,7 +1,0 @@
-{
-	"register.create": "Account created successfully.",
-	"reset.password": "Password reset successfully.",
-	"cc.created": "Chat command created.",
-	"cc.modified": "Chat command modified.",
-	"cc.delete": "Chat command deleted."
-}

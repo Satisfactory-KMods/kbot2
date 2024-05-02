@@ -1,6 +1,0 @@
-{
-	"watch": ["server", "shared"],
-	"ext": "ts",
-	"ignore": ["server/**/*.spec.ts", "server/**/*.test.ts"],
-	"exec": "bun run devserver"
-}

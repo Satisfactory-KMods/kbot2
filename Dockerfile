@@ -1,16 +1,6 @@
-FROM node:18-bullseye
-
-RUN apt-get update && \
-  apt-get install -y python-is-python3 python3 python3-dev python3-pip python3-virtualenv && \
-  rm -rf /var/lib/apt/lists/* && \
-  python --version && \
-  node -v && npm -v
-RUN npm install -g pnpm bun
-
-COPY . /dist
+FROM node:20-alpine@sha256:7a91aa397f2e2dfbfcdad2e2d72599f374e0b0172be1d86eeb73f1d33f36a4b2
+ 
+COPY ./.nuxt/dist /dist
 WORKDIR /dist
 
-# create main files
-RUN bun run build
-
-CMD pnpm run production
+CMD node server.mjs
