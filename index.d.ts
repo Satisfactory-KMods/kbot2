@@ -1,3 +1,4 @@
+import '@nuxt/content';
 import type { Result } from 'h3-formidable';
 import type { DefaultSession } from 'next-auth';
 

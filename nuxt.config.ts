@@ -6,18 +6,17 @@ import { nitro } from './nuxt.config.nitro';
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
 	modules: [
-		'@vueuse/nuxt',
-		'@sidebase/nuxt-auth',
-		'@nuxt/image',
-		'nuxt-icon',
-		'@nuxtjs/color-mode',
-		'nuxt-primevue',
-		'@pinia/nuxt',
-		'@pinia-plugin-persistedstate/nuxt',
-		'@nuxtjs/tailwindcss',
-		'@nuxt/content',
-		'@nuxtjs/mdc'
-	],
+        '@vueuse/nuxt',
+        '@sidebase/nuxt-auth',
+        '@nuxt/image',
+        'nuxt-icon',
+        '@nuxtjs/color-mode',
+        'nuxt-primevue',
+        '@pinia/nuxt',
+        '@pinia-plugin-persistedstate/nuxt',
+        '@nuxtjs/tailwindcss',
+        "@nuxt/content"
+    ],
 	colorMode: {
 		classSuffix: '',
 		preference: 'light'
@@ -41,10 +40,7 @@ export default defineNuxtConfig({
 		'vue3-emoji-picker/css'
 	],
 	tailwindcss: {
-		cssPath: '~/assets/css/tailwind.css',
-		config: {
-			plugins: [require('@tailwindcss/typography')]
-		}
+		cssPath: '~/assets/css/tailwind.css'
 	},
 	pages: true,
 	devtools: { enabled: true },

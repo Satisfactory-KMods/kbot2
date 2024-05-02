@@ -6,7 +6,7 @@
 		useRouter().replace('/');
 	}
 
-	const config = useRuntimeConfig().public;
+	const config = useRuntimeConfig().public as any;
 </script>
 
 <template>
