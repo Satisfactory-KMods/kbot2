@@ -66,6 +66,7 @@ jobs:
                   pnpm add -g bun
                   pnpm i
                   bun run build
+                  chmod 777 -R .output
 
             - name: Log into registry
               if: github.event_name != 'pull_request'
