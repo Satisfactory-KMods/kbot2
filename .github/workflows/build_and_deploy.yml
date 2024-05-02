@@ -46,12 +46,26 @@ jobs:
                       ${{ runner.os }}-pnpm-store-
 
             - name: lint and type check
+              env:
+                  NEXTAUTH_SECRET: "will pass in as env var in production"
+                  DISCORD_CLIENT_SECRET: "will pass in as env var in production"
+                  DISCORD_BOT_TOKEN: "will pass in as env var in production"
+                  NEXTAUTH_URL: "will pass in as env var in production"
+                  REDIS_PASSWORD: "will pass in as env var in production"
+                  REDIS_HOST: "will pass in as env var in production"
+                  REDIS_PORT: "1000"
+                  POSTGRES_PASSWORD: "will pass in as env var in production"
+                  POSTGRES_USER: "will pass in as env var in production"
+                  POSTGRES_DB: "will pass in as env var in production"
+                  POSTGRES_HOST: "will pass in as env var in production"
+                  POSTGRES_PORT: "1000"
+                  FICSIT_APP_API_URL: "will pass in as env var in production"
+                  FICSIT_APP_API_TOKEN: "will pass in as env var in production"
+                  DISCORD_CLIENT_ID: "{{ github.ref == 'refs/heads/main' && '944331343700054056' || '1235530228701597778' }}"
               run: |
-                  cp .env.example .env
                   pnpm add -g bun
                   pnpm i
                   bun run build
-                  rm .env
 
             - name: Log into registry
               if: github.event_name != 'pull_request'
