@@ -5,4 +5,4 @@ RUN npm add -g bun pnpm
 COPY . /dist
 WORKDIR /dist
 
-CMD pnpm install && bun run build && node server/index.mjs
+CMD pnpm install && bun run build && node .output/server/index.mjs
