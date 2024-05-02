@@ -31,7 +31,7 @@ export const env = z
 		POSTGRES_PORT: zodStringOrNumber,
 		// Ficsit app url
 		FICSIT_APP_API_URL: z.string(),
-		FIVSIT_APP_API_TOKEN: z.string().optional()
+		FICSIT_APP_API_TOKEN: z.string().optional()
 	})
 	.transform((env) => {
 		return {
@@ -39,7 +39,7 @@ export const env = z
 			dev: process.env.NODE_ENV !== 'production',
 			ficsit: {
 				url: env.FICSIT_APP_API_URL,
-				token: env.FIVSIT_APP_API_TOKEN
+				token: env.FICSIT_APP_API_TOKEN
 			},
 			nuxt: {
 				public: {
