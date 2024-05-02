@@ -6,6 +6,6 @@ COPY . /dist
 WORKDIR /dist
 
 RUN pnpm install
-RUN pnpm run build
 
-CMD node .nuxt/dist/server.mjs
+# todo: add a build step with compatiple env
+CMD pnpm run build && node .nuxt/dist/server.mjs
