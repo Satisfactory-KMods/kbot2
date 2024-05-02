@@ -2,7 +2,7 @@ import type { MenuItem } from 'primevue/menuitem';
 
 export function useNavigationUrls() {
 	const route = useRoute();
-	const config = useRuntimeConfig().public as any;
+	const config = useRuntimeConfig().public;
 
 	const params = useParams({
 		values: {

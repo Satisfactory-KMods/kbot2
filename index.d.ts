@@ -1,6 +1,8 @@
-import '@nuxt/content';
+import '@nuxt/schema';
 import type { Result } from 'h3-formidable';
 import type { DefaultSession } from 'next-auth';
+
+import '@nuxtjs/mdc';
 
 // ts global for yaml
 declare module '*.yaml' {
@@ -11,6 +13,25 @@ declare module '*.yaml' {
 declare module '*.yml' {
 	const json: Record<string, string>;
 	export default json;
+}
+
+declare module '@nuxt/schema' {
+	interface PublicRuntimeConfig {
+		version: string;
+		discordClientId: string;
+		discordInviteUrl: string;
+		patreonUrl: string;
+		githubRepo: string;
+		discordSupport: string;
+		mdc: {
+			useNuxtImage: any;
+			components: {
+				prose: boolean;
+				map: Record<string, string>;
+			};
+			headings: any;
+		};
+	}
 }
 
 declare module 'next-auth' {
@@ -24,17 +45,6 @@ declare module 'next-auth' {
 			superAdmin: boolean;
 		};
 		expires: string;
-	}
-}
-
-declare module 'nuxt/schema' {
-	interface PublicRuntimeConfig {
-		version: string;
-		discordClientId: string;
-		discordInviteUrl: string;
-		patreonUrl: string;
-		githubRepo: string;
-		discordSupport: string;
 	}
 }
 
