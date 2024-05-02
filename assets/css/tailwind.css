@@ -65,5 +65,5 @@
 
 #__nuxt,
 .full-wh {
-	@apply flex h-[100vh] max-h-[100vh] min-h-[100vh] w-[100vh] min-w-[100vh] max-w-[100vh] flex-col;
+	@apply flex h-[100vh] max-h-[100vh] min-h-[100vh] w-[100vw] min-w-[100vw] max-w-[100vw] flex-col;
 }
