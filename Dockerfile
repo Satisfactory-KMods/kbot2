@@ -2,6 +2,7 @@ FROM node:20-alpine@sha256:80234aa9669e62c1fb47780d96128127c96fed663bd17dfacfe7b
 
 COPY .output /dist
 COPY server/utils/db/postgres/migrations /dist/server/utils/db/postgres/migrations
+
 WORKDIR /dist
 
-CMD server/index.mjs
+CMD node server/index.mjs
