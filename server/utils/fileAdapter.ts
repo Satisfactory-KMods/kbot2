@@ -1,6 +1,7 @@
 import fs from 'fs';
 import fsp from 'fs/promises';
 import { join } from 'path';
+import { log } from '~/utils/logger';
 export const FileAdapter = new (class FileAdapter {
 	move(from: string, to: string) {
 		if (!fs.existsSync(from)) {
@@ -12,7 +13,11 @@ export const FileAdapter = new (class FileAdapter {
 			toPath.pop();
 			fs.mkdirSync(toPath.join('/'), { recursive: true });
 		}
-		return fsp.rename(from, to);
+		return fsp.copyFile(from, to).then(() => {
+			return fsp.unlink(from).catch(() => {
+				log('error', 'Failed to delete file', from);
+			});
+		});
 	}
 
 	createReadStream(filePath: string) {
