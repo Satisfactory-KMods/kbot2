@@ -61,7 +61,7 @@ jobs:
                   POSTGRES_PORT: "1000"
                   FICSIT_APP_API_URL: "will pass in as env var in production"
                   FICSIT_APP_API_TOKEN: "will pass in as env var in production"
-                  DISCORD_CLIENT_ID: "{{ github.ref == 'refs/heads/main' && '944331343700054056' || '1235530228701597778' }}"
+                  DISCORD_CLIENT_ID: ${{ github.ref == 'refs/heads/main' && '944331343700054056' || '1235530228701597778' }}
               run: |
                   pnpm add -g bun
                   pnpm i
