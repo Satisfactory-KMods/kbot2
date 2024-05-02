@@ -8,7 +8,7 @@
 		":prHourlyLimitNone",
 		":prConcurrentLimitNone"
 	],
-	"baseBranches": ["dev", "next"],
+	"baseBranches": ["dev"],
 	"ignoreDeps": [
 		"@nuxt/image",
 		"@typescript-eslint/eslint-plugin",
