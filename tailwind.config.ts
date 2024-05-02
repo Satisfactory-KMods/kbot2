@@ -2,6 +2,7 @@ import type tailwind from 'tailwindcss';
 /** @type {import('tailwindcss').Config} */
 export default {
 	darkMode: 'class',
+	plugins: [require('@tailwindcss/typography')],
 	content: [
 		'./presets/**/*.{js,ts}',
 		'./components/**/*.{ts,js,vue}',

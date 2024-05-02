@@ -14,7 +14,9 @@ export default defineNuxtConfig({
 		'nuxt-primevue',
 		'@pinia/nuxt',
 		'@pinia-plugin-persistedstate/nuxt',
-		'@nuxtjs/tailwindcss'
+		'@nuxtjs/tailwindcss',
+		'@nuxt/content',
+		'@nuxtjs/mdc'
 	],
 	colorMode: {
 		classSuffix: '',
@@ -39,7 +41,10 @@ export default defineNuxtConfig({
 		'vue3-emoji-picker/css'
 	],
 	tailwindcss: {
-		cssPath: '~/assets/css/tailwind.css'
+		cssPath: '~/assets/css/tailwind.css',
+		config: {
+			plugins: [require('@tailwindcss/typography')]
+		}
 	},
 	pages: true,
 	devtools: { enabled: true },

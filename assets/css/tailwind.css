@@ -34,52 +34,36 @@
 		sans-serif;
 	font-variation-settings: normal;
 }
-
 .nuxt-ui-scrollbars ::-webkit-scrollbar {
-	background-color: transparent;
-	height: 0.6em;
-	width: 0.6em;
+	@apply h-[0.6em] w-[0.6em]  bg-transparent;
 }
+
 .nuxt-ui-scrollbars ::-webkit-scrollbar-track {
-	--tw-bg-opacity: 1;
-	background-color: rgb(var(--color-gray-100) / 1);
-	background-color: rgb(var(--color-gray-100) / var(--tw-bg-opacity));
+	@apply bg-gray-100;
+	@apply rounded;
 }
 .nuxt-ui-scrollbars ::-webkit-scrollbar-thumb {
-	--tw-bg-opacity: 1;
-	background-color: rgb(var(--color-gray-300) / 1);
-	background-color: rgb(var(--color-gray-300) / var(--tw-bg-opacity));
-	border-radius: 0.6em;
+	@apply bg-gray-300;
+	@apply rounded;
 }
 .nuxt-ui-scrollbars ::-webkit-scrollbar-thumb:hover {
-	--tw-bg-opacity: 1;
-	background-color: rgb(var(--color-gray-400) / 1);
-	background-color: rgb(var(--color-gray-400) / var(--tw-bg-opacity));
+	@apply bg-gray-400;
+	@apply rounded;
 }
 .nuxt-ui-scrollbars.dark ::-webkit-scrollbar-track {
-	--tw-bg-opacity: 1;
-	background-color: rgb(var(--color-gray-800) / 1);
-	background-color: rgb(var(--color-gray-800) / var(--tw-bg-opacity));
+	@apply bg-gray-800;
+	@apply rounded;
 }
 .nuxt-ui-scrollbars.dark ::-webkit-scrollbar-thumb {
-	--tw-bg-opacity: 1;
-	background-color: rgb(var(--color-gray-700) / 1);
-	background-color: rgb(var(--color-gray-700) / var(--tw-bg-opacity));
+	@apply bg-gray-700;
+	@apply rounded;
 }
 .nuxt-ui-scrollbars.dark ::-webkit-scrollbar-thumb:hover {
-	--tw-bg-opacity: 1;
-	background-color: rgb(var(--color-gray-600) / 1);
-	background-color: rgb(var(--color-gray-600) / var(--tw-bg-opacity));
+	@apply bg-gray-600;
+	@apply rounded;
 }
 
 #__nuxt,
 .full-wh {
-	display: flex;
-	flex-direction: column;
-	min-height: 100vh;
-	height: 100vh;
-	max-height: 100vh;
-	min-width: 100%;
-	width: 100%;
-	max-width: 100%;
+	@apply flex h-[100vh] max-h-[100vh] min-h-[100vh] w-[100vh] min-w-[100vh] max-w-[100vh] flex-col;
 }

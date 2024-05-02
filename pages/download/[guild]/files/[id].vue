@@ -46,9 +46,13 @@
 				</div>
 
 				<Divider />
-				<article class="prose dark:prose-invert max-h-[40vh] overflow-auto">
-					{{ data.download.changelog }}
-				</article>
+
+				<MDC
+					:head="false"
+					tag="article"
+					:value="data.download.changelog.replace(/---(.*)(\r|\n)/g, '')"
+					class="prose max-h-[40vh] w-full max-w-full overflow-auto whitespace-break-spaces dark:prose-invert" />
+
 				<Divider />
 
 				<NuxtLink
