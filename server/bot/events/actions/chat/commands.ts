@@ -69,22 +69,19 @@ export async function fuzzySearch(message: Message<true>) {
 			return t.type === TriggerMatchTypes.fuzzy;
 		});
 
-		// calculate the threshold based on trigger (use the middle)
-		const threshold =
-			1 -
-			fuzzy.reduce((acc, t) => {
-				return acc + t.match_percentage;
-			}, 0) /
-				fuzzy.length;
-
-		const collection = new Fuse([message.content], {
+		const collection = new Fuse([{ content: message.content }], {
 			includeScore: true,
-			threshold
+			ignoreFieldNorm: true,
+			ignoreLocation: true,
+			includeMatches: true,
+			keys: ['content']
 		});
 
 		if (
 			fuzzy.some((t) => {
-				return collection.search(t.trigger).length > 0;
+				return collection.search(t.trigger).some((r) => {
+					return r.score! <= t.match_percentage;
+				});
 			})
 		) {
 			await replayMessageWithContent(message, command.reaction_text);
