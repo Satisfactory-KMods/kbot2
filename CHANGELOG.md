@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.0.1](https://github.com/Satisfactory-KMods/kbot2/compare/v2.0.0...v2.0.1) (2024-05-03)
+
+
+### Refactors
+
+* fiuzzy search for auto reaction ([b0b8d52](https://github.com/Satisfactory-KMods/kbot2/commit/b0b8d527c2fad18dd9af59af003d49545f6557b1))
+
 ## [2.0.0](https://github.com/Satisfactory-KMods/kbot2/compare/v1.0.0...v2.0.0) (2024-05-02)
 
 
