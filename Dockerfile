@@ -1,4 +1,4 @@
-FROM node:20-alpine@sha256:80234aa9669e62c1fb47780d96128127c96fed663bd17dfacfe7bf9e5473884c
+FROM node:20-alpine@sha256:291e84d956f1aff38454bbd3da38941461ad569a185c20aa289f71f37ea08e23
 
 COPY .output /dist
 COPY server/utils/db/postgres/migrations /dist/server/utils/db/postgres/migrations
