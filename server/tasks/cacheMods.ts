@@ -143,7 +143,7 @@ async function exec() {
 
 export const cacheModSettings = { taskInstalled: false };
 export function installModTask(cron: string, runOnInit?: boolean) {
-	if (cacheModSettings.taskInstalled)  {
+	if (cacheModSettings.taskInstalled) {
 		log('tasks', 'Task "cache mods" already installed');
 	}
 

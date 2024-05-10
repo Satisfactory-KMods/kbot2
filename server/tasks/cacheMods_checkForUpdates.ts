@@ -1,11 +1,11 @@
-import { and, eq, inArray, isNotNull } from '@kmods/drizzle-pg';
+import { and, eq, inArray } from '@kmods/drizzle-pg';
 import {
 	getColumnsFromViewOrSubquery,
 	now,
 	pgAggJsonBuildObject,
 	pgAnyValue
 } from '@kmods/drizzle-pg/pg-core';
-import moment from 'moment';
+import { compareVersions } from 'compare-versions';
 import { LOGO } from '~/utils/constant';
 import { log } from '~/utils/logger';
 import { createEmbed } from '../bot/utils/embed';
@@ -59,7 +59,6 @@ export async function checkForModUpdates() {
 			.innerJoin(scModAuthors, eq(viewMods.mod_id, scModAuthors.mod_id))
 			.where(
 				and(
-					isNotNull(viewMods.last_version),
 					inArray(
 						scModAuthors.user_id,
 						ficsit_users.map((u) => {
@@ -76,11 +75,16 @@ export async function checkForModUpdates() {
 					const exists = mod_updates.find((update) => {
 						return update.mod_reference === mod.mod_reference;
 					});
+
 					if (!exists) {
 						return true;
 					}
 
-					if (moment(exists.updated_at).isBefore(mod.updated_at)) {
+					if (!mod.last_version) {
+						return false;
+					}
+
+					if (compareVersions(mod.last_version.version, exists.version) !== 0) {
 						return true;
 					}
 
@@ -89,13 +93,14 @@ export async function checkForModUpdates() {
 			});
 
 		for (const mod of dirtyMods) {
-			let announce = false;
 			const exists = mod_updates.find((update) => {
 				return update.mod_reference === mod.mod_reference;
 			});
-			if (exists && moment(exists.updated_at).isBefore(mod.updated_at)) {
-				announce = true;
-			}
+
+			const announce =
+				exists &&
+				!!mod.last_version &&
+				compareVersions(mod.last_version.version, exists.version) > 0;
 
 			await db
 				.transaction(async (trx) => {
@@ -104,18 +109,22 @@ export async function checkForModUpdates() {
 						.values({
 							guild_id,
 							mod_reference: mod.mod_reference,
-							version: mod.last_version!.version
+							version: mod.last_version?.version ?? '0.0.0'
 						})
 						.onConflictDoUpdate({
 							target: [scModUpdates.guild_id, scModUpdates.mod_reference],
 							set: {
 								announced_at: now(),
 								updated_at: now(),
-								version: mod.last_version!.version
+								version: mod.last_version?.version ?? '0.0.0'
 							}
 						})
 						.returning()
 						.firstOrThrow('Failed to insert mod update');
+
+					if (!mod.last_version?.version) {
+						return;
+					}
 
 					const guild = await DiscordGuildManager.getGuild(guild_id);
 					if (announce && guild.isValid()) {
