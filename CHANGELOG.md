@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.0.5](https://github.com/Satisfactory-KMods/kbot2/compare/v2.0.4...v2.0.5) (2024-05-10)
+
+
+### Refactors
+
+* use sem vers compare for mod updates ([5869d0f](https://github.com/Satisfactory-KMods/kbot2/commit/5869d0fdf7c5f19f762c48fbdb6689cef9f3b119))
+
 ## [2.0.4](https://github.com/Satisfactory-KMods/kbot2/compare/v2.0.3...v2.0.4) (2024-05-10)
 
 
