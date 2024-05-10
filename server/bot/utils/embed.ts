@@ -33,6 +33,7 @@ export type EmbedOptions = z.input<typeof embedOptionsSchema>;
 
 function validateIsUrl(url: string, fallback: string) {
 	try {
+		// eslint-disable-next-line no-new
 		new URL(url);
 		return url;
 	} catch (e) {
@@ -54,7 +55,7 @@ export function createEmbed(o: EmbedOptions): EmbedBuilder | undefined {
 		embed.setTitle(o.title);
 		embed.setAuthor({
 			name: o.author?.name ?? botClient.user?.username ?? 'KMods Team',
-			iconURL: o.author?.iconURL || LOGO
+			iconURL
 		});
 		o.fields?.length && embed.setFields(o.fields);
 		!o.disableTimestamp && embed.setTimestamp();
