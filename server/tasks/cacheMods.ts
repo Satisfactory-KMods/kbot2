@@ -78,9 +78,9 @@ async function exec() {
 									})
 									.firstOrThrow(`failed to insert mod ${mod.id} / ${mod.name}`);
 
-								//await trx
-								//	.delete(scModVersions)
-								//	.where(eq(scModVersions.mod_id, mod_id));
+								await trx
+									.delete(scModVersions)
+									.where(eq(scModVersions.mod_id, mod_id));
 								await trx
 									.delete(scModAuthors)
 									.where(eq(scModAuthors.mod_id, mod_id));
