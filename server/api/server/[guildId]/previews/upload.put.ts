@@ -6,6 +6,7 @@ import { createEmbed } from '~/server/bot/utils/embed';
 import { getRouteBaseParams } from '~/server/bot/utils/routes';
 import { db, scDownloadFiles, scDownloads, scModCache } from '~/server/utils/db/postgres/pg';
 import { parseFormidable } from '~/server/utils/form';
+import { LOGO } from '~/utils/constant';
 import { log } from '~/utils/logger';
 
 export default defineEventHandler(async (event) => {
@@ -116,9 +117,9 @@ export default defineEventHandler(async (event) => {
 	const embed = createEmbed({
 		author: {
 			name,
-			iconURL: mod.logo
+			iconURL: mod.logo || LOGO
 		},
-		thumbnail: mod.logo,
+		thumbnail: mod.logo || LOGO,
 		title: 'Download now!',
 		url: `${env.auth.url}/download/${guildId}/files/${result}`
 	});

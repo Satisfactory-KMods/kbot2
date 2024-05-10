@@ -6,6 +6,7 @@ import {
 	pgAnyValue
 } from '@kmods/drizzle-pg/pg-core';
 import moment from 'moment';
+import { LOGO } from '~/utils/constant';
 import { log } from '~/utils/logger';
 import { createEmbed } from '../bot/utils/embed';
 import { DiscordGuildManager } from '../bot/utils/guildManager';
@@ -163,9 +164,9 @@ export async function checkForModUpdates() {
 							const embed = createEmbed({
 								author: {
 									name: mod.name,
-									iconURL: mod.logo
+									iconURL: mod.logo || LOGO
 								},
-								thumbnail: mod.logo,
+								thumbnail: mod.logo || LOGO,
 								title: `v.${mod.last_version!.version} - ${mod.name}`,
 								fields: [
 									{

@@ -1,5 +1,7 @@
+/* eslint-disable @typescript-eslint/prefer-nullish-coalescing */
 import { EmbedBuilder } from 'discord.js';
 import { z } from 'zod';
+import { LOGO } from '~/utils/constant';
 import { log } from '~/utils/logger';
 import { botClient } from '../bot';
 
@@ -29,18 +31,30 @@ const embedOptionsSchema = z.object({
 
 export type EmbedOptions = z.input<typeof embedOptionsSchema>;
 
+function validateIsUrl(url: string, fallback: string) {
+	try {
+		new URL(url);
+		return url;
+	} catch (e) {
+		return fallback;
+	}
+}
+
 export function createEmbed(o: EmbedOptions): EmbedBuilder | undefined {
 	try {
 		o = embedOptionsSchema.parse(o);
 		const embed = new EmbedBuilder();
 
-		embed.setThumbnail(o.thumbnail ?? 'https://kbot2.kmods.space/images/logo.png');
+		const thumbnail = validateIsUrl(o.thumbnail || LOGO, LOGO);
+		const iconURL = validateIsUrl(o.author?.iconURL || LOGO, LOGO);
+
+		embed.setThumbnail(thumbnail);
 		o.url && embed.setURL(o.url);
 		embed.setColor('#0099ff');
 		embed.setTitle(o.title);
 		embed.setAuthor({
 			name: o.author?.name ?? botClient.user?.username ?? 'KMods Team',
-			iconURL: o.author?.iconURL ?? 'https://kbot2.kmods.space/images/logo.png'
+			iconURL: o.author?.iconURL || LOGO
 		});
 		o.fields?.length && embed.setFields(o.fields);
 		!o.disableTimestamp && embed.setTimestamp();
