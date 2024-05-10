@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.0.4](https://github.com/Satisfactory-KMods/kbot2/compare/v2.0.3...v2.0.4) (2024-05-10)
+
+
+### Bug Fixes
+
+* fallback to existsing images ([4d63b58](https://github.com/Satisfactory-KMods/kbot2/commit/4d63b58f6b662c036c91f08c9e0713a2a954a074))
+
 ## [2.0.3](https://github.com/Satisfactory-KMods/kbot2/compare/v2.0.2...v2.0.3) (2024-05-10)
 
 
