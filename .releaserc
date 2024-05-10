@@ -165,7 +165,7 @@
 		[
 			"@semantic-release/exec",
 			{
-				"publishCmd": "npm version ${nextRelease.version} --no-commit-hooks --no-git-tag-version"
+				"prepareCmd": "npm version ${nextRelease.version} --no-commit-hooks --no-git-tag-version"
 			}
 		],
 		[
