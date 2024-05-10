@@ -141,13 +141,24 @@ async function exec() {
 	await checkForModUpdates();
 }
 
+export const cacheModSettings = { taskInstalled: false };
 export function installModTask(cron: string, runOnInit?: boolean) {
+	if (cacheModSettings.taskInstalled)  {
+		log('tasks', 'Task "cache mods" already installed');
+	}
+
 	if (env.dev) {
+		schedule(cron, checkForModUpdates, {
+			runOnInit
+		});
+		cacheModSettings.taskInstalled = true;
 		log('tasks', 'Not installing task "cache mods" in dev mode');
 		return;
 	}
 	schedule(cron, exec, {
 		runOnInit
 	});
+
+	cacheModSettings.taskInstalled = true;
 	log('tasks', `Scheduled task to cache mods every "${cron}"`);
 }
