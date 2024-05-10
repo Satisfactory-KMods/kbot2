@@ -22,7 +22,7 @@ import { viewMods } from '../utils/db/postgres/views';
 export async function checkForModUpdates() {
 	log('tasks', 'Check for mod updates started!');
 	const guilds = await db
-		.select({
+		.selectDistinctOn([scGuild.guild_id], {
 			guild_id: scGuild.guild_id,
 			changelog_announce_hidden_mods: pgAnyValue(
 				scGuildConfiguration.changelog_announce_hidden_mods
@@ -109,7 +109,8 @@ export async function checkForModUpdates() {
 							target: [scModUpdates.guild_id, scModUpdates.mod_reference],
 							set: {
 								announced_at: now(),
-								updated_at: now()
+								updated_at: now(),
+								version: mod.last_version!.version
 							}
 						})
 						.returning()
@@ -117,12 +118,16 @@ export async function checkForModUpdates() {
 
 					const guild = await DiscordGuildManager.getGuild(guild_id);
 					if (announce && guild.isValid()) {
-						const updateChannel = await guild.chatChannel(
-							configuration.update_text_channel_id
-						);
-						const changelogThreadChannel = await guild.forumChannel(
-							configuration.changelog_forum_id
-						);
+						const updateChannel = await guild
+							.chatChannel(configuration.update_text_channel_id)
+							.catch(() => {
+								return null;
+							});
+						const changelogThreadChannel = await guild
+							.forumChannel(configuration.changelog_forum_id)
+							.catch(() => {
+								return null;
+							});
 
 						if (!updateChannel) {
 							throw new Error(
@@ -161,13 +166,13 @@ export async function checkForModUpdates() {
 									iconURL: mod.logo
 								},
 								thumbnail: mod.logo,
-								title: `v.${mod.versions[0].version} - ${mod.name}`,
+								title: `v.${mod.last_version!.version} - ${mod.name}`,
 								fields: [
 									{
 										name:
-											mod.versions[0].changelog !== ''
-												? mod.versions[0].changelog
-														.split(/\r?\n/)[0]
+											mod.last_version!.changelog !== ''
+												? mod
+														.last_version!.changelog.split(/\r?\n/)[0]
 														.substring(0, 255)
 												: '...',
 										value: `Now available on SMM and SMR \n\n For any suggestion please use <#${configuration.changelog_suggestion_channel_id}> \n And for bug reports <#${configuration.changelog_bug_channel_id}>.`
@@ -176,7 +181,7 @@ export async function checkForModUpdates() {
 										name: 'Changelog',
 										value: threadId
 											? `<#${threadId}>`
-											: `[Click here](https://ficsit.app/mod/${mod.mod_reference}/version/${mod.versions[0].id})`,
+											: `[Click here](https://ficsit.app/mod/${mod.mod_reference}/version/${mod.last_version!.id})`,
 										inline: true
 									},
 									{
