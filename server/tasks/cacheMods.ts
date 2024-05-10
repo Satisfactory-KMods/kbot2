@@ -78,9 +78,9 @@ async function exec() {
 									})
 									.firstOrThrow(`failed to insert mod ${mod.id} / ${mod.name}`);
 
-								await trx
-									.delete(scModVersions)
-									.where(eq(scModVersions.mod_id, mod_id));
+								//await trx
+								//	.delete(scModVersions)
+								//	.where(eq(scModVersions.mod_id, mod_id));
 								await trx
 									.delete(scModAuthors)
 									.where(eq(scModAuthors.mod_id, mod_id));
@@ -143,7 +143,7 @@ async function exec() {
 
 export const cacheModSettings = { taskInstalled: false };
 export function installModTask(cron: string, runOnInit?: boolean) {
-	if (cacheModSettings.taskInstalled)  {
+	if (cacheModSettings.taskInstalled) {
 		log('tasks', 'Task "cache mods" already installed');
 	}
 

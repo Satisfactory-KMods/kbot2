@@ -8,10 +8,13 @@ botClient.once(Events.ClientReady, async (client) => {
 
 	client.user.setActivity({
 		name: `v${env.version}`,
-		type: ActivityType.Custom
+		type: ActivityType.Custom,
+		url: env.auth.url
 	});
 
-	await client.user.setUsername(`KBot 2.0${env.dev ? ' - Dev' : ''}`);
+	await client.user.edit({
+		username: `KBot 2.0${env.dev ? ' - Dev' : ''}`
+	});
 });
 
 log('bot', 'ClientReady event loaded');

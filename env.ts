@@ -1,6 +1,7 @@
 import { z } from 'zod';
+import pkg from './package.json';
 
-const version = '2.0.0';
+const version = pkg.version;
 
 const zodStringOrNumber = z
 	.string()

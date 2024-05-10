@@ -35,6 +35,9 @@ dependencies:
   axios:
     specifier: ^1.6.8
     version: 1.6.8
+  compare-versions:
+    specifier: ^6.1.0
+    version: 6.1.0
   discord.js:
     specifier: ^14.14.1
     version: 14.14.1
@@ -5700,6 +5703,10 @@ packages:
       array-ify: 1.0.0
       dot-prop: 5.3.0
     dev: true
+
+  /compare-versions@6.1.0:
+    resolution: {integrity: sha512-LNZQXhqUvqUTotpZ00qLSaify3b4VFD588aRr8MKFw4CMUr98ytzCW5wDH5qx/DEY5kCDXcbcRuCqL0szEf2tg==}
+    dev: false
 
   /compress-commons@6.0.2:
     resolution: {integrity: sha512-6FqVXeETqWPoGcfzrXb37E50NP0LXT8kAMu5ooZayhWWdgEY4lBEEcbQNXtkuKQsGduxiIcI4gOTsxTmuq/bSg==}
