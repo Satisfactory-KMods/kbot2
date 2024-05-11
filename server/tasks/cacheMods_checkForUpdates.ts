@@ -1,4 +1,4 @@
-import { and, eq, inArray } from '@kmods/drizzle-pg';
+import { and, eq, inArray, neq } from '@kmods/drizzle-pg';
 import {
 	getColumnsFromViewOrSubquery,
 	now,
@@ -47,6 +47,7 @@ export async function checkForModUpdates() {
 		.from(scGuild)
 		.innerJoin(scGuildConfiguration, ['guild_id'])
 		.innerJoin(scGuildConfigurationFicsitUserIds, ['guild_id'])
+		.where(and(eq(scGuild.active, true), neq(scGuildConfiguration.update_text_channel_id, '0')))
 		.leftJoin(scModUpdates, ['guild_id'])
 		.groupBy(scGuild.guild_id);
 
@@ -131,8 +132,6 @@ export async function checkForModUpdates() {
 					if (!mod.last_version?.version || !announce) {
 						return;
 					}
-
-					console.log(!!exists, !!mod.last_version, semverGt(mod.last_version.version, exists.version), mod, mod.last_version.version, exists.version);
 
 					const guild = await DiscordGuildManager.getGuild(guild_id);
 					if (guild.isValid()) {
