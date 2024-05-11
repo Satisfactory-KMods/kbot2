@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.0.7](https://github.com/Satisfactory-KMods/kbot2/compare/v2.0.6...v2.0.7) (2024-05-11)
+
+
+### Bug Fixes
+
+* use the created_at timestamp instead of updated_at to find the latest mod ([16fa32a](https://github.com/Satisfactory-KMods/kbot2/commit/16fa32afa5fc119a13cdfbb4dbc4e92b99004332))
+
 ## [2.0.6](https://github.com/Satisfactory-KMods/kbot2/compare/v2.0.5...v2.0.6) (2024-05-11)
 
 
