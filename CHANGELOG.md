@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.0.6](https://github.com/Satisfactory-KMods/kbot2/compare/v2.0.5...v2.0.6) (2024-05-11)
+
+
+### Bug Fixes
+
+* hide inactive guilds ([2ffcafa](https://github.com/Satisfactory-KMods/kbot2/commit/2ffcafa6042b3d29118c0f47b03a1c7bd9a75584))
+
 ## [2.0.5](https://github.com/Satisfactory-KMods/kbot2/compare/v2.0.4...v2.0.5) (2024-05-10)
 
 
