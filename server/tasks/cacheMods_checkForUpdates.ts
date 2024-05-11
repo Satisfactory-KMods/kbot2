@@ -21,7 +21,6 @@ import {
 import { viewMods } from '../utils/db/postgres/views';
 
 export async function checkForModUpdates() {
-	log('tasks', 'Check for mod updates started!');
 	const guilds = await db
 		.selectDistinctOn([scGuild.guild_id], {
 			guild_id: scGuild.guild_id,
@@ -51,8 +50,10 @@ export async function checkForModUpdates() {
 		.leftJoin(scModUpdates, ['guild_id'])
 		.groupBy(scGuild.guild_id);
 
+	log('tasks', `Check for mod updates started! for ${guilds.length} guilds`);
 	for (const { guild_id, ficsit_users, mod_updates, ...configuration } of guilds) {
 		if (!ficsit_users.length) continue;
+		log('tasks', `Check for guild ${guild_id} started!`);
 
 		const dirtyMods = await db
 			.selectDistinctOn([viewMods.mod_reference], getColumnsFromViewOrSubquery(viewMods))
@@ -85,13 +86,37 @@ export async function checkForModUpdates() {
 						return false;
 					}
 
-					if (semverGt(mod.last_version.version, exists.version)) {
+					if (
+						mod.versions.some(({ version }) => {
+							return semverGt(version, exists.version);
+						})
+					) {
 						return true;
 					}
 
 					return false;
 				});
+			})
+			.then((mods) => {
+				// eslint-disable-next-line @typescript-eslint/prefer-for-of
+				for (let i = 0; i < mods.length; i++) {
+					const mod = mods[i];
+					// we going to make sure that we really find the latest version
+					mod.last_version = mod.versions.reduce((acc, cur) => {
+						if (!cur) return acc;
+						if (!acc) return cur ?? null;
+
+						if (semverGt(cur.version, acc.version)) {
+							return cur;
+						}
+
+						return acc;
+					}, mod.last_version);
+				}
+				return mods;
 			});
+
+		log('tasks', `Check for guild ${guild_id} has found ${dirtyMods.length} mods!`);
 
 		for (const mod of dirtyMods) {
 			const exists = mod_updates.find((update) => {
@@ -129,6 +154,10 @@ export async function checkForModUpdates() {
 						.returning()
 						.firstOrThrow('Failed to insert mod update');
 
+					log(
+						'tasks',
+						`Check for guild ${guild_id}: ${mod.mod_reference} - ${exists?.version ?? 'NEW!'} -> ${mod.last_version?.version ?? '0.0.0'}`
+					);
 					if (!mod.last_version?.version || !announce) {
 						return;
 					}

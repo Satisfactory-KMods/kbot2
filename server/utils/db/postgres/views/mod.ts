@@ -7,7 +7,7 @@ export const viewMods = ficsitAppSchema.view('view_mods').as((db) => {
 	const lastModVersion = db
 		.select()
 		.from(scModVersions)
-		.orderBy(desc(scModVersions.updated_at))
+		.orderBy(desc(scModVersions.created_at))
 		.where(eq(scModCache.mod_id, scModVersions.mod_id))
 		.limit(1)
 		.as('last_version');
