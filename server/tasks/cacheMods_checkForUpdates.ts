@@ -132,10 +132,7 @@ export async function checkForModUpdates() {
 						return;
 					}
 
-					console.log
-				!!exists ,
-				!!mod.last_version ,
-				semverGt(mod.last_version.version, exists.version),mod,mod.last_version.version, exists.version)
+					console.log(!!exists, !!mod.last_version, semverGt(mod.last_version.version, exists.version),mod,mod.last_version.version, exists.version);
 
 					const guild = await DiscordGuildManager.getGuild(guild_id);
 					if (guild.isValid()) {
