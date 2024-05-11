@@ -357,6 +357,16 @@ export const DiscordGuildManager = new (class DiscordGuildManager {
 		}
 	}
 
+	public async getGuildChecked(guildId: string, fetch = false): Promise<DiscordGuild<true>> {
+		const guild = await this.getGuild(guildId, fetch);
+
+		if (!guild.isValid()) {
+			throw new Error('Invalid Guild');
+		}
+
+		return guild;
+	}
+
 	public async getGuild(guildId: string, fetch = false): Promise<DiscordGuild> {
 		const guild = this.guilds.get(guildId);
 		if (guild) {
@@ -364,6 +374,7 @@ export const DiscordGuildManager = new (class DiscordGuildManager {
 				await guild.doFetch();
 			}
 			await guild.updateGuildConfiguration();
+
 			return guild;
 		}
 

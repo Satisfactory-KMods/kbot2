@@ -1,11 +1,11 @@
-import { and, eq, inArray } from '@kmods/drizzle-pg';
+import { and, eq, inArray, neq } from '@kmods/drizzle-pg';
 import {
 	getColumnsFromViewOrSubquery,
 	now,
 	pgAggJsonBuildObject,
 	pgAnyValue
 } from '@kmods/drizzle-pg/pg-core';
-import { compareVersions } from 'compare-versions';
+import { gt as semverGt } from 'semver';
 import { LOGO } from '~/utils/constant';
 import { log } from '~/utils/logger';
 import { createEmbed } from '../bot/utils/embed';
@@ -47,6 +47,7 @@ export async function checkForModUpdates() {
 		.from(scGuild)
 		.innerJoin(scGuildConfiguration, ['guild_id'])
 		.innerJoin(scGuildConfigurationFicsitUserIds, ['guild_id'])
+		.where(and(eq(scGuild.active, true), neq(scGuildConfiguration.update_text_channel_id, '0')))
 		.leftJoin(scModUpdates, ['guild_id'])
 		.groupBy(scGuild.guild_id);
 
@@ -84,7 +85,7 @@ export async function checkForModUpdates() {
 						return false;
 					}
 
-					if (compareVersions(mod.last_version.version, exists.version) !== 0) {
+					if (semverGt(mod.last_version.version, exists.version)) {
 						return true;
 					}
 
@@ -98,9 +99,13 @@ export async function checkForModUpdates() {
 			});
 
 			const announce =
-				exists &&
+				!!exists &&
 				!!mod.last_version &&
-				compareVersions(mod.last_version.version, exists.version) > 0;
+				semverGt(mod.last_version.version, exists.version);
+
+			if (!!exists && !mod.last_version) {
+				return;
+			}
 
 			await db
 				.transaction(async (trx) => {
@@ -108,6 +113,8 @@ export async function checkForModUpdates() {
 						.insert(scModUpdates)
 						.values({
 							guild_id,
+							announced_at: now(),
+							updated_at: now(),
 							mod_reference: mod.mod_reference,
 							version: mod.last_version?.version ?? '0.0.0'
 						})
@@ -122,12 +129,12 @@ export async function checkForModUpdates() {
 						.returning()
 						.firstOrThrow('Failed to insert mod update');
 
-					if (!mod.last_version?.version) {
+					if (!mod.last_version?.version || !announce) {
 						return;
 					}
 
 					const guild = await DiscordGuildManager.getGuild(guild_id);
-					if (announce && guild.isValid()) {
+					if (guild.isValid()) {
 						const updateChannel = await guild
 							.chatChannel(configuration.update_text_channel_id)
 							.catch(() => {

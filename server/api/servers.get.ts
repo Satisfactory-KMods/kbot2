@@ -1,4 +1,4 @@
-import { eq } from '@kmods/drizzle-pg';
+import { and, eq } from '@kmods/drizzle-pg';
 import { getColumns } from '@kmods/drizzle-pg/pg-core';
 import type { Return } from '~/utils/typeUtils';
 import { db, scGuild, scGuildAdmins } from '../utils/db/postgres/pg';
@@ -9,7 +9,7 @@ function getServersByDiscordId(discordId: string) {
 		.selectDistinctOn([scGuild.guild_id], getColumns(scGuild))
 		.from(scGuild)
 		.leftJoin(scGuildAdmins, ['guild_id'])
-		.where(eq(scGuildAdmins.user_id, discordId));
+		.where(and(eq(scGuild.active, true), eq(scGuildAdmins.user_id, discordId)));
 }
 
 export type DiscordServerByUser = Return<typeof getServersByDiscordId>;
