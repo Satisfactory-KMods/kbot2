@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.0.7](https://github.com/Satisfactory-KMods/kbot2/compare/v2.0.6...v2.0.7) (2024-05-11)
+
+
+### Bug Fixes
+
+* use the created_at timestamp instead of updated_at to find the latest mod ([16fa32a](https://github.com/Satisfactory-KMods/kbot2/commit/16fa32afa5fc119a13cdfbb4dbc4e92b99004332))
+
+## [2.0.6](https://github.com/Satisfactory-KMods/kbot2/compare/v2.0.5...v2.0.6) (2024-05-11)
+
+
+### Bug Fixes
+
+* hide inactive guilds ([2ffcafa](https://github.com/Satisfactory-KMods/kbot2/commit/2ffcafa6042b3d29118c0f47b03a1c7bd9a75584))
+
+## [2.0.5](https://github.com/Satisfactory-KMods/kbot2/compare/v2.0.4...v2.0.5) (2024-05-10)
+
+
+### Refactors
+
+* use sem vers compare for mod updates ([5869d0f](https://github.com/Satisfactory-KMods/kbot2/commit/5869d0fdf7c5f19f762c48fbdb6689cef9f3b119))
+
 ## [2.0.4](https://github.com/Satisfactory-KMods/kbot2/compare/v2.0.3...v2.0.4) (2024-05-10)
 
 
