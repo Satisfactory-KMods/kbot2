@@ -32,7 +32,7 @@
 		"dotenv": "^16.4.5",
 		"drizzle-kit": "^0.20.17",
 		"fuse.js": "^7.0.0",
-		"graphql-request": "^6.1.0",
+		"graphql-request": "^7.0.0",
 		"h3-formidable": "^1.0.0",
 		"lodash": "^4.17.21",
 		"moment": "^2.30.1",
