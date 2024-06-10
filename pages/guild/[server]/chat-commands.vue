@@ -111,7 +111,6 @@
 						);
 					case 'regex':
 						try {
-							// eslint-disable-next-line no-new
 							new RegExp(item.trigger.trim());
 						} catch (e) {
 							return false;

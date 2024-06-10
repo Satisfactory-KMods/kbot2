@@ -1,4 +1,3 @@
-/* eslint-disable unused-imports/no-unused-vars */
 import { createVfm } from 'vue-final-modal';
 
 export default defineNuxtPlugin((nuxtApp) => {

@@ -11,12 +11,9 @@
 	"baseBranches": ["dev"],
 	"ignoreDeps": [
 		"@nuxt/image",
-		"@typescript-eslint/eslint-plugin",
-		"slint-plugin-unused-imports",
-		"@typescript-eslint/parser",
+		"@nuxtjs/mdc",
 		"sharp",
 		"typescript",
-		"eslint",
 		"next-auth"
 	]
 }

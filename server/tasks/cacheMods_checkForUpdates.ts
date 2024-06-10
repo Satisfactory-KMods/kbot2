@@ -200,6 +200,7 @@ export async function checkForModUpdates() {
 									}
 								})
 								.then((thread) => {
+									log('tasks', 'successfully sent thread');
 									if (!thread) return;
 									threadId = thread.id;
 								});
@@ -248,10 +249,18 @@ export async function checkForModUpdates() {
 									return role.id === configuration.default_ping_role;
 								}) ?? guild.getGuild.roles.everyone;
 
-							await updateChannel.send({
-								embeds: embed ? [embed] : undefined,
-								content: `${role} new mod update has been released!\n\n`
-							});
+							await updateChannel
+								.send({
+									embeds: embed ? [embed] : undefined,
+									content: `${role} new mod update has been released!\n\n`
+								})
+								.then((message) => {
+									log('tasks', 'successfully sent message', {
+										content: message.content,
+										mod: mod.mod_reference,
+										version: mod.last_version?.version
+									});
+								});
 						}
 					}
 				})
