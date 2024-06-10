@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.0.8](https://github.com/Satisfactory-KMods/kbot2/compare/v2.0.7...v2.0.8) (2024-06-10)
+
+
+### Bug Fixes
+
+* **deps:** update all non-major dependencies ([f948090](https://github.com/Satisfactory-KMods/kbot2/commit/f9480908ebd0d529f9b609027b53bb27988bec43))
+* **deps:** update dependency graphql-request to v7 ([782f0fc](https://github.com/Satisfactory-KMods/kbot2/commit/782f0fcca60414f31cb79b92dffbcf25313db46e))
+* upgrade deps ([45d2e14](https://github.com/Satisfactory-KMods/kbot2/commit/45d2e14379beb8c235c3bf05c5b937d6e0c7af33))
+
 ## [2.0.7](https://github.com/Satisfactory-KMods/kbot2/compare/v2.0.6...v2.0.7) (2024-05-11)
 
 
