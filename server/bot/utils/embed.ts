@@ -33,7 +33,6 @@ export type EmbedOptions = z.input<typeof embedOptionsSchema>;
 
 function validateIsUrl(url: string, fallback: string) {
 	try {
-		// eslint-disable-next-line no-new
 		new URL(url);
 		return url;
 	} catch (e) {

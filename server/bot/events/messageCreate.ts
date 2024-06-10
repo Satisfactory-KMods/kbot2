@@ -20,10 +20,10 @@ async function handleInGuild(message: Message<true>) {
 	} else {
 		await fuzzySearch(message);
 	}
+	return null
 }
 
-// eslint-disable-next-line unused-imports/no-unused-vars
-async function handleNotInGuild(message: Message<false>) {}
+ function handleNotInGuild(message: Message<false>) {}
 
 log('bot', 'MessageCreate event loaded');
 

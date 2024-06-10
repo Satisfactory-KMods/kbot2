@@ -1,10 +1,8 @@
 {
-  "id": "ca7e30a0-0e88-4b36-ac0b-f41f3c02e6c9",
-  "prevId": "65b0c408-650e-416c-a71b-48cf201a5d7e",
-  "version": "5",
-  "dialect": "pg",
+  "version": "7",
+  "dialect": "postgresql",
   "tables": {
-    "account": {
+    "kbot2.account": {
       "name": "account",
       "schema": "kbot2",
       "columns": {
@@ -77,27 +75,35 @@
       },
       "indexes": {
         "account_providerAccountId_index": {
-          "name": "account_providerAccountId_index",
           "columns": [
-            "providerAccountId"
+            {
+              "expression": "providerAccountId",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
           ],
-          "isUnique": true
+          "with": {},
+          "name": "account_providerAccountId_index",
+          "isUnique": true,
+          "method": "btree",
+          "concurrently": false
         }
       },
       "foreignKeys": {
         "account_userId_user_id_fk": {
           "name": "account_userId_user_id_fk",
           "tableFrom": "account",
-          "tableTo": "user",
-          "schemaTo": "kbot2",
           "columnsFrom": [
             "userId"
           ],
+          "tableTo": "user",
+          "schemaTo": "kbot2",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "cascade"
         }
       },
       "compositePrimaryKeys": {
@@ -111,7 +117,7 @@
       },
       "uniqueConstraints": {}
     },
-    "session": {
+    "kbot2.session": {
       "name": "session",
       "schema": "kbot2",
       "columns": {
@@ -139,22 +145,22 @@
         "session_userId_user_id_fk": {
           "name": "session_userId_user_id_fk",
           "tableFrom": "session",
-          "tableTo": "user",
-          "schemaTo": "kbot2",
           "columnsFrom": [
             "userId"
           ],
+          "tableTo": "user",
+          "schemaTo": "kbot2",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "cascade"
         }
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "user": {
+    "kbot2.user": {
       "name": "user",
       "schema": "kbot2",
       "columns": {
@@ -201,7 +207,7 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "verificationToken": {
+    "kbot2.verificationToken": {
       "name": "verificationToken",
       "schema": "kbot2",
       "columns": {
@@ -237,7 +243,7 @@
       },
       "uniqueConstraints": {}
     },
-    "discord_guild_chat_commands": {
+    "kbot2.discord_guild_chat_commands": {
       "name": "discord_guild_chat_commands",
       "schema": "kbot2",
       "columns": {
@@ -273,22 +279,22 @@
         "discord_guild_chat_commands_guild_id_discord_guild_guild_id_fk": {
           "name": "discord_guild_chat_commands_guild_id_discord_guild_guild_id_fk",
           "tableFrom": "discord_guild_chat_commands",
-          "tableTo": "discord_guild",
-          "schemaTo": "kbot2",
           "columnsFrom": [
             "guild_id"
           ],
+          "tableTo": "discord_guild",
+          "schemaTo": "kbot2",
           "columnsTo": [
             "guild_id"
           ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "cascade"
         }
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "discord_guild_chat_commands_trigger": {
+    "kbot2.discord_guild_chat_commands_trigger": {
       "name": "discord_guild_chat_commands_trigger",
       "schema": "kbot2",
       "columns": {
@@ -321,27 +327,35 @@
       },
       "indexes": {
         "discord_guild_chat_commands_trigger_command_id_index": {
-          "name": "discord_guild_chat_commands_trigger_command_id_index",
           "columns": [
-            "command_id"
+            {
+              "expression": "command_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
           ],
-          "isUnique": false
+          "with": {},
+          "name": "discord_guild_chat_commands_trigger_command_id_index",
+          "isUnique": false,
+          "method": "btree",
+          "concurrently": false
         }
       },
       "foreignKeys": {
         "discord_guild_chat_commands_trigger_command_id_discord_guild_chat_commands_command_id_fk": {
           "name": "discord_guild_chat_commands_trigger_command_id_discord_guild_chat_commands_command_id_fk",
           "tableFrom": "discord_guild_chat_commands_trigger",
-          "tableTo": "discord_guild_chat_commands",
-          "schemaTo": "kbot2",
           "columnsFrom": [
             "command_id"
           ],
+          "tableTo": "discord_guild_chat_commands",
+          "schemaTo": "kbot2",
           "columnsTo": [
             "command_id"
           ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "cascade"
         }
       },
       "compositePrimaryKeys": {
@@ -355,7 +369,7 @@
       },
       "uniqueConstraints": {}
     },
-    "download_files": {
+    "kbot2.download_files": {
       "name": "download_files",
       "schema": "kbot2",
       "columns": {
@@ -393,33 +407,41 @@
       },
       "indexes": {
         "download_files_download_id_index": {
-          "name": "download_files_download_id_index",
           "columns": [
-            "download_id"
+            {
+              "expression": "download_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
           ],
-          "isUnique": false
+          "with": {},
+          "name": "download_files_download_id_index",
+          "isUnique": false,
+          "method": "btree",
+          "concurrently": false
         }
       },
       "foreignKeys": {
         "download_files_download_id_downloads_id_fk": {
           "name": "download_files_download_id_downloads_id_fk",
           "tableFrom": "download_files",
-          "tableTo": "downloads",
-          "schemaTo": "kbot2",
           "columnsFrom": [
             "download_id"
           ],
+          "tableTo": "downloads",
+          "schemaTo": "kbot2",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "cascade"
         }
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "downloads": {
+    "kbot2.downloads": {
       "name": "downloads",
       "schema": "kbot2",
       "columns": {
@@ -476,56 +498,64 @@
       },
       "indexes": {
         "downloads_mod_reference_index": {
-          "name": "downloads_mod_reference_index",
           "columns": [
-            "mod_reference"
+            {
+              "expression": "mod_reference",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
           ],
-          "isUnique": false
+          "with": {},
+          "name": "downloads_mod_reference_index",
+          "isUnique": false,
+          "method": "btree",
+          "concurrently": false
         }
       },
       "foreignKeys": {
         "downloads_guild_id_discord_guild_guild_id_fk": {
           "name": "downloads_guild_id_discord_guild_guild_id_fk",
           "tableFrom": "downloads",
-          "tableTo": "discord_guild",
-          "schemaTo": "kbot2",
           "columnsFrom": [
             "guild_id"
           ],
+          "tableTo": "discord_guild",
+          "schemaTo": "kbot2",
           "columnsTo": [
             "guild_id"
           ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "cascade"
         },
         "downloads_uploaded_by_account_providerAccountId_fk": {
           "name": "downloads_uploaded_by_account_providerAccountId_fk",
           "tableFrom": "downloads",
-          "tableTo": "account",
-          "schemaTo": "kbot2",
           "columnsFrom": [
             "uploaded_by"
           ],
+          "tableTo": "account",
+          "schemaTo": "kbot2",
           "columnsTo": [
             "providerAccountId"
           ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "no action"
         }
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
         "downloads_version_mod_reference_unique": {
           "name": "downloads_version_mod_reference_unique",
-          "nullsNotDistinct": false,
           "columns": [
             "version",
             "mod_reference"
-          ]
+          ],
+          "nullsNotDistinct": false
         }
       }
     },
-    "mod_authors": {
+    "ficsit_app.mod_authors": {
       "name": "mod_authors",
       "schema": "ficsit_app",
       "columns": {
@@ -567,7 +597,7 @@
       },
       "uniqueConstraints": {}
     },
-    "mod_cache": {
+    "ficsit_app.mod_cache": {
       "name": "mod_cache",
       "schema": "ficsit_app",
       "columns": {
@@ -671,11 +701,19 @@
       },
       "indexes": {
         "mod_cache_mod_reference_index": {
-          "name": "mod_cache_mod_reference_index",
           "columns": [
-            "mod_reference"
+            {
+              "expression": "mod_reference",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
           ],
-          "isUnique": false
+          "with": {},
+          "name": "mod_cache_mod_reference_index",
+          "isUnique": false,
+          "method": "btree",
+          "concurrently": false
         }
       },
       "foreignKeys": {},
@@ -683,14 +721,14 @@
       "uniqueConstraints": {
         "mod_cache_mod_reference_unique": {
           "name": "mod_cache_mod_reference_unique",
-          "nullsNotDistinct": false,
           "columns": [
             "mod_reference"
-          ]
+          ],
+          "nullsNotDistinct": false
         }
       }
     },
-    "mod_versions": {
+    "ficsit_app.mod_versions": {
       "name": "mod_versions",
       "schema": "ficsit_app",
       "columns": {
@@ -758,7 +796,7 @@
       },
       "uniqueConstraints": {}
     },
-    "discord_guild": {
+    "kbot2.discord_guild": {
       "name": "discord_guild",
       "schema": "kbot2",
       "columns": {
@@ -816,7 +854,7 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "discord_guild_admins": {
+    "kbot2.discord_guild_admins": {
       "name": "discord_guild_admins",
       "schema": "kbot2",
       "columns": {
@@ -838,16 +876,16 @@
         "discord_guild_admins_guild_id_discord_guild_guild_id_fk": {
           "name": "discord_guild_admins_guild_id_discord_guild_guild_id_fk",
           "tableFrom": "discord_guild_admins",
-          "tableTo": "discord_guild",
-          "schemaTo": "kbot2",
           "columnsFrom": [
             "guild_id"
           ],
+          "tableTo": "discord_guild",
+          "schemaTo": "kbot2",
           "columnsTo": [
             "guild_id"
           ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "cascade"
         }
       },
       "compositePrimaryKeys": {
@@ -861,7 +899,7 @@
       },
       "uniqueConstraints": {}
     },
-    "discord_guild_configuration": {
+    "kbot2.discord_guild_configuration": {
       "name": "discord_guild_configuration",
       "schema": "kbot2",
       "columns": {
@@ -982,16 +1020,16 @@
         "discord_guild_configuration_guild_id_discord_guild_guild_id_fk": {
           "name": "discord_guild_configuration_guild_id_discord_guild_guild_id_fk",
           "tableFrom": "discord_guild_configuration",
-          "tableTo": "discord_guild",
-          "schemaTo": "kbot2",
           "columnsFrom": [
             "guild_id"
           ],
+          "tableTo": "discord_guild",
+          "schemaTo": "kbot2",
           "columnsTo": [
             "guild_id"
           ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "cascade"
         }
       },
       "compositePrimaryKeys": {
@@ -1004,7 +1042,7 @@
       },
       "uniqueConstraints": {}
     },
-    "discord_guild_configuration_blacklisted_mods": {
+    "kbot2.discord_guild_configuration_blacklisted_mods": {
       "name": "discord_guild_configuration_blacklisted_mods",
       "schema": "kbot2",
       "columns": {
@@ -1023,27 +1061,35 @@
       },
       "indexes": {
         "discord_guild_configuration_blacklisted_mods_mod_reference_index": {
-          "name": "discord_guild_configuration_blacklisted_mods_mod_reference_index",
           "columns": [
-            "mod_reference"
+            {
+              "expression": "mod_reference",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
           ],
-          "isUnique": false
+          "with": {},
+          "name": "discord_guild_configuration_blacklisted_mods_mod_reference_index",
+          "isUnique": false,
+          "method": "btree",
+          "concurrently": false
         }
       },
       "foreignKeys": {
         "discord_guild_configuration_blacklisted_mods_guild_id_discord_guild_guild_id_fk": {
           "name": "discord_guild_configuration_blacklisted_mods_guild_id_discord_guild_guild_id_fk",
           "tableFrom": "discord_guild_configuration_blacklisted_mods",
-          "tableTo": "discord_guild",
-          "schemaTo": "kbot2",
           "columnsFrom": [
             "guild_id"
           ],
+          "tableTo": "discord_guild",
+          "schemaTo": "kbot2",
           "columnsTo": [
             "guild_id"
           ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "cascade"
         }
       },
       "compositePrimaryKeys": {
@@ -1057,7 +1103,7 @@
       },
       "uniqueConstraints": {}
     },
-    "discord_guild_configuration_ficsit_user_ids": {
+    "kbot2.discord_guild_configuration_ficsit_user_ids": {
       "name": "discord_guild_configuration_ficsit_user_ids",
       "schema": "kbot2",
       "columns": {
@@ -1076,27 +1122,35 @@
       },
       "indexes": {
         "discord_guild_configuration_ficsit_user_ids_ficsit_user_id_index": {
-          "name": "discord_guild_configuration_ficsit_user_ids_ficsit_user_id_index",
           "columns": [
-            "ficsit_user_id"
+            {
+              "expression": "ficsit_user_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
           ],
-          "isUnique": false
+          "with": {},
+          "name": "discord_guild_configuration_ficsit_user_ids_ficsit_user_id_index",
+          "isUnique": false,
+          "method": "btree",
+          "concurrently": false
         }
       },
       "foreignKeys": {
         "discord_guild_configuration_ficsit_user_ids_guild_id_discord_guild_guild_id_fk": {
           "name": "discord_guild_configuration_ficsit_user_ids_guild_id_discord_guild_guild_id_fk",
           "tableFrom": "discord_guild_configuration_ficsit_user_ids",
-          "tableTo": "discord_guild",
-          "schemaTo": "kbot2",
           "columnsFrom": [
             "guild_id"
           ],
+          "tableTo": "discord_guild",
+          "schemaTo": "kbot2",
           "columnsTo": [
             "guild_id"
           ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "cascade"
         }
       },
       "compositePrimaryKeys": {
@@ -1110,7 +1164,7 @@
       },
       "uniqueConstraints": {}
     },
-    "discord_guild_configuration_mod_roles": {
+    "kbot2.discord_guild_configuration_mod_roles": {
       "name": "discord_guild_configuration_mod_roles",
       "schema": "kbot2",
       "columns": {
@@ -1135,34 +1189,50 @@
       },
       "indexes": {
         "discord_guild_configuration_mod_roles_mod_reference_index": {
-          "name": "discord_guild_configuration_mod_roles_mod_reference_index",
           "columns": [
-            "mod_reference"
+            {
+              "expression": "mod_reference",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
           ],
-          "isUnique": false
+          "with": {},
+          "name": "discord_guild_configuration_mod_roles_mod_reference_index",
+          "isUnique": false,
+          "method": "btree",
+          "concurrently": false
         },
         "discord_guild_configuration_mod_roles_role_id_index": {
-          "name": "discord_guild_configuration_mod_roles_role_id_index",
           "columns": [
-            "role_id"
+            {
+              "expression": "role_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
           ],
-          "isUnique": false
+          "with": {},
+          "name": "discord_guild_configuration_mod_roles_role_id_index",
+          "isUnique": false,
+          "method": "btree",
+          "concurrently": false
         }
       },
       "foreignKeys": {
         "discord_guild_configuration_mod_roles_guild_id_discord_guild_guild_id_fk": {
           "name": "discord_guild_configuration_mod_roles_guild_id_discord_guild_guild_id_fk",
           "tableFrom": "discord_guild_configuration_mod_roles",
-          "tableTo": "discord_guild",
-          "schemaTo": "kbot2",
           "columnsFrom": [
             "guild_id"
           ],
+          "tableTo": "discord_guild",
+          "schemaTo": "kbot2",
           "columnsTo": [
             "guild_id"
           ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "cascade"
         }
       },
       "compositePrimaryKeys": {
@@ -1177,15 +1247,15 @@
       "uniqueConstraints": {
         "discord_guild_configuration_mod_roles_mod_reference_role_id_unique": {
           "name": "discord_guild_configuration_mod_roles_mod_reference_role_id_unique",
-          "nullsNotDistinct": false,
           "columns": [
             "mod_reference",
             "role_id"
-          ]
+          ],
+          "nullsNotDistinct": false
         }
       }
     },
-    "discord_guild_patreons": {
+    "kbot2.discord_guild_patreons": {
       "name": "discord_guild_patreons",
       "schema": "kbot2",
       "columns": {
@@ -1204,27 +1274,35 @@
       },
       "indexes": {
         "discord_guild_patreons_user_id_index": {
-          "name": "discord_guild_patreons_user_id_index",
           "columns": [
-            "user_id"
+            {
+              "expression": "user_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
           ],
-          "isUnique": false
+          "with": {},
+          "name": "discord_guild_patreons_user_id_index",
+          "isUnique": false,
+          "method": "btree",
+          "concurrently": false
         }
       },
       "foreignKeys": {
         "discord_guild_patreons_guild_id_discord_guild_guild_id_fk": {
           "name": "discord_guild_patreons_guild_id_discord_guild_guild_id_fk",
           "tableFrom": "discord_guild_patreons",
-          "tableTo": "discord_guild",
-          "schemaTo": "kbot2",
           "columnsFrom": [
             "guild_id"
           ],
+          "tableTo": "discord_guild",
+          "schemaTo": "kbot2",
           "columnsTo": [
             "guild_id"
           ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "cascade"
         }
       },
       "compositePrimaryKeys": {
@@ -1238,7 +1316,7 @@
       },
       "uniqueConstraints": {}
     },
-    "mod_updates": {
+    "kbot2.mod_updates": {
       "name": "mod_updates",
       "schema": "kbot2",
       "columns": {
@@ -1284,27 +1362,35 @@
       },
       "indexes": {
         "mod_updates_mod_reference_index": {
-          "name": "mod_updates_mod_reference_index",
           "columns": [
-            "mod_reference"
+            {
+              "expression": "mod_reference",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
           ],
-          "isUnique": false
+          "with": {},
+          "name": "mod_updates_mod_reference_index",
+          "isUnique": false,
+          "method": "btree",
+          "concurrently": false
         }
       },
       "foreignKeys": {
         "mod_updates_guild_id_discord_guild_guild_id_fk": {
           "name": "mod_updates_guild_id_discord_guild_guild_id_fk",
           "tableFrom": "mod_updates",
-          "tableTo": "discord_guild",
-          "schemaTo": "kbot2",
           "columnsFrom": [
             "guild_id"
           ],
+          "tableTo": "discord_guild",
+          "schemaTo": "kbot2",
           "columnsTo": [
             "guild_id"
           ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "cascade"
         }
       },
       "compositePrimaryKeys": {
@@ -1318,7 +1404,7 @@
       },
       "uniqueConstraints": {}
     },
-    "discord_guild_reaction_roles_message": {
+    "kbot2.discord_guild_reaction_roles_message": {
       "name": "discord_guild_reaction_roles_message",
       "schema": "kbot2",
       "columns": {
@@ -1353,22 +1439,22 @@
         "discord_guild_reaction_roles_message_guild_id_discord_guild_guild_id_fk": {
           "name": "discord_guild_reaction_roles_message_guild_id_discord_guild_guild_id_fk",
           "tableFrom": "discord_guild_reaction_roles_message",
-          "tableTo": "discord_guild",
-          "schemaTo": "kbot2",
           "columnsFrom": [
             "guild_id"
           ],
+          "tableTo": "discord_guild",
+          "schemaTo": "kbot2",
           "columnsTo": [
             "guild_id"
           ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "cascade"
         }
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "discord_guild_reaction_roles_message_emojies": {
+    "kbot2.discord_guild_reaction_roles_message_emojies": {
       "name": "discord_guild_reaction_roles_message_emojies",
       "schema": "kbot2",
       "columns": {
@@ -1397,16 +1483,16 @@
         "discord_guild_reaction_roles_message_emojies_message_id_discord_guild_reaction_roles_message_message_id_fk": {
           "name": "discord_guild_reaction_roles_message_emojies_message_id_discord_guild_reaction_roles_message_message_id_fk",
           "tableFrom": "discord_guild_reaction_roles_message_emojies",
-          "tableTo": "discord_guild_reaction_roles_message",
-          "schemaTo": "kbot2",
           "columnsFrom": [
             "message_id"
           ],
+          "tableTo": "discord_guild_reaction_roles_message",
+          "schemaTo": "kbot2",
           "columnsTo": [
             "message_id"
           ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "cascade"
         }
       },
       "compositePrimaryKeys": {
@@ -1420,7 +1506,7 @@
       },
       "uniqueConstraints": {}
     },
-    "discord_guild_releases": {
+    "kbot2.discord_guild_releases": {
       "name": "discord_guild_releases",
       "schema": "kbot2",
       "columns": {
@@ -1458,34 +1544,50 @@
       },
       "indexes": {
         "discord_guild_releases_guild_id_index": {
-          "name": "discord_guild_releases_guild_id_index",
           "columns": [
-            "guild_id"
+            {
+              "expression": "guild_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
           ],
-          "isUnique": false
+          "with": {},
+          "name": "discord_guild_releases_guild_id_index",
+          "isUnique": false,
+          "method": "btree",
+          "concurrently": false
         },
         "discord_guild_releases_mod_reference_index": {
-          "name": "discord_guild_releases_mod_reference_index",
           "columns": [
-            "mod_reference"
+            {
+              "expression": "mod_reference",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
           ],
-          "isUnique": false
+          "with": {},
+          "name": "discord_guild_releases_mod_reference_index",
+          "isUnique": false,
+          "method": "btree",
+          "concurrently": false
         }
       },
       "foreignKeys": {
         "discord_guild_releases_guild_id_discord_guild_guild_id_fk": {
           "name": "discord_guild_releases_guild_id_discord_guild_guild_id_fk",
           "tableFrom": "discord_guild_releases",
-          "tableTo": "discord_guild",
-          "schemaTo": "kbot2",
           "columnsFrom": [
             "guild_id"
           ],
+          "tableTo": "discord_guild",
+          "schemaTo": "kbot2",
           "columnsTo": [
             "guild_id"
           ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "cascade"
         }
       },
       "compositePrimaryKeys": {},
@@ -1493,22 +1595,24 @@
     }
   },
   "enums": {
-    "enum_adapter_auth_type": {
+    "public.enum_adapter_auth_type": {
       "name": "enum_adapter_auth_type",
-      "values": {
-        "oauth": "oauth",
-        "oidc": "oidc",
-        "email": "email",
-        "webauthn": "webauthn"
-      }
+      "schema": "public",
+      "values": [
+        "oauth",
+        "oidc",
+        "email",
+        "webauthn"
+      ]
     },
-    "command_trigger_match_type": {
+    "public.command_trigger_match_type": {
       "name": "command_trigger_match_type",
-      "values": {
-        "prefix": "prefix",
-        "fuzzy": "fuzzy",
-        "regex": "regex"
-      }
+      "schema": "public",
+      "values": [
+        "prefix",
+        "fuzzy",
+        "regex"
+      ]
     }
   },
   "schemas": {
@@ -1516,8 +1620,10 @@
     "kbot2": "kbot2"
   },
   "_meta": {
-    "columns": {},
     "schemas": {},
-    "tables": {}
-  }
+    "tables": {},
+    "columns": {}
+  },
+  "id": "ca7e30a0-0e88-4b36-ac0b-f41f3c02e6c9",
+  "prevId": "65b0c408-650e-416c-a71b-48cf201a5d7e"
 }
