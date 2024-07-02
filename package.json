@@ -18,7 +18,7 @@
 		"hooks:pre-commit": "npx prettier --write **/*.{js,ts,json,tsx,vue,cjs,mjs} && git add ."
 	},
 	"dependencies": {
-		"@auth/core": "^0.32.0",
+		"@auth/core": "^0.34.0",
 		"@auth/drizzle-adapter": "^1.2.0",
 		"@kmods/drizzle-pg": "1.9.0",
 		"@nuxt/schema": "^3.11.2",
