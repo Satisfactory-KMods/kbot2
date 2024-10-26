@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.0.9](https://github.com/Satisfactory-KMods/kbot2/compare/v2.0.8...v2.0.9) (2024-10-26)
+
+
+### Bug Fixes
+
+* remove sml_version ([076051a](https://github.com/Satisfactory-KMods/kbot2/commit/076051a0fb822a07dc59dddd84891cc75b9a17db))
+
 ## [2.0.8](https://github.com/Satisfactory-KMods/kbot2/compare/v2.0.7...v2.0.8) (2024-06-10)
 
 
