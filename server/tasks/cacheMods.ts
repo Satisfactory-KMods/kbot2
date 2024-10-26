@@ -11,7 +11,7 @@ function getQueryChunk(offset: number) {
         query {
             getMods( filter: { limit: 100, offset: ${offset}, hidden: true } ) {
                 mods {
-                    versions( filter: {order_by: created_at} ) { version, sml_version, id, created_at, updated_at, changelog, hash  },
+                    versions( filter: {order_by: created_at} ) { version, id, created_at, updated_at, changelog, hash  },
                     mod_reference,
                     id,
                     name,
@@ -26,7 +26,7 @@ function getQueryChunk(offset: number) {
                     last_version_date,
                     hidden,
                     authors{user_id, mod_id, role, user{id, username}},
-                    latestVersions {alpha{version, sml_version, id, created_at, updated_at, changelog, hash}, beta{version, sml_version, id, created_at, updated_at, changelog, hash}, release{version, sml_version, id, created_at, updated_at, changelog, hash} }
+                    latestVersions {alpha{version, id, created_at, updated_at, changelog, hash}, beta{version, id, created_at, updated_at, changelog, hash}, release{version, id, created_at, updated_at, changelog, hash} }
                 },
                 count
             }
@@ -109,8 +109,7 @@ async function exec() {
 											updated_at: version.updated_at,
 											changelog: version.changelog,
 											hash: version.hash,
-											version: version.version,
-											sml_version: version.sml_version
+											version: version.version
 										})
 										.firstOrThrow(
 											`failed to insert version ${version.id} / ${version.version}`

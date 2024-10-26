@@ -1,0 +1,1 @@
+ALTER TABLE "ficsit_app"."mod_versions" DROP COLUMN IF EXISTS "sml_version";

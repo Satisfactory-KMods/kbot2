@@ -17,7 +17,6 @@ export type LastVersion = {
 	changelog: string;
 	hash: string;
 	version: string;
-	sml_version: string;
 };
 
 export const scModCache = ficsitAppSchema.table(
@@ -77,8 +76,7 @@ export const scModVersions = ficsitAppSchema.table(
 		updated_at: colTimestamp('updated_at').notNull().defaultNow(),
 		changelog: text('changelog').notNull(),
 		hash: varchar('hash', { length: 64 }).notNull(),
-		version: varchar('version', { length: 64 }).notNull(),
-		sml_version: varchar('sml_version', { length: 64 }).notNull()
+		version: varchar('version', { length: 64 }).notNull()
 	},
 	(t) => {
 		return {
