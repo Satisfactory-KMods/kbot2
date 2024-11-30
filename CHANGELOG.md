@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.0.10](https://github.com/Satisfactory-KMods/kbot2/compare/v2.0.9...v2.0.10) (2024-11-30)
+
+
+### Bug Fixes
+
+* disable ssr ([a171fe4](https://github.com/Satisfactory-KMods/kbot2/commit/a171fe48948380606c690fec201d73b2d05743fe))
+
 ## [2.0.9](https://github.com/Satisfactory-KMods/kbot2/compare/v2.0.8...v2.0.9) (2024-10-26)
 
 
