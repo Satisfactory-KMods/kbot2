@@ -45,5 +45,6 @@ export default defineNuxtConfig({
 	pages: true,
 	devtools: { enabled: true },
 	components,
-	nitro
+	nitro,
+	ssr: false
 });
