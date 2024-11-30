@@ -101,5 +101,5 @@
 		"vue-tsc": "^2.1.10",
 		"yaml-eslint-parser": "^1.2.3"
 	},
-	"version": "2.0.10"
+	"version": "2.0.11"
 }
