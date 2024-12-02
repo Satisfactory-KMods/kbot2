@@ -26,6 +26,10 @@
 
 	const { mods, refreshMods, loading: isLoading } = useServerStore();
 
+	onMounted(async () => {
+		if (mods.mods.length === 0) await refreshMods();
+	});
+
 	const value = computed<string>({
 		get: () => {
 			return props.modelValue;
