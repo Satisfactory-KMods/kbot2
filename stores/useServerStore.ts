@@ -104,6 +104,8 @@ export const useServerStore = defineStore('server-store', () => {
 			refreshConfig(newGuild)
 		]);
 
+		await refreshMods();
+
 		return data.value;
 	}
 

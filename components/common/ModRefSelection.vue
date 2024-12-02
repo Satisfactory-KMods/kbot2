@@ -24,11 +24,10 @@
 
 	const emit = defineEmits<(e: 'update:modelValue', v: string) => void>();
 
-	const { mods, refreshMods, loading: isLoading } = useServerStore();
+	const { mods, loading: isLoading } = storeToRefs(useServerStore());
+	const serverStore = useServerStore();
 
-	onMounted(async () => {
-		if (mods.mods.length === 0) await refreshMods();
-	});
+	onMounted(serverStore.refreshMods);
 
 	const value = computed<string>({
 		get: () => {
@@ -78,7 +77,7 @@
 			icon="pi pi-refresh"
 			label="Refresh"
 			:loading="!!$props.loading || isLoading"
-			@click="refreshMods()" />
+			@click="serverStore.refreshMods()" />
 	</div>
 </template>
 
