@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.0.13](https://github.com/Satisfactory-KMods/kbot2/compare/v2.0.12...v2.0.13) (2024-12-02)
+
+
+### Bug Fixes
+
+* mods loading ([766037f](https://github.com/Satisfactory-KMods/kbot2/commit/766037f3855615dca50b36ec80d99b24befe8522))
+
 ## [2.0.12](https://github.com/Satisfactory-KMods/kbot2/compare/v2.0.11...v2.0.12) (2024-12-02)
 
 
