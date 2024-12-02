@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.0.11](https://github.com/Satisfactory-KMods/kbot2/compare/v2.0.10...v2.0.11) (2024-11-30)
+
+
+### Bug Fixes
+
+* vue-tsc ([46eb33e](https://github.com/Satisfactory-KMods/kbot2/commit/46eb33e70415deed41528a3fe2a1411c8c5257e6))
+
 ## [2.0.10](https://github.com/Satisfactory-KMods/kbot2/compare/v2.0.9...v2.0.10) (2024-11-30)
 
 
