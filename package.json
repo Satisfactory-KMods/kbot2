@@ -28,7 +28,7 @@
 		"@vueuse/components": "^10.10.0",
 		"@vueuse/nuxt": "^10.10.0",
 		"axios": "^1.7.2",
-		"discord.js": "^14.15.3",
+		"discord.js": "^14.21.0",
 		"dotenv": "^16.4.5",
 		"drizzle-kit": "^0.22.7",
 		"fuse.js": "^7.0.0",

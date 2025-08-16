@@ -1,0 +1,5 @@
+onlyBuiltDependencies:
+  - dprint
+  - esbuild
+  - sharp
+  - vue-demi
