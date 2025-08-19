@@ -43,7 +43,7 @@
 		"pinia": "^2.1.7",
 		"postgres": "^3.4.4",
 		"primeicons": "^7.0.0",
-		"primevue": "^3.52.0",
+		"primevue": "^4.0.0",
 		"semver": "^7.6.2",
 		"typescript-eslint": "^7.13.0",
 		"uuid": "^10.0.0",
