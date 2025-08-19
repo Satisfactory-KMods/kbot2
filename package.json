@@ -23,7 +23,7 @@
 		"@kmods/drizzle-pg": "1.9.0",
 		"@nuxt/schema": "^3.11.2",
 		"@nuxtjs/mdc": "^0.6.1",
-		"@sidebase/nuxt-auth": "^0.7.2",
+		"@sidebase/nuxt-auth": "^1.0.0",
 		"@tailwindcss/typography": "^0.5.13",
 		"@vueuse/components": "^10.10.0",
 		"@vueuse/nuxt": "^10.10.0",
