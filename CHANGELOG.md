@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.0.15](https://github.com/Satisfactory-KMods/kbot2/compare/v2.0.14...v2.0.15) (2025-11-11)
+
+
+### Bug Fixes
+
+* retry count ([0a8344d](https://github.com/Satisfactory-KMods/kbot2/commit/0a8344d7516eb304a0a9bebf141fa3d8feea036c))
+
 ## [2.0.14](https://github.com/Satisfactory-KMods/kbot2/compare/v2.0.13...v2.0.14) (2025-08-16)
 
 
