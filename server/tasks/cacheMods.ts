@@ -36,11 +36,16 @@ function getQueryChunk(offset: number) {
 
 async function exec() {
 	try {
+		let retryCount = 0;
 		let maxReached = false;
 		let offset = 0;
 		let total = 0;
 		log('tasks', 'Start Update Mods!');
 		while (!maxReached) {
+			if (retryCount > 5) {
+				log('tasks-error', 'Max retry count reached, aborting mod cache task');
+				break;
+			}
 			try {
 				log('tasks', 'Fetching Mods...', env.ficsit.url, [total, offset]);
 				const client = new GraphQLClient(env.ficsit.url, { headers: {} });
@@ -118,6 +123,7 @@ async function exec() {
 							})
 							.catch((e) => {
 								log('ficsit-error', e.message);
+								retryCount++;
 							});
 					})
 				);
@@ -129,6 +135,7 @@ async function exec() {
 					log('ficsit-error', e.message);
 				}
 				maxReached = true;
+				retryCount++;
 			}
 		}
 		log('tasks', `Update Mods (${total}) Finished!`);
